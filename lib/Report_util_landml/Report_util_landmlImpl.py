@@ -2,7 +2,7 @@
 #BEGIN_HEADER
 import os
 import shutil
-import uuid
+#import uuid
 from Bio import SeqIO
 from pprint import pprint, pformat
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
@@ -34,7 +34,7 @@ This sample module for creating text report for data objects
     GIT_COMMIT_HASH = "75e61cbf33462215193ba682716fbcfa89837320"
 
     #BEGIN_CLASS_HEADER
-    def create_report(self, token, ws, uuid_string, read_file_path):
+    def create_report(self, token, ws, report_string, read_file_path):
         # type: (object, object, object, object) -> object
         output_html_files = list()
         output_zip_files = list()
@@ -93,8 +93,8 @@ This sample module for creating text report for data objects
                                   'description': desc})
 
         report_params = {
-            'message' : "This is the message that I want to show",
-            'direct_html_link_index': 0,
+            'message' : report_string,
+#            'direct_html_link_index': 0,
             'file_links': output_zip_files,
             #'html_links': output_html_files,
             'html_links': [],
@@ -132,8 +132,8 @@ This sample module for creating text report for data objects
         # return variables are: output
         #BEGIN assembly_metadata_report
         token = ctx['token']
-        uuid_string = str(uuid.uuid4())
-        write_file_path = self.scratch + "/" + uuid_string
+        #uuid_string = str(uuid.uuid4())
+        #write_file_path = self.scratch + "/" + uuid_string
 
         # Print statements to stdout/stderr are captured and available as the App log
         print('Starting Assembly MetaData Report Function. Params=')
@@ -217,7 +217,7 @@ This sample module for creating text report for data objects
 
 
         reported_output = self.create_report(token, params['workspace_name'],
-                                    uuid_string, self.scratch)
+                                    string, self.scratch)
 
         output = {'report_name': reported_output['name'],
                            'report_ref': reported_output['ref']}
