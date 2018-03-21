@@ -260,11 +260,11 @@ This sample module for creating text report for data objects
         #                   }
 
 
-        output = self.create_report(token, params['workspace_name'],
+        coutput = self.create_report(token, params['workspace_name'],
                                     uuid_string, self.scratch)
 
-        reported_output = {'report_name': output['name'],
-                           'report_ref': output['ref']}
+        output = {'report_name': coutput['name'],
+                           'report_ref': coutput['ref']}
 
         print('returning: ' + pformat(output))
 
