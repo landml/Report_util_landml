@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #BEGIN_HEADER
 import os
+import shutil
 import uuid
 from Bio import SeqIO
 from pprint import pprint, pformat
@@ -118,29 +119,11 @@ This sample module for creating text report for data objects
 
     def assembly_metadata_report(self, ctx, params):
         """
-        The actual function is declared using 'funcdef' to specify the name
-        and input/return arguments to the function.  For all typical KBase
-        Apps that run in the Narrative, your function should have the 
-        'authentication required' modifier.
-        :param params: instance of type "AssemblyMetadataReportParams" (A
-           'typedef' can also be used to define compound or container
-           objects, like lists, maps, and structures.  The standard KBase
-           convention is to use structures, as shown here, to define the
-           input and output of your function.  Here the input is a reference
-           to the Assembly data object, a workspace to save output, and a
-           length threshold for filtering. To define lists and maps, use a
-           syntax similar to C++ templates to indicate the type contained in
-           the list or map.  For example: list <string> list_of_strings;
-           mapping <string, int> map_of_ints;) -> structure: parameter
+        :param params: instance of type "AssemblyMetadataReportParams"  -> structure: parameter
            "assembly_input_ref" of type "assembly_ref", parameter
            "workspace_name" of String, parameter "showContigs" of type
            "boolean" (A boolean. 0 = false, other = true.)
-        :returns: instance of type "AssemblyMetadataResults" (Here is the
-           definition of the output of the function.  The output can be used
-           by other SDK modules which call your code, or the output
-           visualizations in the Narrative.  'report_name' and 'report_ref'
-           are special output fields- if defined, the Narrative can
-           automatically render your Report.) -> structure: parameter
+        :returns: instance of type "AssemblyMetadataResults"  -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
         # ctx is the context object
@@ -156,9 +139,7 @@ This sample module for creating text report for data objects
 
         # Step 1 - Parse/examine the parameters and catch any errors
         # It is important to check that parameters exist and are defined, and that nice error
-        # messages are returned to users.  Parameter values go through basic validation when
-        # defined in a Narrative App, but advanced users or other SDK developers can call
-        # this function directly, so validation is still important.
+        # messages are returned to users.
         print('Validating parameters.')
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
@@ -182,7 +163,7 @@ This sample module for creating text report for data objects
         # Step 2 - Download the input data as a Fasta and
         # We can use the AssemblyUtils module to download a FASTA file from our Assembly data object.
         # The return object gives us the path to the file that was created.
-        print('Downloading Assembly data as a Fasta file.')
+        #print('Downloading Assembly data as a Fasta file.')
         #        assemblyUtil = AssemblyUtil(self.callback_url)
         #        fasta_file = assemblyUtil.get_assembly_as_fasta({'ref': assembly_input_ref})
 
@@ -190,7 +171,7 @@ This sample module for creating text report for data objects
         # We can use BioPython to parse the Fasta file and build and save the output to a file.
 
         data_file_cli = DataFileUtil(self.callback_url)
-        #        assembly_metadata = data_file_cli.get_objects({'object_refs': ['assembly_input_ref']})['data'][0]['data']
+#        assembly_metadata = data_file_cli.get_objects({'object_refs': ['assembly_input_ref']})['data'][0]['data']
         assembly = data_file_cli.get_objects({'object_refs': [assembly_input_ref]})
         assembly_metadata = assembly['data'][0]['data']
 
@@ -225,54 +206,22 @@ This sample module for creating text report for data objects
         report_txt = open(report_path, "w")
         report_txt.write(string)
         report_txt.close()
-        #        with open('assembly_metadata_report.txt',"w") as report_txt:
-        #            report_txt.write(string)
-        #        with open('assembly_metadata_report.html',"w") as report_txt:
-        #            report_txt.write(string)
-        #        output_file = []
-        #        output_file.append({'path' : os.path.join(self.shared_folder, 'assembly_metadata_report.txt'),
-        #                            'name' : 'assembly_metadata_report.txt',
-        #                            'label' : 'AssemblyMetadata.label',
-        #                            'description' : 'Text output for the assembly metadata'})
-        #        html_file = []
-        #        html_file.append({'path' : os.path.join(self.shared_folder, 'assembly_metadata_report.html'),
-        #                           'name' : 'assembly_metadata_report.html',
-        #                           'label' : 'AssemblyMetadata.label.html',
-        #                           'description' : 'Text output for the assembly metadata'})
+        report_path = os.path.join(self.scratch, 'assembly_metadata_report.html')
+        report_txt = open(report_path, "w")
+        report_txt.write("<pre>" + string + "</pre>")
+        report_txt.close()
 
         print string
 
-        # Step 5 - Build a Report and return
-        #        report_params = {'message': string,
-        #                         'direct_html_link_index': 0,
-        #                         'html_links': [html_file],
-        #                         'file_links': [output_file],
-        #                         'report_object_name': 'assembly_metadata_report_' + str(uuid.uuid4()),
-        #                         'workspace_name': params['workspace_name']
-        #                        }
-        #        reportObj = {
-        #            'objects_created': [{'ref': 'assembly_metadata_report_' + str(uuid.uuid4()), 'description': 'AssemblyMetadata'}],
-        #            'report_object_name' : 'assembly_metadata_report',
-        #            'text_message':  "\n" + string
-        #        }
-        #        report = KBaseReport(self.callback_url)
-        #        report_info = report.create_extended_report({'report': reportObj, 'workspace_name': params['workspace_name']})
-        #        report_info = report.create_extended_report(report_params)
 
-        # STEP 6: contruct the output to send back
-        #        output = {'report_name': 'My_report',
-        #        'report_ref': report_info['ref']
-        #                   }
-
-
-        coutput = self.create_report(token, params['workspace_name'],
+        reported_output = self.create_report(token, params['workspace_name'],
                                     uuid_string, self.scratch)
 
-        output = {'report_name': coutput['name'],
-                           'report_ref': coutput['ref']}
+        output = {'report_name': reported_output['name'],
+                           'report_ref': reported_output['ref']}
 
         print('returning: ' + pformat(output))
-
+        print('Not returning: ' + pformat(reported_output))
         #END assembly_metadata_report
 
         # At some point might do deeper type checking...
