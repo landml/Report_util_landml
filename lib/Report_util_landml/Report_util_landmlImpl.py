@@ -132,8 +132,6 @@ This sample module for creating text report for data objects
         # return variables are: output
         #BEGIN assembly_metadata_report
         token = ctx['token']
-        #uuid_string = str(uuid.uuid4())
-        #write_file_path = self.scratch + "/" + uuid_string
 
         # Print statements to stdout/stderr are captured and available as the App log
         print('Starting Assembly MetaData Report Function. Params=')
@@ -212,6 +210,9 @@ This sample module for creating text report for data objects
         report_txt = open(report_path, "w")
         report_txt.write("<pre>" + string + "</pre>")
         report_txt.close()
+
+        if showContigs:
+            string += "This is the place where the list of contigs will go when that part gets created\n"
 
         print string
 
