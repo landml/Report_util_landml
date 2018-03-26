@@ -106,7 +106,7 @@ class Report_util_landmlTest(unittest.TestCase):
         return assembly_ref
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def mytest_assembly_metadata(self):
+    def test_assembly_metadata(self):
 
         assembly_ref = self.get_fasta_file(self.test_path,
                                              'TestAssembly3')
@@ -122,7 +122,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
  #       print  ret
 
-    def test_genome_tab(self):
+    def mytest_genome_tab(self):
 #        genbank_file_name = 'minimal.gbff'
 #        genbank_file_path = os.path.join(self.scratch, genbank_file_name)
 #        shutil.copy(os.path.join('data', genbank_file_name), genbank_file_path)
@@ -141,7 +141,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genome_gff(self):
+    def mytest_genome_gff(self):
         genome_object_name = 'test_Genome'
         genome_ref = "1706/26/1"
         ret = self.getImpl().genome_report(self.getContext(),
@@ -152,7 +152,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genome_fasta(self):
+    def mytest_genome_fasta(self):
         genome_object_name = 'test_Genome'
         genome_ref = "1706/26/1"
         ret = self.getImpl().genome_report(self.getContext(),
