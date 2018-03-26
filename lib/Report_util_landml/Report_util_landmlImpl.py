@@ -30,7 +30,7 @@ This sample module for creating text report for data objects
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/landml/Report_util_landml"
-    GIT_COMMIT_HASH = "1ddc6719cfcefc7a3fa3acef6467e83c5fcecf31"
+    GIT_COMMIT_HASH = "b4809d875cc70c4843964658397c1235a1e8e560"
 
     #BEGIN_CLASS_HEADER
     def create_report(self, token, ws, report_string, read_file_path):
@@ -362,7 +362,6 @@ This sample module for creating text report for data objects
                              'output is not type dict as required.')
         # return the results
         return [output]
-
 
     def genome_report(self, ctx, params):
         """
