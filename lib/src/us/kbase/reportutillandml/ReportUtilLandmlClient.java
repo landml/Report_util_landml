@@ -172,15 +172,32 @@ public class ReportUtilLandmlClient {
      * 'authentication required' modifier.
      * </pre>
      * @param   params   instance of type {@link us.kbase.reportutillandml.AssemblyMetadataReportParams AssemblyMetadataReportParams}
-     * @return   parameter "output" of type {@link us.kbase.reportutillandml.AssemblyMetadataResults AssemblyMetadataResults}
+     * @return   parameter "output" of type {@link us.kbase.reportutillandml.ReportResults ReportResults}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public AssemblyMetadataResults assemblyMetadataReport(AssemblyMetadataReportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public ReportResults assemblyMetadataReport(AssemblyMetadataReportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
-        TypeReference<List<AssemblyMetadataResults>> retType = new TypeReference<List<AssemblyMetadataResults>>() {};
-        List<AssemblyMetadataResults> res = caller.jsonrpcCall("Report_util_landml.assembly_metadata_report", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        TypeReference<List<ReportResults>> retType = new TypeReference<List<ReportResults>>() {};
+        List<ReportResults> res = caller.jsonrpcCall("Report_util_landml.assembly_metadata_report", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: genome_report</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.reportutillandml.GenomeReportParams GenomeReportParams}
+     * @return   parameter "output" of type {@link us.kbase.reportutillandml.ReportResults ReportResults}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ReportResults genomeReport(GenomeReportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ReportResults>> retType = new TypeReference<List<ReportResults>>() {};
+        List<ReportResults> res = caller.jsonrpcCall("Report_util_landml.genome_report", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

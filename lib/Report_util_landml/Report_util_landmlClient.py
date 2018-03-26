@@ -52,16 +52,33 @@ class Report_util_landml(object):
            "assembly_input_ref" of type "assembly_ref", parameter
            "workspace_name" of String, parameter "showContigs" of type
            "boolean" (A boolean. 0 = false, other = true.)
-        :returns: instance of type "AssemblyMetadataResults" (Here is the
-           definition of the output of the function.  The output can be used
-           by other SDK modules which call your code, or the output
-           visualizations in the Narrative.  'report_name' and 'report_ref'
-           are special output fields- if defined, the Narrative can
-           automatically render your Report.) -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String
+        :returns: instance of type "ReportResults" (Here is the definition of
+           the output of the function.  The output can be used by other SDK
+           modules which call your code, or the output visualizations in the
+           Narrative.  'report_name' and 'report_ref' are special output
+           fields- if defined, the Narrative can automatically render your
+           Report.) -> structure: parameter "report_name" of String,
+           parameter "report_ref" of String
         """
         return self._client.call_method(
             'Report_util_landml.assembly_metadata_report',
+            [params], self._service_ver, context)
+
+    def genome_report(self, params, context=None):
+        """
+        :param params: instance of type "GenomeReportParams" -> structure:
+           parameter "genome_input_ref" of type "genome_ref", parameter
+           "workspace_name" of String, parameter "report_format" of String
+        :returns: instance of type "ReportResults" (Here is the definition of
+           the output of the function.  The output can be used by other SDK
+           modules which call your code, or the output visualizations in the
+           Narrative.  'report_name' and 'report_ref' are special output
+           fields- if defined, the Narrative can automatically render your
+           Report.) -> structure: parameter "report_name" of String,
+           parameter "report_ref" of String
+        """
+        return self._client.call_method(
+            'Report_util_landml.genome_report',
             [params], self._service_ver, context)
 
     def status(self, context=None):

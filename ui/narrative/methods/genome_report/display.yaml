@@ -1,0 +1,41 @@
+#
+# define display information
+#
+name: Genome-Based Reports
+tooltip: |
+    Create a reports based on Genome-Objects
+screenshots: []
+
+icon: kaleidoscope.png
+
+#
+# define a set of similar methods that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            []
+        next:
+            []
+    methods:
+        related:
+            []
+        next:
+            []
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    genome_input_ref :
+        ui-name : |
+            Genome
+        short-hint : |
+            The genome used in the report
+    report_format:
+        ui-name : |
+            Report_format
+        short-hint : |
+            Format for the type of report to product
+description : |
+    <p>Getting an annotated genome in FASTA, tab-separated (tsv), comma-separated (csv), or GFF3 format</p>

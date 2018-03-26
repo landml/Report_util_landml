@@ -16,6 +16,7 @@ module Report_util_landml {
     typedef int boolean;
 
     typedef string assembly_ref;
+    typedef string genome_ref;
 
     /*
         A 'typedef' can also be used to define compound or container
@@ -38,6 +39,12 @@ module Report_util_landml {
         boolean showContigs;
     } AssemblyMetadataReportParams;
 
+    typedef structure {
+        genome_ref genome_input_ref;
+        string workspace_name;
+        string report_format;
+    } GenomeReportParams;
+
     /*
         Here is the definition of the output of the function.  The output
         can be used by other SDK modules which call your code, or the output
@@ -49,7 +56,7 @@ module Report_util_landml {
     typedef structure {
         string report_name;
         string report_ref;
-    } AssemblyMetadataResults;
+    } ReportResults;
     
     /*
         The actual function is declared using 'funcdef' to specify the name
@@ -58,5 +65,7 @@ module Report_util_landml {
         'authentication required' modifier.
     */
     funcdef assembly_metadata_report(AssemblyMetadataReportParams params)
-        returns (AssemblyMetadataResults output) authentication required;
+        returns (ReportResults output) authentication required;
+    funcdef genome_report(GenomeReportParams params)
+        returns (ReportResults output) authentication required;
 };

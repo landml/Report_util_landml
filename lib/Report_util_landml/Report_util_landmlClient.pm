@@ -121,14 +121,14 @@ sub new
 
 <pre>
 $params is a Report_util_landml.AssemblyMetadataReportParams
-$output is a Report_util_landml.AssemblyMetadataResults
+$output is a Report_util_landml.ReportResults
 AssemblyMetadataReportParams is a reference to a hash where the following keys are defined:
 	assembly_input_ref has a value which is a Report_util_landml.assembly_ref
 	workspace_name has a value which is a string
 	showContigs has a value which is a Report_util_landml.boolean
 assembly_ref is a string
 boolean is an int
-AssemblyMetadataResults is a reference to a hash where the following keys are defined:
+ReportResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
 
@@ -139,14 +139,14 @@ AssemblyMetadataResults is a reference to a hash where the following keys are de
 =begin text
 
 $params is a Report_util_landml.AssemblyMetadataReportParams
-$output is a Report_util_landml.AssemblyMetadataResults
+$output is a Report_util_landml.ReportResults
 AssemblyMetadataReportParams is a reference to a hash where the following keys are defined:
 	assembly_input_ref has a value which is a Report_util_landml.assembly_ref
 	workspace_name has a value which is a string
 	showContigs has a value which is a Report_util_landml.boolean
 assembly_ref is a string
 boolean is an int
-AssemblyMetadataResults is a reference to a hash where the following keys are defined:
+ReportResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
 
@@ -210,6 +210,104 @@ Apps that run in the Narrative, your function should have the
     }
 }
  
+
+
+=head2 genome_report
+
+  $output = $obj->genome_report($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a Report_util_landml.GenomeReportParams
+$output is a Report_util_landml.ReportResults
+GenomeReportParams is a reference to a hash where the following keys are defined:
+	genome_input_ref has a value which is a Report_util_landml.genome_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+genome_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a Report_util_landml.GenomeReportParams
+$output is a Report_util_landml.ReportResults
+GenomeReportParams is a reference to a hash where the following keys are defined:
+	genome_input_ref has a value which is a Report_util_landml.genome_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+genome_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub genome_report
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function genome_report (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to genome_report:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'genome_report');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "Report_util_landml.genome_report",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'genome_report',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method genome_report",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'genome_report',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -253,16 +351,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'assembly_metadata_report',
+                method_name => 'genome_report',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method assembly_metadata_report",
+            error => "Error invoking method genome_report",
             status_line => $self->{client}->status_line,
-            method_name => 'assembly_metadata_report',
+            method_name => 'genome_report',
         );
     }
 }
@@ -356,6 +454,32 @@ a string
 
 
 
+=head2 genome_ref
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 AssemblyMetadataReportParams
 
 =over 4
@@ -406,7 +530,41 @@ showContigs has a value which is a Report_util_landml.boolean
 
 
 
-=head2 AssemblyMetadataResults
+=head2 GenomeReportParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+genome_input_ref has a value which is a Report_util_landml.genome_ref
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+genome_input_ref has a value which is a Report_util_landml.genome_ref
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 ReportResults
 
 =over 4
 

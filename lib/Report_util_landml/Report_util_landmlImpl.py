@@ -9,7 +9,6 @@ from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 
-
 #END_HEADER
 
 
@@ -31,7 +30,7 @@ This sample module for creating text report for data objects
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/landml/Report_util_landml"
-    GIT_COMMIT_HASH = "75e61cbf33462215193ba682716fbcfa89837320"
+    GIT_COMMIT_HASH = "1ddc6719cfcefc7a3fa3acef6467e83c5fcecf31"
 
     #BEGIN_CLASS_HEADER
     def create_report(self, token, ws, report_string, read_file_path):
@@ -105,6 +104,118 @@ This sample module for creating text report for data objects
         output = kbase_report_client.create_extended_report(report_params)
         return output
 
+    # -----------------------------------------------------------------
+    #    Create a Delimited Table version of the genes in a genome
+    #
+    def delimitedTable(self, genome, format, features):
+        line = ""
+        index = 0
+        for feat in genome[features]:
+            if 'function' not in feat:
+                feat['function'] = 'unknown'
+
+            aliases = ''
+            if 'aliases' in feat:
+                aliases = ', '.join(feat['aliases'])
+
+            if 'type' not in feat:
+                feat['type'] = features
+
+            location = ''
+            contig = ''
+            strand = ''
+            if len(feat['location']) > 0:
+                locList = []
+                # For those REALLY rare occassions when there is more than one location in Prokaryotes
+                for loc in feat['location']:
+                    contig = loc[0]
+                    strand = loc[2]
+                    if strand == '+':
+                        start = loc[1]
+                        stop = loc[1] + loc[3] - 1
+                        locList.append(str(start) + '..' + str(stop))
+                    else:
+                        start = loc[1]
+                        stop = loc[1] - loc[3] + 1
+                        locList.append(str(start) + '..' + str(stop))
+
+                location = ", ".join(locList)
+
+            if format == 'tab':
+                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases]
+                line += "\t".join(lineList) + "\n"
+            else:
+                feat['function'] = '"' + feat['function'] + '"'
+                aliases = '"' + aliases + '"'
+                location = '"' + location + '"'
+                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases]
+                line += ",".join(lineList) + "\n"
+
+            # print line
+            index += 1
+
+            #        To Test - un-comment the next two lines
+
+        return line
+
+    # -----------------------------------------------------------------
+    #    Create a GFF3 version of the features in a genome
+    #
+    def gff3(self, genome, features):
+        line = ""
+        index = 0
+        for feat in genome[features]:
+            if 'function' not in feat:
+                feat['function'] = 'unknown'
+
+            aliases = ''
+            if 'aliases' in feat:
+                aliases = ':'.join(feat['aliases'])
+
+            if 'type' not in feat:
+                feat['type'] = features
+
+            location = ''
+            contig = ''
+            strand = ''
+            start = 0
+            stop = 0
+            if len(feat['location']) > 0:
+                locList = []
+                # For those REALLY rare occassions when there is more than one location in Prokaryotes
+                for loc in feat['location']:
+                    contig = loc[0]
+                    strand = loc[2]
+                    if strand == '+':
+                        start = loc[1]
+                        stop = loc[1] + loc[3] - 1
+                        locList.append(str(start) + '..' + str(stop))
+                    else:
+                        start = loc[1]
+                        stop = loc[1] - loc[3] + 1
+                        locList.append(str(start) + '..' + str(stop))
+
+                location = ", ".join(locList)
+
+            ph = "."  # Placeholder for missing data
+            attrib = "ID=" + feat['id']
+            if feat['function'] != 'unknown':
+                attrib += ";FUNCTION=" + feat['function']
+            if aliases > '     ':
+                attrib += ";ALIASES=" + aliases
+
+            lineList = [contig, ph, feat['type'], str(start), str(stop), ph, strand, ph, attrib]
+            line += "\t".join(lineList) + "\n"
+
+            # print line
+            index += 1
+
+            #        To Test - un-comment the next two lines
+            if index > 5 and testing.upper() == 'YES':
+                break
+
+        return line
+
     #END_CLASS_HEADER
 
     # config contains contents of config file in a hash or None if it couldn't
@@ -121,12 +232,30 @@ This sample module for creating text report for data objects
 
     def assembly_metadata_report(self, ctx, params):
         """
-        :param params: instance of type "AssemblyMetadataReportParams"  -> structure: parameter
+        The actual function is declared using 'funcdef' to specify the name
+        and input/return arguments to the function.  For all typical KBase
+        Apps that run in the Narrative, your function should have the 
+        'authentication required' modifier.
+        :param params: instance of type "AssemblyMetadataReportParams" (A
+           'typedef' can also be used to define compound or container
+           objects, like lists, maps, and structures.  The standard KBase
+           convention is to use structures, as shown here, to define the
+           input and output of your function.  Here the input is a reference
+           to the Assembly data object, a workspace to save output, and a
+           length threshold for filtering. To define lists and maps, use a
+           syntax similar to C++ templates to indicate the type contained in
+           the list or map.  For example: list <string> list_of_strings;
+           mapping <string, int> map_of_ints;) -> structure: parameter
            "assembly_input_ref" of type "assembly_ref", parameter
            "workspace_name" of String, parameter "showContigs" of type
            "boolean" (A boolean. 0 = false, other = true.)
-        :returns: instance of type "AssemblyMetadataResults"  -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String
+        :returns: instance of type "ReportResults" (Here is the definition of
+           the output of the function.  The output can be used by other SDK
+           modules which call your code, or the output visualizations in the
+           Narrative.  'report_name' and 'report_ref' are special output
+           fields- if defined, the Narrative can automatically render your
+           Report.) -> structure: parameter "report_name" of String,
+           parameter "report_ref" of String
         """
         # ctx is the context object
         # return variables are: output
@@ -230,6 +359,105 @@ This sample module for creating text report for data objects
         # At some point might do deeper type checking...
         if not isinstance(output, dict):
             raise ValueError('Method assembly_metadata_report return value ' +
+                             'output is not type dict as required.')
+        # return the results
+        return [output]
+
+
+    def genome_report(self, ctx, params):
+        """
+        :param params: instance of type "GenomeReportParams" -> structure:
+           parameter "genome_input_ref" of type "genome_ref", parameter
+           "workspace_name" of String, parameter "report_format" of String
+        :returns: instance of type "ReportResults" (Here is the definition of
+           the output of the function.  The output can be used by other SDK
+           modules which call your code, or the output visualizations in the
+           Narrative.  'report_name' and 'report_ref' are special output
+           fields- if defined, the Narrative can automatically render your
+           Report.) -> structure: parameter "report_name" of String,
+           parameter "report_ref" of String
+        """
+        # ctx is the context object
+        # return variables are: output
+        #BEGIN genome_report
+        token = ctx['token']
+
+        # Print statements to stdout/stderr are captured and available as the App log
+        print('Starting Genome Report Function. Params=')
+        pprint(params)
+
+        # Step 1 - Parse/examine the parameters and catch any errors
+        # It is important to check that parameters exist and are defined, and that nice error
+        # messages are returned to users.
+        print('Validating parameters.')
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'genome_input_ref' not in params:
+            raise ValueError('Parameter genome_input_ref is not set in input arguments')
+        genome_input_ref = params['genome_input_ref']
+
+
+        # Step 2 - Download the input data as a Fasta and
+        # We can use the AssemblyUtils module to download a FASTA file from our Assembly data object.
+        # The return object gives us the path to the file that was created.
+        # print('Downloading Assembly data as a Fasta file.')
+        #        assemblyUtil = AssemblyUtil(self.callback_url)
+        #        fasta_file = assemblyUtil.get_assembly_as_fasta({'ref': assembly_input_ref})
+
+        # Step 3 - Actually perform the filter operation, saving the good contigs to a new fasta file.
+        # We can use BioPython to parse the Fasta file and build and save the output to a file.
+
+        data_file_cli = DataFileUtil(self.callback_url)
+        genome = data_file_cli.get_objects({'object_refs': [genome_input_ref]})
+        genome_data = genome['data'][0]['data']
+
+        report_format = params['report_format']
+        print "REPORT FORMAT:", report_format
+        string = ''
+#        report_format = 'tab'
+        if report_format == 'tab':
+            string = self.delimitedTable(genome_data, 'tab', 'features')
+            report_path = os.path.join(self.scratch, 'genome_report.txt')
+        elif report_format == 'csv':
+            string = self.delimitedTable(genome_data, 'csv', 'features')
+            report_path = os.path.join(self.scratch, 'genome_report.csv')
+        elif report_format == 'gff':
+            string = self.gff3(genome_data, 'gff', 'features')
+            report_path = os.path.join(self.scratch, 'genome_report.gff')
+        elif report_format == 'fasta':
+            string = self.delimitedTable(genome_data, 'csv', 'features')
+            report_path = os.path.join(self.scratch, 'genome_report.faa')
+        else:
+            raise ValueError('Invalid report option.' + str(report_format))
+
+        report_txt = open(report_path, "w")
+        report_txt.write(string)
+        report_txt.close()
+        report_path = os.path.join(self.scratch, 'text_report.html')
+        report_txt = open(report_path, "w")
+        report_txt.write("<pre>" + string + "</pre>")
+        report_txt.close()
+
+        print string
+
+
+        reported_output = self.create_report(token, params['workspace_name'],
+                                    string, self.scratch)
+
+        output = {'report_name': reported_output['name'],
+                           'report_ref': reported_output['ref']}
+
+#        output = {'report_name': "",
+#                  'report_ref': ""}
+
+        print('returning: ' + pformat(output))
+        print('Not returning: ' + pformat(reported_output))
+        #END genome_report
+
+        # At some point might do deeper type checking...
+        if not isinstance(output, dict):
+            raise ValueError('Method genome_report return value ' +
                              'output is not type dict as required.')
         # return the results
         return [output]

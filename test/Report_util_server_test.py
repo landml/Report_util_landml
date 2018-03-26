@@ -20,6 +20,7 @@ from Report_util_landml.Report_util_landmlServer import MethodContext
 from Report_util_landml.authclient import KBaseAuth as _KBaseAuth
 
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
+from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
 
 class Report_util_landmlTest(unittest.TestCase):
 
@@ -105,11 +106,11 @@ class Report_util_landmlTest(unittest.TestCase):
         return assembly_ref
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def test_assembly_metadata(self):
+    def mytest_assembly_metadata(self):
 
         assembly_ref = self.get_fasta_file(self.test_path,
                                              'TestAssembly3')
-        print "ASSEMBLY_REF=", assembly_ref
+#        print "ASSEMBLY_REF=", assembly_ref
 
         # Second, call your implementation
         ret = self.getImpl().assembly_metadata_report(self.getContext(),
@@ -119,4 +120,26 @@ class Report_util_landmlTest(unittest.TestCase):
                                              })
 
         # Validate the returned data
-        print  ret
+ #       print  ret
+
+    def test_genome(self):
+        genbank_file_name = 'minimal.gbff'
+        genbank_file_path = os.path.join(self.scratch, genbank_file_name)
+        shutil.copy(os.path.join('data', genbank_file_name), genbank_file_path)
+
+        genome_object_name = 'test_Genome'
+#        gfu = GenomeFileUtil(self.callback_url)
+#        genome_ref = gfu.genbank_to_genome({'file': {'path': genbank_file_path},
+#                                                    'workspace_name': self.getwsName(),
+#                                                    'genome_name': genome_object_name
+#                                                    })['genome_ref']
+        genome_ref = "1706/26/1"
+
+        ret = self.getImpl().genome_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'genome_input_ref': genome_ref,
+                                             'report_format': 'tab'
+                                             })
+
+        # Validate the returned data
+        print  "RETURN;", ret
