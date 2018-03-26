@@ -228,7 +228,7 @@ class Report_util_landml:
 #            string = self.delimitedTable(genome_data, 'tab', 'features')
             cf = CreateFeatureLists(self.config)
             string = cf.delimitedTable(genome_data, 'tab', 'features')
-            report_path = os.path.join(self.scratch, 'genome_report.txt')
+            report_path = os.path.join(self.scratch, 'genome_report.tab')
         elif report_format == 'csv':
 #            string = self.delimitedTable(genome_data, 'csv', 'features')
             cf = CreateFeatureLists(self.config)
