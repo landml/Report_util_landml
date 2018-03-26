@@ -93,7 +93,6 @@ class Report_creator:
                 'direct_html_link_index': 0,
                 'file_links': output_zip_files,
                 'html_links': output_html_files,
-                'html_links': [],
                 'workspace_name': ws,
                 'report_object_name': 'Report_util_report'
             }
