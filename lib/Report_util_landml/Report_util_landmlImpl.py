@@ -2,12 +2,14 @@
 #BEGIN_HEADER
 import os
 import shutil
+import sys
 #import uuid
 from Bio import SeqIO
 from pprint import pprint, pformat
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+from Report_util_landml.CreateFasta import CreateFasta
 
 #END_HEADER
 
@@ -265,6 +267,7 @@ This sample module for creating text report for data objects
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.dfu = DataFileUtil(self.callback_url)
         self.scratch = os.path.abspath(config['scratch'])
+        self.config = config
         #END_CONSTRUCTOR
         pass
 
@@ -435,14 +438,6 @@ This sample module for creating text report for data objects
             raise ValueError('Parameter genome_input_ref is not set in input arguments')
         genome_input_ref = params['genome_input_ref']
 
-
-        # Step 2 - Get the input data
-        # We can use the AssemblyUtils module to download a FASTA file from our Assembly data object.
-        # The return object gives us the path to the file that was created.
-
-        # Step 3 - Actually perform the filter operation, saving the good contigs to a new fasta file.
-        # We can use BioPython to parse the Fasta file and build and save the output to a file.
-
         data_file_cli = DataFileUtil(self.callback_url)
         genome = data_file_cli.get_objects({'object_refs': [genome_input_ref]})
         genome_data = genome['data'][0]['data']
@@ -459,7 +454,9 @@ This sample module for creating text report for data objects
             string = self.gff3(genome_data, 'features')
             report_path = os.path.join(self.scratch, 'genome_report.gff')
         elif report_format == 'fasta':
-            string = self.readProteinFasta(genome_data)
+#            string = self.readProteinFasta(genome_data)
+            cf = CreateFasta(self.config)
+            string = cf.create_Fasta_from_features(genome_data['features'])
             report_path = os.path.join(self.scratch, 'genome_report.faa')
         else:
             raise ValueError('Invalid report option.' + str(report_format))
