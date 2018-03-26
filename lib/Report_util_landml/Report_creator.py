@@ -55,8 +55,6 @@ class Report_creator:
                 if (first_file == ""):
                     first_file = file
 
-                html_string += "            <button data-button=\"page " + str(html_count) + \
-                               "\" data-page=\"" + file + "\">Page " + str(html_count + 1) + "</button>\n"
                 html_count += 1
 
         html_string += "        </div>    </div>    <div id=\"body\">\n"
@@ -79,8 +77,10 @@ class Report_creator:
                                   'description': desc})
 
         report_params = {
+            'objects_created': [],
             'message': report_string,
-            #            'direct_html_link_index': 0,
+            'direct_html': '',
+            'direct_html_link_index': None,
             'file_links': output_zip_files,
             # 'html_links': output_html_files,
             'html_links': [],
@@ -89,8 +89,10 @@ class Report_creator:
         }
         if len(report_string) > 1000:
             report_params = {
+                'objects_created': [],
                 'message': "Long Report. Text in linked reports.",
- #               'direct_html_link_index': 0,
+                'direct_html': 'Simple direct message',
+                'direct_html_link_index': None,
                 'file_links': output_zip_files,
                 'html_links': output_html_files,
                 'workspace_name': ws,
