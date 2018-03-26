@@ -122,24 +122,43 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
  #       print  ret
 
-    def test_genome(self):
-        genbank_file_name = 'minimal.gbff'
-        genbank_file_path = os.path.join(self.scratch, genbank_file_name)
-        shutil.copy(os.path.join('data', genbank_file_name), genbank_file_path)
-
-        genome_object_name = 'test_Genome'
+    def test_genome_tab(self):
+#        genbank_file_name = 'minimal.gbff'
+#        genbank_file_path = os.path.join(self.scratch, genbank_file_name)
+#        shutil.copy(os.path.join('data', genbank_file_name), genbank_file_path)
 #        gfu = GenomeFileUtil(self.callback_url)
 #        genome_ref = gfu.genbank_to_genome({'file': {'path': genbank_file_path},
 #                                                    'workspace_name': self.getwsName(),
 #                                                    'genome_name': genome_object_name
 #                                                    })['genome_ref']
+        genome_object_name = 'test_Genome'
         genome_ref = "1706/26/1"
-
         ret = self.getImpl().genome_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genome_input_ref': genome_ref,
                                              'report_format': 'tab'
                                              })
+        # Validate the returned data
+        print  "RETURN;", ret
 
+    def test_genome_gff(self):
+        genome_object_name = 'test_Genome'
+        genome_ref = "1706/26/1"
+        ret = self.getImpl().genome_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'genome_input_ref': genome_ref,
+                                             'report_format': 'gff'
+                                             })
+        # Validate the returned data
+        print  "RETURN;", ret
+
+    def test_genome_fasta(self):
+        genome_object_name = 'test_Genome'
+        genome_ref = "1706/26/1"
+        ret = self.getImpl().genome_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'genome_input_ref': genome_ref,
+                                             'report_format': 'fasta'
+                                             })
         # Validate the returned data
         print  "RETURN;", ret

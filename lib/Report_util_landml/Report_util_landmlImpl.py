@@ -33,7 +33,7 @@ This sample module for creating text report for data objects
     GIT_COMMIT_HASH = "b4809d875cc70c4843964658397c1235a1e8e560"
 
     #BEGIN_CLASS_HEADER
-    def create_report(self, token, ws, report_string, read_file_path):
+    def create_report(self, token, ws, report_string, read_file_path, report_format):
         # type: (object, object, object, object) -> object
         output_html_files = list()
         output_zip_files = list()
@@ -44,7 +44,7 @@ This sample module for creating text report for data objects
             html_string = start_file.read()
 
         # Make HTML folder
-        html_folder = os.path.join(read_file_path, 'html')
+        html_folder = os.path.join(read_file_path, report_format + 'html')
         os.mkdir(html_folder)
         for file in os.listdir(read_file_path):
             label = ".".join(file.split(".")[1:])
@@ -212,9 +212,46 @@ This sample module for creating text report for data objects
             # print line
             index += 1
 
-            #        To Test - un-comment the next two lines
-            if index > 5 and testing.upper() == 'YES':
+        return line
+
+    # -----------------------------------------------------------------
+    #   Split a Sequence into 50 column chunks
+    #
+    def splitSequence(self, seq):
+        colsz = 50
+        start = 0
+        lenseq = len(seq)
+        line = ""
+
+        while True:
+            end = start + colsz
+            if end > lenseq:
+                end = lenseq
+            # print seq[start:end]
+            line += seq[start:end] + "\n"
+            start += colsz
+            if start > lenseq:
+                False
                 break
+        return line
+
+    # -----------------------------------------------------------------
+    #    Create a protein Fasta file for a genome
+    #
+    def readProteinFasta(self, pyStr):
+        myFeat = pyStr['features']
+        line = ""
+        for feat in myFeat:
+            if 'function' not in feat:
+                feat['function'] = 'unknown'
+            if 'type' in feat and feat['type'] not in ['CDS', 'gene']:
+                continue
+
+            if ('protein_translation' in feat):
+                line += ">" + feat['id'] + " " + feat['function']
+                line += " (len=" + str(feat['protein_translation_length']) + ")" + "\n"
+                # print line
+                line += self.splitSequence(feat['protein_translation']) + "\n"
 
         return line
 
@@ -402,9 +439,6 @@ This sample module for creating text report for data objects
         # Step 2 - Get the input data
         # We can use the AssemblyUtils module to download a FASTA file from our Assembly data object.
         # The return object gives us the path to the file that was created.
-        # print('Downloading Assembly data as a Fasta file.')
-        #        assemblyUtil = AssemblyUtil(self.callback_url)
-        #        fasta_file = assemblyUtil.get_assembly_as_fasta({'ref': assembly_input_ref})
 
         # Step 3 - Actually perform the filter operation, saving the good contigs to a new fasta file.
         # We can use BioPython to parse the Fasta file and build and save the output to a file.
@@ -422,10 +456,10 @@ This sample module for creating text report for data objects
             string = self.delimitedTable(genome_data, 'csv', 'features')
             report_path = os.path.join(self.scratch, 'genome_report.csv')
         elif report_format == 'gff':
-            string = self.gff3(genome_data, 'gff', 'features')
+            string = self.gff3(genome_data, 'features')
             report_path = os.path.join(self.scratch, 'genome_report.gff')
         elif report_format == 'fasta':
-            string = self.delimitedTable(genome_data, 'csv', 'features')
+            string = self.readProteinFasta(genome_data)
             report_path = os.path.join(self.scratch, 'genome_report.faa')
         else:
             raise ValueError('Invalid report option.' + str(report_format))
@@ -441,7 +475,7 @@ This sample module for creating text report for data objects
 #        print string
 
         reported_output = self.create_report(token, params['workspace_name'],
-                                    string, self.scratch)
+                                    string, self.scratch, report_format)
 
         output = {'report_name': reported_output['name'],
                   'report_ref': reported_output['ref']}
