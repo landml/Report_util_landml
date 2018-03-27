@@ -177,7 +177,7 @@ class Report_util_landml:
 
         cr = Report_creator(self.config)
         reported_output = cr.create_report(token, params['workspace_name'],
-                                    string, self.scratch, 'assem')
+                                    string, self.scratch)
 
         output = {'report_name': reported_output['name'],
                            'report_ref': reported_output['ref']}

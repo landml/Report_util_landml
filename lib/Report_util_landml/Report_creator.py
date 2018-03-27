@@ -98,7 +98,7 @@ class Report_creator:
 
         report_params = {
             'objects_created': [],
-            'message': report_string,
+            'message': "Click on Files below to download.\n" + report_string,
             'direct_html': '',
             'direct_html_link_index': None,
             'file_links': output_zip_files,
@@ -110,7 +110,7 @@ class Report_creator:
             report_params = {
                 'objects_created': [],
                 'message': '',
-                'direct_html': 'Text and HTML links for output files.',
+                'direct_html': 'Links below open text in a new window and click on Files below to download.',
                 'direct_html_link_index': None,
                 'file_links': output_zip_files,
                 'html_links': output_html_files,
