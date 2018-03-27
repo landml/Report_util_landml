@@ -2,7 +2,7 @@ module-name:
     Report_util_landml
 
 module-description:
-    A KBase module for creating text report for various data objects
+    A KBase module for creating text report for based on data objects
 
 service-language:
     python

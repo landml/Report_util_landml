@@ -3,7 +3,7 @@
 #
 name: Assembly Metadata Report
 tooltip: |
-    Create a report of the metadata of an Assembly Object
+    Create a text report of an Assembly Object's Metadata
 screenshots: []
 
 icon: kaleidoscope.png
@@ -36,6 +36,9 @@ parameters :
         ui-name : |
             Include a fasta of the contigs
         short-hint : |
-            Include a fasta of the contigs in the Assembly 
+            Include a fasta listing of the contigs in the Assembly
 description : |
-    <p>Example of how to do a text report from a database object </p>
+    <p>Text Report of the Metadata included in an Assembly, including the counts of bases.
+     Output is in tab-delimited format.
+     Includes a listing of the contig descriptions.
+     Optionally includes a FASTA of the contigs in the assembly.</p>
