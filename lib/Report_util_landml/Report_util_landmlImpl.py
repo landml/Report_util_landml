@@ -3,7 +3,7 @@
 import os
 import shutil
 
-#from Bio import SeqIO
+from Bio import SeqIO
 from pprint import pprint, pformat
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from KBaseReport.KBaseReportClient import KBaseReport
@@ -114,38 +114,43 @@ class Report_util_landml:
         # Step 2 - Download the input data as a Fasta and
         # We can use the AssemblyUtils module to download a FASTA file from our Assembly data object.
         # The return object gives us the path to the file that was created.
-        #print('Downloading Assembly data as a Fasta file.')
-        #        assemblyUtil = AssemblyUtil(self.callback_url)
-        #        fasta_file = assemblyUtil.get_assembly_as_fasta({'ref': assembly_input_ref})
+        print('Downloading Assembly data as a Fasta file.')
+        assemblyUtil = AssemblyUtil(self.callback_url)
+        fasta_file = assemblyUtil.get_assembly_as_fasta({'ref': assembly_input_ref})
 
-        # Step 3 - Actually perform the filter operation, saving the good contigs to a new fasta file.
-        # We can use BioPython to parse the Fasta file and build and save the output to a file.
-
+        # Step 3 - Get the data and save the output to a file.
         data_file_cli = DataFileUtil(self.callback_url)
 #        assembly_metadata = data_file_cli.get_objects({'object_refs': ['assembly_input_ref']})['data'][0]['data']
         assembly = data_file_cli.get_objects({'object_refs': [assembly_input_ref]})
+        name = "Assembly Data Object"
+        object_type = ''
+        if 'info' in assembly['data'][0]:
+            name = assembly['data'][0]['info'][1]
+            object_type = assembly['data'][0]['info'][2]
         assembly_metadata = assembly['data'][0]['data']
 
-        string = "\nAssembly Metadata\n"
+        string = "\n" + name + " Type=" + object_type  + "\n"
+        string += "Data Columns are tab-delimited\n"
+        string += "METADATA\n"
         list = ['assembly_id', 'dna_size', 'gc_content', 'num_contigs',
                 'fasta_handle_ref', 'md5', 'type', 'taxon_ref']
         for item in list:
             if item in assembly_metadata:
-                string += "\t{:20} = {}".format(item, assembly_metadata[item]) + "\n"
+                string += "\t" + item + "\t" + str(assembly_metadata[item]) + "\n"
 
         if 'fasta_handle_info' in assembly_metadata and 'node_file_name' in assembly_metadata['fasta_handle_info']:
             string += "\tfilename             = " + assembly_metadata['fasta_handle_info']['node_file_name'] + "\n"
-        string += "BASE counts\n"
+        string += "\nBASE COUNTS\n"
         for base in assembly_metadata['base_counts']:
-            #            string += "\t" + base + str(assembly_metadata['base_counts'][base]) + "\n"
-            string += "\t{:5} = {}".format(base, str(assembly_metadata['base_counts'][base])) + "\n"
-        string += "\nName\tLength\tGC content\tContigID\tDescription\n"
+            string += "\t" + base + "\t" +  str(assembly_metadata['base_counts'][base]) + "\n"
+
+        string += "\nCONTIGS in the Assembly"
+        string += "\nName\tLength\tGC content\tNum of Ns\tContigID\tDescription\n"
         if 'contigs' in assembly_metadata:
             myContig = assembly_metadata['contigs']
             for ctg in myContig:
-                list = ['length', 'gc_content', 'contig_id', 'description']
+                list = ['length', 'gc_content', 'Ncount', 'contig_id', 'description']
                 string += ctg
-                #                describeDict(myContig[ctg])
                 for item in list:
                     if item in myContig[ctg]:
                         string += "\t{}".format(myContig[ctg][item])
@@ -153,17 +158,20 @@ class Report_util_landml:
                         string += "\t"
                 string += "\n"
 
+        if showContigs:
+            string += "\nFASTA of the DNA Sequences\n"
+            for seq_record in SeqIO.parse(fasta_file['path'], 'fasta'):
+                string += ">" + seq_record.id + "\n" + str(seq_record.seq) + "\n"
+
         report_path = os.path.join(self.scratch, 'assembly_metadata_report.txt')
         report_txt = open(report_path, "w")
         report_txt.write(string)
+
         report_txt.close()
         report_path = os.path.join(self.scratch, 'assembly_metadata_report.html')
         report_txt = open(report_path, "w")
         report_txt.write("<pre>" + string + "</pre>")
         report_txt.close()
-
-        if showContigs:
-            string += "This is the place where the list of contigs will go when that part gets created\n"
 
         print string
 
@@ -175,7 +183,7 @@ class Report_util_landml:
                            'report_ref': reported_output['ref']}
 
         print('returning: ' + pformat(output))
-        print('Not returning: ' + pformat(reported_output))
+
         #END assembly_metadata_report
 
         # At some point might do deeper type checking...
@@ -264,7 +272,6 @@ class Report_util_landml:
                   'report_ref': reported_output['ref']}
 
         print('returning: ' + pformat(output))
-        print('Not returning: ' + pformat(reported_output))
         #END genome_report
 
         # At some point might do deeper type checking...
