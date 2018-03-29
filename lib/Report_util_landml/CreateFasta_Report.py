@@ -52,8 +52,28 @@ class CreateFasta:
         return line
 
     # -----------------------------------------------------------------
-    #    Create a Fasta file for a genome
+    #    Create a protein Fasta file for a genome
     #
+    def create_Fasta_from_mRNA(self, myFeat):
+        line = ""
+        for feat in myFeat:
+            if 'function' not in feat:
+                feat['function'] = 'unknown'
+            if 'type' in feat and feat['type'] not in ['CDS', 'gene']:
+                continue
+
+            if ('dna_sequence' in feat):
+                line += ">" + feat['id'] + " " + feat['function']
+                line += " (len=" + str(feat['dna_sequence_length']) + ")" + "\n"
+
+                # print line
+                line += self.splitSequence(feat['dna_sequence_translation']) + "\n"
+        return line
+
+
+    # -----------------------------------------------------------------
+    #    Create a Fasta file for a genome
+    # ######## NOT WRITTEN YET ######################
     def create_Fasta_from_assembly(self, pyStr):
         line = ""
         for feat in myFeat:

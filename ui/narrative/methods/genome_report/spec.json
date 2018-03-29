@@ -46,7 +46,15 @@
 					},
 					{
 						"value": "fasta",
-						"display": "CDSs, fasta format"
+						"display": "CDSs, fasta translated format"
+					},
+					{
+						"value": "DNA",
+						"display": "DNA fasta format"
+					},
+					{
+						"value": "mRNA",
+						"display": "CDSs, fasta mRNA format"
 					}
 				]
             }

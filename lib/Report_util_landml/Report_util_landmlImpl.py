@@ -37,6 +37,23 @@ class Report_util_landml:
 
     #BEGIN_CLASS_HEADER
 
+    def get_assembly_sequence(self,assembly_input_ref):
+        # Download the input data as a Fasta
+        # We can use the AssemblyUtils module to download a FASTA file from our Assembly data object.
+        # The return object gives us the path to the file that was created.
+        print('Downloading Assembly data as a Fasta file.')
+        assemblyUtil = AssemblyUtil(self.callback_url)
+        fasta_file = assemblyUtil.get_assembly_as_fasta({'ref': assembly_input_ref})
+        cf = CreateFasta(self.config)
+
+        string = ''
+        for seq_record in SeqIO.parse(fasta_file['path'], 'fasta'):
+            string += ">" + seq_record.id + "\n"
+            string += cf.splitSequence(str(seq_record.seq))
+            string += "\n"
+
+        return string
+
     #END_CLASS_HEADER
 
     # config contains contents of config file in a hash or None if it couldn't
@@ -111,12 +128,6 @@ class Report_util_landml:
         if showContigs > 1:
             raise ValueError('showContigs parameter cannot be greater than one (' + str(showContigs) + ')')
 
-        # Step 2 - Download the input data as a Fasta and
-        # We can use the AssemblyUtils module to download a FASTA file from our Assembly data object.
-        # The return object gives us the path to the file that was created.
-        print('Downloading Assembly data as a Fasta file.')
-        assemblyUtil = AssemblyUtil(self.callback_url)
-        fasta_file = assemblyUtil.get_assembly_as_fasta({'ref': assembly_input_ref})
 
         # Step 3 - Get the data and save the output to a file.
         data_file_cli = DataFileUtil(self.callback_url)
@@ -129,20 +140,25 @@ class Report_util_landml:
             object_type = assembly['data'][0]['info'][2]
         assembly_metadata = assembly['data'][0]['data']
 
-        string = "\n" + name + " Type=" + object_type  + "\n"
+        string = name + " Type=" + object_type  + "\n"
         string += "Data Columns are tab-delimited\n"
+        dna_size = 1.0
         string += "METADATA\n"
         list = ['assembly_id', 'dna_size', 'gc_content', 'num_contigs',
                 'fasta_handle_ref', 'md5', 'type', 'taxon_ref']
         for item in list:
             if item in assembly_metadata:
                 string += "\t" + item + "\t" + str(assembly_metadata[item]) + "\n"
+                if item == 'dna_size':
+                    dna_size = assembly_metadata['dna_size']
 
         if 'fasta_handle_info' in assembly_metadata and 'node_file_name' in assembly_metadata['fasta_handle_info']:
             string += "\tfilename             = " + assembly_metadata['fasta_handle_info']['node_file_name'] + "\n"
-        string += "\nBASE COUNTS\n"
+        string += "\nDNA BASES\tCOUNTS\tPERCENT\n"
+        pct = 1.00
         for base in assembly_metadata['base_counts']:
-            string += "\t" + base + "\t" +  str(assembly_metadata['base_counts'][base]) + "\n"
+            pct = 100 * assembly_metadata['base_counts'][base] / dna_size
+            string += "\t" + base + "\t" +  str(assembly_metadata['base_counts'][base]) + "\t" + str(pct) + "\n"
 
         string += "\nCONTIGS in the Assembly"
         string += "\nName\tLength\tGC content\tNum of Ns\tContigID\tDescription\n"
@@ -160,8 +176,7 @@ class Report_util_landml:
 
         if showContigs:
             string += "\nFASTA of the DNA Sequences\n"
-            for seq_record in SeqIO.parse(fasta_file['path'], 'fasta'):
-                string += ">" + seq_record.id + "\n" + str(seq_record.seq) + "\n"
+            string += self.get_assembly_sequence(assembly_input_ref)
 
         report_path = os.path.join(self.scratch, 'assembly_metadata_report.txt')
         report_txt = open(report_path, "w")
@@ -233,27 +248,37 @@ class Report_util_landml:
         report_format = params['report_format']
         string = ''
         if report_format == 'tab':
-#            string = self.delimitedTable(genome_data, 'tab', 'features')
             cf = CreateFeatureLists(self.config)
             string = cf.delimitedTable(genome_data, 'tab', 'features')
             report_path = os.path.join(self.scratch, 'genome_report.tab')
         elif report_format == 'csv':
-#            string = self.delimitedTable(genome_data, 'csv', 'features')
             cf = CreateFeatureLists(self.config)
             string = cf.delimitedTable(genome_data, 'csv', 'features')
             report_path = os.path.join(self.scratch, 'genome_report.csv')
         elif report_format == 'gff':
-#            string = self.gff3(genome_data, 'features')
             cf = CreateFeatureLists(self.config)
             string = cf.gff3(genome_data, 'features')
             report_path = os.path.join(self.scratch, 'genome_report.gff')
         elif report_format == 'fasta':
-#            string = self.readProteinFasta(genome_data)
             cf = CreateFasta(self.config)
             string = cf.create_Fasta_from_features(genome_data['features'])
             report_path = os.path.join(self.scratch, 'genome_report.faa')
+        elif report_format == 'mRNA':
+            cf = CreateFasta(self.config)
+            string = cf.create_Fasta_from_mRNA(genome_data['features'])
+            report_path = os.path.join(self.scratch, 'genome_report.fna')
+        elif report_format == 'DNA':
+            string += "\nFASTA of the DNA Sequences\n"
+            report_path = os.path.join(self.scratch, 'genome_dna_report.fna')
+            if 'assembly_ref' in genome_data:
+                assembly_input_ref = genome_data['assembly_ref']
+                string += self.get_assembly_sequence(assembly_input_ref)
+            else:
+                string += 'Did not find the Assembly Reference'
+
         else:
             raise ValueError('Invalid report option.' + str(report_format))
+
 
         report_txt = open(report_path, "w")
         report_txt.write(string)
@@ -266,7 +291,7 @@ class Report_util_landml:
 #        print string
         cr = Report_creator(self.config)
         reported_output = cr.create_report(token, params['workspace_name'],
-                                    string, self.scratch, report_format)
+                                    string, self.scratch)
 
         output = {'report_name': reported_output['name'],
                   'report_ref': reported_output['ref']}
