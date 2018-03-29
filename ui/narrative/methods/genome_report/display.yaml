@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: Genome-Based Texg Reports
+name: Genome-Based Text Reports
 tooltip: |
     Create a text reports based on Genome-Objects
 screenshots: []

@@ -268,7 +268,6 @@ class Report_util_landml:
             string = cf.create_Fasta_from_mRNA(genome_data['features'])
             report_path = os.path.join(self.scratch, 'genome_report.fna')
         elif report_format == 'DNA':
-            string += "\nFASTA of the DNA Sequences\n"
             report_path = os.path.join(self.scratch, 'genome_dna_report.fna')
             if 'assembly_ref' in genome_data:
                 assembly_input_ref = genome_data['assembly_ref']

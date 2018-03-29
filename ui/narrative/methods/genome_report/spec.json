@@ -33,6 +33,10 @@
             "dropdown_options": {
                 "options": [ 
 					{
+						"value": "DNA",
+						"display": "DNA fasta format"
+					},
+					{
 						"value": "tab",
 						"display": "Features, tab-delimited" 
 					},
@@ -46,15 +50,11 @@
 					},
 					{
 						"value": "fasta",
-						"display": "CDSs, fasta translated format"
-					},
-					{
-						"value": "DNA",
-						"display": "DNA fasta format"
+						"display": "FASTA, translated CDSs"
 					},
 					{
 						"value": "mRNA",
-						"display": "CDSs, fasta mRNA format"
+						"display": "FASTA, mRNA of CDSs"
 					}
 				]
             }

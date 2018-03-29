@@ -67,7 +67,7 @@ class CreateFasta:
                 line += " (len=" + str(feat['dna_sequence_length']) + ")" + "\n"
 
                 # print line
-                line += self.splitSequence(feat['dna_sequence_translation']) + "\n"
+                line += self.splitSequence(feat['dna_sequence']) + "\n"
         return line
 
 
