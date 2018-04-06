@@ -33,7 +33,7 @@ This sample module for creating text report for data objects
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/landml/Report_util_landml"
-    GIT_COMMIT_HASH = "b7bf7bc4ab5ab872d005d5e14ae022888fb05891"
+    GIT_COMMIT_HASH = "09788cebee14435f9851737d2a15a0f63721534f"
 
     #BEGIN_CLASS_HEADER
 
@@ -311,7 +311,7 @@ This sample module for creating text report for data objects
     def domain_report(self, ctx, params):
         """
         :param params: instance of type "DomainReportParams" -> structure:
-           parameter "domain_annotation_input_ref" of type "domain_ref",
+           parameter "domain_annotation_input_ref" of type "genome_ref",
            parameter "evalue_cutoff" of Double, parameter "workspace_name" of
            String, parameter "report_format" of String
         :returns: instance of type "ReportResults" (Here is the definition of

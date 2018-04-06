@@ -84,7 +84,7 @@ class Report_util_landml(object):
     def domain_report(self, params, context=None):
         """
         :param params: instance of type "DomainReportParams" -> structure:
-           parameter "domain_annotation_input_ref" of type "genome_ref",
+           parameter "domain_annotation_input_ref" of type "domain_ref",
            parameter "evalue_cutoff" of Double, parameter "workspace_name" of
            String, parameter "report_format" of String
         :returns: instance of type "ReportResults" (Here is the definition of

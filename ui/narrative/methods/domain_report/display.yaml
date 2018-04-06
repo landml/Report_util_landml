@@ -29,9 +29,9 @@ suggestions:
 parameters :
     domain_annotation_input_ref :
         ui-name : |
-            Genome
+            DomainAnnotation
         short-hint : |
-            The genome used in the report
+            The domain annotation object to be used in the report
     evalue_cutoff :
         ui-name : |
             Cutoff

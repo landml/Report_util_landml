@@ -324,11 +324,11 @@ ReportResults is a reference to a hash where the following keys are defined:
 $params is a Report_util_landml.DomainReportParams
 $output is a Report_util_landml.ReportResults
 DomainReportParams is a reference to a hash where the following keys are defined:
-	domain_annotation_input_ref has a value which is a Report_util_landml.genome_ref
+	domain_annotation_input_ref has a value which is a Report_util_landml.domain_ref
 	evalue_cutoff has a value which is a float
 	workspace_name has a value which is a string
 	report_format has a value which is a string
-genome_ref is a string
+domain_ref is a string
 ReportResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -342,11 +342,11 @@ ReportResults is a reference to a hash where the following keys are defined:
 $params is a Report_util_landml.DomainReportParams
 $output is a Report_util_landml.ReportResults
 DomainReportParams is a reference to a hash where the following keys are defined:
-	domain_annotation_input_ref has a value which is a Report_util_landml.genome_ref
+	domain_annotation_input_ref has a value which is a Report_util_landml.domain_ref
 	evalue_cutoff has a value which is a float
 	workspace_name has a value which is a string
 	report_format has a value which is a string
-genome_ref is a string
+domain_ref is a string
 ReportResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -580,6 +580,32 @@ a string
 
 
 
+=head2 domain_ref
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 AssemblyMetadataReportParams
 
 =over 4
@@ -676,7 +702,7 @@ report_format has a value which is a string
 
 <pre>
 a reference to a hash where the following keys are defined:
-domain_annotation_input_ref has a value which is a Report_util_landml.genome_ref
+domain_annotation_input_ref has a value which is a Report_util_landml.domain_ref
 evalue_cutoff has a value which is a float
 workspace_name has a value which is a string
 report_format has a value which is a string
@@ -688,7 +714,7 @@ report_format has a value which is a string
 =begin text
 
 a reference to a hash where the following keys are defined:
-domain_annotation_input_ref has a value which is a Report_util_landml.genome_ref
+domain_annotation_input_ref has a value which is a Report_util_landml.domain_ref
 evalue_cutoff has a value which is a float
 workspace_name has a value which is a string
 report_format has a value which is a string

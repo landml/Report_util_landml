@@ -17,7 +17,7 @@ module Report_util_landml {
 
     typedef string assembly_ref;
     typedef string genome_ref;
-
+    typedef string domain_ref;
     /*
         A 'typedef' can also be used to define compound or container
         objects, like lists, maps, and structures.  The standard KBase
@@ -46,7 +46,7 @@ module Report_util_landml {
     } GenomeReportParams;
 
     typedef structure {
-        genome_ref domain_annotation_input_ref;
+        domain_ref domain_annotation_input_ref;
         float evalue_cutoff;
         string workspace_name;
         string report_format;
