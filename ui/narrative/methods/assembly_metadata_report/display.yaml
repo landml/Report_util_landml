@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: Assembly Metadata Report
+name: Text Report - Assembly Metadata
 tooltip: |
     Create a text report of an Assembly Object's Metadata
 screenshots: []
