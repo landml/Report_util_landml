@@ -207,7 +207,7 @@ class CreateFeatureLists:
 
         # Header
         line = ""
-        lineList = ["Contig", "Count"]
+        lineList = ["Domain", "Count"]
 
         #   Check for valid formats
         if format not in ['tab', 'csv']:
