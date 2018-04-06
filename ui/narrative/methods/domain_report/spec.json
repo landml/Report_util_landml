@@ -46,11 +46,11 @@
                 "options": [ 
 					{
 						"value": "tab",
-						"display": "Features, tab-delimited" 
+						"display": "Tab-delimited"
 					},
 					{
 						"value": "csv",
-						"display": "Features, comma-delimited" 
+						"display": "Comma-delimited"
 					}
 				]
             }

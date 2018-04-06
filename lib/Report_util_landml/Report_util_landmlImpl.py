@@ -383,9 +383,9 @@ This sample module for creating text report for data objects
 
         #        print string
         cr = Report_creator(self.config)
-        string = string1 + "\n" + string2
+
         reported_output = cr.create_report(token, params['workspace_name'],
-                                           string, self.scratch)
+                                           string2, self.scratch)
 
         output = {'report_name': reported_output['name'],
                   'report_ref': reported_output['ref']}
