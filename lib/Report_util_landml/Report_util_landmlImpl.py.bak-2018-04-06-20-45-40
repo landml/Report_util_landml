@@ -274,7 +274,7 @@ This sample module for creating text report for data objects
             report_path = os.path.join(self.scratch, 'genome_dna_report.fna')
             if 'assembly_ref' in genome_data:
                 assembly_input_ref = genome_data['assembly_ref']
-                string += self.get_assembly_sequence(assembly_input_ref)
+                string += self.get_assembly_sequence(assembly_input_ref')
             else:
                 string += 'Did not find the Assembly Reference'
 
@@ -348,7 +348,7 @@ This sample module for creating text report for data objects
 
         print domain_data.keys()
 
-        evalue_cutoff = float(params['evalue_cutoff'])
+        evalue_cutoff = params['evalue_cutoff']
         report_format = params['report_format']
         string1 = ''
         string2 = ''
@@ -358,7 +358,6 @@ This sample module for creating text report for data objects
             string2 = cf.readDomainAnnCount(domain_data, 'tab', evalue_cutoff)
             report_path1 = os.path.join(self.scratch, 'domain_annotation_list.tab')
             report_path2 = os.path.join(self.scratch, 'domain_annotation_count.tab')
-            print "TYOPE=", type(string1)
         elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
             string1 = cf.readDomainAnnList(domain_data, 'csv', evalue_cutoff)
@@ -383,7 +382,6 @@ This sample module for creating text report for data objects
 
         #        print string
         cr = Report_creator(self.config)
-        string = string1 + "\n" + string2
         reported_output = cr.create_report(token, params['workspace_name'],
                                            string, self.scratch)
 

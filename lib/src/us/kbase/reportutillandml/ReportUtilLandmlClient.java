@@ -201,6 +201,23 @@ public class ReportUtilLandmlClient {
         return res.get(0);
     }
 
+    /**
+     * <p>Original spec-file function name: domain_report</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.reportutillandml.DomainReportParams DomainReportParams}
+     * @return   parameter "output" of type {@link us.kbase.reportutillandml.ReportResults ReportResults}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ReportResults domainReport(DomainReportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ReportResults>> retType = new TypeReference<List<ReportResults>>() {};
+        List<ReportResults> res = caller.jsonrpcCall("Report_util_landml.domain_report", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
     public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<List<Map<String, Object>>> retType = new TypeReference<List<Map<String, Object>>>() {};

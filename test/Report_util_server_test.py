@@ -174,13 +174,25 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genome_DNA(self):
+    def mytest_genome_DNA(self):
         genome_object_name = 'test_Genome'
         genome_ref = "1706/26/1"
         ret = self.getImpl().genome_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genome_input_ref': genome_ref,
                                              'report_format': 'DNA'
+                                             })
+        # Validate the returned data
+        print  "RETURN;", ret
+
+    def test_domain_annotation(self):
+        genome_object_name = 'test_Genome'
+        domain_ref = "14803/3/3"
+        ret = self.getImpl().domain_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'evalue_cutoff': '1e-20',
+                                             'domain_annotation_input_ref': domain_ref,
+                                             'report_format': 'tab'
                                              })
         # Validate the returned data
         print  "RETURN;", ret

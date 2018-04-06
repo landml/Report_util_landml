@@ -45,6 +45,13 @@ module Report_util_landml {
         string report_format;
     } GenomeReportParams;
 
+    typedef structure {
+        genome_ref domain_annotation_input_ref;
+        float evalue_cutoff;
+        string workspace_name;
+        string report_format;
+    } DomainReportParams;
+
     /*
         Here is the definition of the output of the function.  The output
         can be used by other SDK modules which call your code, or the output
@@ -67,5 +74,7 @@ module Report_util_landml {
     funcdef assembly_metadata_report(AssemblyMetadataReportParams params)
         returns (ReportResults output) authentication required;
     funcdef genome_report(GenomeReportParams params)
+        returns (ReportResults output) authentication required;
+    funcdef domain_report(DomainReportParams params)
         returns (ReportResults output) authentication required;
 };

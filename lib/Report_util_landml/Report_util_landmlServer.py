@@ -341,6 +341,10 @@ class Application(object):
                              name='Report_util_landml.genome_report',
                              types=[dict])
         self.method_authentication['Report_util_landml.genome_report'] = 'required'  # noqa
+        self.rpc_service.add(impl_Report_util_landml.domain_report,
+                             name='Report_util_landml.domain_report',
+                             types=[dict])
+        self.method_authentication['Report_util_landml.domain_report'] = 'required'  # noqa
         self.rpc_service.add(impl_Report_util_landml.status,
                              name='Report_util_landml.status',
                              types=[dict])

@@ -4,33 +4,55 @@
         "landml"
     ],
     "contact": "https://kbase.us/contact-us/",
-    "categories": ["active"],
+    "categories": ["active","util"],
     "widgets": {
         "input": null,
         "output": "no-display"
     },
     "parameters": [ 
         {
-            "id": "assembly_input_ref",
+            "id": "domain_annotation_input_ref",
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ "KBaseGenomeAnnotations.Assembly" ]
+                "valid_ws_types": [ "KBaseGenomes.Genome" ]
             }
         },
-        {
-            "id": "showContigs",
+       {
+            "id": "evalue_cutoff",
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
-            "default_values": [ 1 ],
-            "field_type": "int",
+            "default_values": [ "0.001" ],
+            "field_type": "text",
             "text_options": {
-                "validate_as": "int",
+                "validate_as": "float",
                 "min_integer" : 0
+            }
+        },
+        {
+            "id": "report_format",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [
+                "tab"
+            ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [ 
+					{
+						"value": "tab",
+						"display": "Features, tab-delimited" 
+					},
+					{
+						"value": "csv",
+						"display": "Features, comma-delimited" 
+					}
+				]
             }
         }
     ],
@@ -38,20 +60,24 @@
         "service-mapping": {
             "url": "",
             "name":"Report_util_landml",
-            "method": "assembly_metadata_report",
+            "method": "domain_report",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace_name"
                 },
                 {
-                    "input_parameter": "assembly_input_ref",
-                    "target_property": "assembly_input_ref",
+                    "input_parameter": "domain_annotation_input_ref",
+                    "target_property": "domain_annotation_input_ref",
                     "target_type_transform": "resolved-ref"
                 },
                 {
-                    "input_parameter": "showContigs",
-                    "target_property": "showContigs"
+                    "input_parameter": "evalue_cutoff",
+                    "target_property": "evalue_cutoff"
+                },
+                {
+                    "input_parameter": "report_format",
+                    "target_property": "report_format"
                 }
             ],
             "output_mapping": [

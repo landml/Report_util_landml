@@ -113,3 +113,135 @@ class CreateFeatureLists:
             line += "\t".join(lineList) + "\n"
 
         return line
+
+
+
+    # -----------------------------------------------------------------
+    #   Domain Annotation Reports
+    #
+
+    #   OBJECT: DomainAnnotation
+    #   FUNCTION: User-defined function to format all the domains for a gene
+    #
+    def printGeneDomain(self, contig, geneName, geneDomain, format, cutoff):
+        line = ""
+        lineList = ""
+        for domain in geneDomain:
+            list = geneDomain[domain]
+            if list[0][2] < cutoff:
+                lineList = [contig, geneName, domain, str(list[0][2]), str(list[0][0]), str(list[0][1])]
+                if format == 'tab':
+                    line += "\t".join(lineList)
+                elif format == 'csv':
+                    line += ",".join(lineList)
+                #            print line
+                line += "\n"
+        return line
+
+
+    #
+    #   OBJECT: DomainAnnotation
+    #   FORMAT: tab or comma delimited list of the genes, domains, e-values, and start/stop of domain hit
+    #   Loop through all of the contigs and get all of the genes
+    #   Uses printGeneDomain to print out individual lines
+    #
+    def readDomainAnnList(self, pyStr, format, cutoff):
+        #   Make sure the cutoff is a number
+        if not isinstance(cutoff, (int, long, float, complex)):
+            print "Cutoff Value must be numeric."
+            return
+
+        # Header
+        line = ""
+        lineList = ["Contig", "Gene ID", "Domain", "Evalue", "Start", "Stop"]
+
+        #   Check for valid formats
+        if format not in ['tab', 'csv']:
+            print "Invalid format. Valid formats are tab and csv"
+            return
+        elif format == 'tab':
+            line = "\t".join(lineList)
+        elif format == 'csv':
+            line = "'" + ",".join(lineList)
+
+        # Add line-end to the header
+        line += "\n"
+
+        myData = pyStr['data']
+
+        for contig in myData:
+            contigData = myData[contig]
+            for gene in contigData:
+                if (gene[4]):
+                    line += self.printGeneDomain(contig, gene[0], gene[4], format, cutoff)
+
+        return line
+
+
+    #
+    #   OBJECT: DomainAnnotation
+    #   FUNCTION: User-defined function to count the domains for a gene
+    #
+    def countGeneDomain(self, contig, geneName, geneDomain, format, cutoff, myDict):
+        for domain in geneDomain:
+            list = geneDomain[domain]
+            if list[0][2] < cutoff:
+                if domain in myDict:
+                    myDict[domain] += 1
+                else:
+                    myDict[domain] = 1
+
+        return myDict
+
+
+    #
+    #   OBJECT: DomainAnnotation
+    #   FORMAT: List of the domains and number of occurrences in the genome
+    #   Uses countGeneDomain to get the statistics for an individual gene
+    #
+    def readDomainAnnCount(self, pyStr, format, cutoff):
+        #   Make sure the cutoff is a number
+        if not isinstance(cutoff, (int, long, float, complex)):
+            print "Cutoff Value must be numeric."
+            return
+
+        # Header
+        line = ""
+        lineList = ["Contig", "Count"]
+
+        #   Check for valid formats
+        if format not in ['tab', 'csv']:
+            print "Invalid format. Valid formats are tab and csv"
+            return
+        elif format == 'tab':
+            line = "\t".join(lineList)
+        elif format == 'csv':
+            line = "'" + ",".join(lineList)
+
+        # Add line-end to the header
+        line += "\n"
+
+        myData = pyStr['data']
+        count = 0
+        myDict = {}
+        for contig in myData:
+            contigData = myData[contig]
+
+            for gene in contigData:
+                if (gene[4]):
+                    myDict = self.countGeneDomain(contig, gene[0], gene[4], format, cutoff, myDict)
+
+        domainList = myDict.keys()
+        domainList.sort()
+        for domain in domainList:
+            lineList = [domain, str(myDict[domain])]
+            if format == 'tab':
+                line += "\t".join(lineList)
+            elif format == 'csv':
+                line += ",".join(lineList)
+            line += "\n"
+
+        return line
+
+
+print "Done"

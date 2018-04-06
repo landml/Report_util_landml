@@ -1,0 +1,46 @@
+#
+# define display information
+#
+name: Text Reports - Domain Annotation
+tooltip: |
+    Create a text reports based on a Domain Annotation Object
+screenshots: []
+
+icon: kaleidoscope.png
+
+#
+# define a set of similar methods that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            []
+        next:
+            []
+    methods:
+        related:
+            []
+        next:
+            []
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    domain_annotation_input_ref :
+        ui-name : |
+            Genome
+        short-hint : |
+            The genome used in the report
+    evalue_cutoff :
+        ui-name : |
+            Cutoff
+        short-hint : |
+            Cutoff evalue for filtering the report
+    report_format:
+        ui-name : |
+            Report_format
+        short-hint : |
+            Format for the type of report to produce
+description : |
+    <p>Get a list in tab-separated (tsv) or comma-separated (csv) format</p>

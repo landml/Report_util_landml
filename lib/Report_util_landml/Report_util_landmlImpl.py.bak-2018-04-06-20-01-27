@@ -274,7 +274,7 @@ This sample module for creating text report for data objects
             report_path = os.path.join(self.scratch, 'genome_dna_report.fna')
             if 'assembly_ref' in genome_data:
                 assembly_input_ref = genome_data['assembly_ref']
-                string += self.get_assembly_sequence(assembly_input_ref)
+                string += self.get_assembly_sequence(assembly_input_ref')
             else:
                 string += 'Did not find the Assembly Reference'
 
@@ -312,8 +312,8 @@ This sample module for creating text report for data objects
         """
         :param params: instance of type "DomainReportParams" -> structure:
            parameter "domain_annotation_input_ref" of type "genome_ref",
-           parameter "evalue_cutoff" of Double, parameter "workspace_name" of
-           String, parameter "report_format" of String
+           parameter "workspace_name" of String, parameter "report_format" of
+           String
         :returns: instance of type "ReportResults" (Here is the definition of
            the output of the function.  The output can be used by other SDK
            modules which call your code, or the output visualizations in the
@@ -348,42 +348,29 @@ This sample module for creating text report for data objects
 
         print domain_data.keys()
 
-        evalue_cutoff = float(params['evalue_cutoff'])
         report_format = params['report_format']
-        string1 = ''
-        string2 = ''
+        string = ''
         if report_format == 'tab':
             cf = CreateFeatureLists(self.config)
-            string1 = cf.readDomainAnnList(domain_data, 'tab', evalue_cutoff)
-            string2 = cf.readDomainAnnCount(domain_data, 'tab', evalue_cutoff)
-            report_path1 = os.path.join(self.scratch, 'domain_annotation_list.tab')
-            report_path2 = os.path.join(self.scratch, 'domain_annotation_count.tab')
-            print "TYOPE=", type(string1)
+            string = cf.delimitedTable(genome_data, 'tab', 'features')
+            report_path = os.path.join(self.scratch, 'genome_report.tab')
         elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
-            string1 = cf.readDomainAnnList(domain_data, 'csv', evalue_cutoff)
-            string2 = cf.readDomainAnnCount(domain_data, 'csv', evalue_cutoff)
-            report_path1 = os.path.join(self.scratch, 'domain_annotation_list.csv')
-            report_path2 = os.path.join(self.scratch, 'domain_annotation_count.csv')
+            string = cf.delimitedTable(genome_data, 'csv', 'features')
+            report_path = os.path.join(self.scratch, 'genome_report.csv')
         else:
             raise ValueError('Invalid report option.' + str(report_format))
 
-        report_txt = open(report_path1, "w")
-        report_txt.write(string1)
+        report_txt = open(report_path, "w")
+        report_txt.write(string)
         report_txt.close()
-        report_txt = open(report_path2, "w")
-        report_txt.write(string2)
-        report_txt.close()
-
         report_path = os.path.join(self.scratch, 'text_report.html')
         report_txt = open(report_path, "w")
-        report_txt.write("<pre>" + string2 + "</pre>")
-        report_txt.write("<pre>" + string1 + "</pre>")
+        report_txt.write("<pre>" + string + "</pre>")
         report_txt.close()
 
         #        print string
         cr = Report_creator(self.config)
-        string = string1 + "\n" + string2
         reported_output = cr.create_report(token, params['workspace_name'],
                                            string, self.scratch)
 
