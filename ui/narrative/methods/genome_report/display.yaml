@@ -1,9 +1,9 @@
 #
 # define display information
 #
-name: Genome-Based Text Reports
+name: Text Reports - Genome
 tooltip: |
-    Create a text reports based on Genome-Objects
+    Create a text reports based on a Genome Object
 screenshots: []
 
 icon: kaleidoscope.png
@@ -36,6 +36,6 @@ parameters :
         ui-name : |
             Report_format
         short-hint : |
-            Format for the type of report to product
+            Format for the type of report to produce
 description : |
     <p>Get an annotated genome in FASTA, tab-separated (tsv), comma-separated (csv), or GFF3 format</p>

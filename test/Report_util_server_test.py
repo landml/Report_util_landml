@@ -106,7 +106,7 @@ class Report_util_landmlTest(unittest.TestCase):
         return assembly_ref
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def test_assembly_metadata(self):
+    def mytest_assembly_metadata(self):
 
         assembly_ref = self.get_fasta_file(self.test_path,
                                              'TestAssembly3')
@@ -159,6 +159,28 @@ class Report_util_landmlTest(unittest.TestCase):
                                             {'workspace_name': self.getWsName(),
                                              'genome_input_ref': genome_ref,
                                              'report_format': 'fasta'
+                                             })
+        # Validate the returned data
+        print  "RETURN;", ret
+
+    def mytest_genome_mrna(self):
+        genome_object_name = 'test_Genome'
+        genome_ref = "1706/26/1"
+        ret = self.getImpl().genome_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'genome_input_ref': genome_ref,
+                                             'report_format': 'mRNA'
+                                             })
+        # Validate the returned data
+        print  "RETURN;", ret
+
+    def test_genome_DNA(self):
+        genome_object_name = 'test_Genome'
+        genome_ref = "1706/26/1"
+        ret = self.getImpl().genome_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'genome_input_ref': genome_ref,
+                                             'report_format': 'DNA'
                                              })
         # Validate the returned data
         print  "RETURN;", ret
