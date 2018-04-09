@@ -1,9 +1,9 @@
 #
 # define display information
 #
-name: Text Reports - Genome
+name: Text Reports - Genome Set
 tooltip: |
-    Create a text reports based on a Genome Object
+    Create a text reports based on a Genome  Set Object
 screenshots: []
 
 icon: kaleidoscope.png
@@ -29,13 +29,13 @@ suggestions:
 parameters :
     genome_input_ref :
         ui-name : |
-            Genome
+            GenomeSet
         short-hint : |
-            The genome used in the report
+            The genome set used in the report
     report_format:
         ui-name : |
             Report_format
         short-hint : |
             Format for the type of report to produce
 description : |
-    <p>Get an annotated genome in FASTA, tab-separated (tsv), comma-separated (csv), or GFF3 format</p>
+    <p>Get a list of the genomes in a GenomeSet</p>

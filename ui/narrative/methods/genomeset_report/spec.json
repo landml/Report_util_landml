@@ -11,17 +11,17 @@
     },
     "parameters": [ 
         {
-            "id": "genome_input_ref",
+            "id": "genomeset_input_ref",
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ "KBaseGenomes.Genome" ]
+                "valid_ws_types": [ "KBaseSearch.GenomeSet‑2.1" ]
             }
         },
-        {
+       {
             "id": "report_format",
             "optional": false,
             "advanced": false,
@@ -31,30 +31,22 @@
             ],
             "field_type": "dropdown",
             "dropdown_options": {
-                "options": [ 
+                "options": [
 					{
-						"value": "DNA",
-						"display": "DNA fasta format"
+						"value": "meta",
+						"display": "Metadata only"
+					},
+					{
+						"value": "list",
+						"display": "Vertical Pretty List"
 					},
 					{
 						"value": "tab",
-						"display": "Features, tab-delimited" 
+						"display": "Features, tab-delimited"
 					},
 					{
 						"value": "csv",
-						"display": "Features, comma-delimited" 
-					},
-					{
-						"value": "gff",
-						"display": "Features, GFF3 format"
-					},
-					{
-						"value": "fasta",
-						"display": "FASTA, translated CDSs"
-					},
-					{
-						"value": "mRNA",
-						"display": "FASTA, mRNA of CDSs"
+						"display": "Features, comma-delimited"
 					}
 				]
             }
@@ -64,15 +56,15 @@
         "service-mapping": {
             "url": "",
             "name":"Report_util_landml",
-            "method": "genome_report",
+            "method": "genomeset_report",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace_name"
                 },
                 {
-                    "input_parameter": "genome_input_ref",
-                    "target_property": "genome_input_ref",
+                    "input_parameter": "genomeset_input_ref",
+                    "target_property": "genomeset_input_ref",
                     "target_type_transform": "resolved-ref"
                 },
                 {
