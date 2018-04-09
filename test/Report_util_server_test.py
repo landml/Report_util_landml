@@ -185,7 +185,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_domain_annotation(self):
+    def mytest_domain_annotation(self):
         genome_object_name = 'test_Genome'
         domain_ref = "14803/3/3"
         ret = self.getImpl().domain_report(self.getContext(),
@@ -193,6 +193,50 @@ class Report_util_landmlTest(unittest.TestCase):
                                              'evalue_cutoff': '1e-20',
                                              'domain_annotation_input_ref': domain_ref,
                                              'report_format': 'tab'
+                                             })
+        # Validate the returned data
+        print  "RETURN;", ret
+
+    def test_genomeset_meta(self):
+        genome_object_name = 'test_Genome'
+        genomeset_ref = "1706/37/1"
+        ret = self.getImpl().genomeset_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'genomeset_input_ref': genomeset_ref,
+                                             'report_format': 'meta'
+                                             })
+        # Validate the returned data
+        print  "RETURN;", ret
+
+    def test_genomeset_list(self):
+        genome_object_name = 'test_Genome'
+        genomeset_ref = "1706/37/1"
+        ret = self.getImpl().genomeset_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'genomeset_input_ref': genomeset_ref,
+                                             'report_format': 'list'
+                                             })
+        # Validate the returned data
+        print  "RETURN;", ret
+
+    def test_genomeset_tab(self):
+        genome_object_name = 'test_Genome'
+        genomeset_ref = "1706/37/1"
+        ret = self.getImpl().genomeset_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'genomeset_input_ref': genomeset_ref,
+                                             'report_format': 'tab'
+                                             })
+        # Validate the returned data
+        print  "RETURN;", ret
+
+    def test_genomeset_csv(self):
+        genome_object_name = 'test_Genome'
+        genomeset_ref = "1706/37/1"
+        ret = self.getImpl().genomeset_report(self.getContext(),
+                                            {'workspace_name': self.getWsName(),
+                                             'genomeset_input_ref': genomeset_ref,
+                                             'report_format': 'csv'
                                              })
         # Validate the returned data
         print  "RETURN;", ret

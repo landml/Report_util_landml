@@ -81,6 +81,23 @@ class Report_util_landml(object):
             'Report_util_landml.genome_report',
             [params], self._service_ver, context)
 
+    def genomeset_report(self, params, context=None):
+        """
+        :param params: instance of type "GenomeSetReportParams" -> structure:
+           parameter "genomeset_input_ref" of type "genomeset_ref", parameter
+           "workspace_name" of String, parameter "report_format" of String
+        :returns: instance of type "ReportResults" (Here is the definition of
+           the output of the function.  The output can be used by other SDK
+           modules which call your code, or the output visualizations in the
+           Narrative.  'report_name' and 'report_ref' are special output
+           fields- if defined, the Narrative can automatically render your
+           Report.) -> structure: parameter "report_name" of String,
+           parameter "report_ref" of String
+        """
+        return self._client.call_method(
+            'Report_util_landml.genomeset_report',
+            [params], self._service_ver, context)
+
     def domain_report(self, params, context=None):
         """
         :param params: instance of type "DomainReportParams" -> structure:
@@ -97,6 +114,59 @@ class Report_util_landml(object):
         """
         return self._client.call_method(
             'Report_util_landml.domain_report',
+            [params], self._service_ver, context)
+
+    def tree_report(self, params, context=None):
+        """
+        :param params: instance of type "TreeReportParams" -> structure:
+           parameter "tree_input_ref" of type "tree_ref", parameter
+           "workspace_name" of String, parameter "report_format" of String
+        :returns: instance of type "ReportResults" (Here is the definition of
+           the output of the function.  The output can be used by other SDK
+           modules which call your code, or the output visualizations in the
+           Narrative.  'report_name' and 'report_ref' are special output
+           fields- if defined, the Narrative can automatically render your
+           Report.) -> structure: parameter "report_name" of String,
+           parameter "report_ref" of String
+        """
+        return self._client.call_method(
+            'Report_util_landml.tree_report',
+            [params], self._service_ver, context)
+
+    def featseq_report(self, params, context=None):
+        """
+        :param params: instance of type "FeatSeqReportParams" -> structure:
+           parameter "feature_sequence_input_ref" of type "featseq_ref",
+           parameter "workspace_name" of String, parameter "report_format" of
+           String
+        :returns: instance of type "ReportResults" (Here is the definition of
+           the output of the function.  The output can be used by other SDK
+           modules which call your code, or the output visualizations in the
+           Narrative.  'report_name' and 'report_ref' are special output
+           fields- if defined, the Narrative can automatically render your
+           Report.) -> structure: parameter "report_name" of String,
+           parameter "report_ref" of String
+        """
+        return self._client.call_method(
+            'Report_util_landml.featseq_report',
+            [params], self._service_ver, context)
+
+    def protcomp_report(self, params, context=None):
+        """
+        :param params: instance of type "ProtCompReportParams" -> structure:
+           parameter "protein_compare_input_ref" of type "protcomp_ref",
+           parameter "workspace_name" of String, parameter "report_format" of
+           String
+        :returns: instance of type "ReportResults" (Here is the definition of
+           the output of the function.  The output can be used by other SDK
+           modules which call your code, or the output visualizations in the
+           Narrative.  'report_name' and 'report_ref' are special output
+           fields- if defined, the Narrative can automatically render your
+           Report.) -> structure: parameter "report_name" of String,
+           parameter "report_ref" of String
+        """
+        return self._client.call_method(
+            'Report_util_landml.protcomp_report',
             [params], self._service_ver, context)
 
     def status(self, context=None):

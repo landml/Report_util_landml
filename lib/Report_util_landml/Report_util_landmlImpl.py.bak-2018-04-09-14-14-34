@@ -10,7 +10,6 @@ from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from CreateFasta_Report import CreateFasta
 from CreateFeatureLists_Report import CreateFeatureLists
-from CreateGenomeSetsReport import CreateGenomeSetsReport
 from Report_creator import Report_creator
 
 #END_HEADER
@@ -34,7 +33,7 @@ This sample module for creating text report for data objects
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/landml/Report_util_landml"
-    GIT_COMMIT_HASH = "9330b0f8118e498655e8baf6c1c5fb585001475e"
+    GIT_COMMIT_HASH = "b7bf7bc4ab5ab872d005d5e14ae022888fb05891"
 
     #BEGIN_CLASS_HEADER
 
@@ -309,93 +308,6 @@ This sample module for creating text report for data objects
         # return the results
         return [output]
 
-    def genomeset_report(self, ctx, params):
-        """
-        :param params: instance of type "GenomeSetReportParams" -> structure:
-           parameter "genomeset_input_ref" of type "genomeset_ref", parameter
-           "workspace_name" of String, parameter "report_format" of String
-        :returns: instance of type "ReportResults" (Here is the definition of
-           the output of the function.  The output can be used by other SDK
-           modules which call your code, or the output visualizations in the
-           Narrative.  'report_name' and 'report_ref' are special output
-           fields- if defined, the Narrative can automatically render your
-           Report.) -> structure: parameter "report_name" of String,
-           parameter "report_ref" of String
-        """
-        # ctx is the context object
-        # return variables are: output
-        #BEGIN genomeset_report
-        token = ctx['token']
-
-        # Print statements to stdout/stderr are captured and available as the App log
-        print('Starting Genome Set Report Function. Params=')
-        pprint(params)
-
-        # Step 1 - Parse/examine the parameters and catch any errors
-        # It is important to check that parameters exist and are defined, and that nice error
-        # messages are returned to users.
-        print('Validating parameters.')
-        if 'workspace_name' not in params:
-            raise ValueError('Parameter workspace_name is not set in input arguments')
-        workspace_name = params['workspace_name']
-        if 'genomeset_input_ref' not in params:
-            raise ValueError('Parameter genomeset_input_ref is not set in input arguments')
-        genomeset_input_ref = params['genomeset_input_ref']
-
-        data_file_cli = DataFileUtil(self.callback_url)
-        genomeset = data_file_cli.get_objects({'object_refs': [genomeset_input_ref]})
-        genome_name = genomeset['data'][0]['info'][1]
-        genomeset_data = genomeset['data'][0]['data']
-
-        print genomeset_data.keys()
-
-        report_format = params['report_format']
-        string = ''
-        if report_format == 'tab':
-            gsr = CreateGenomeSetsReport(self.config)
-            string = gsr.readGenomeSet(genome_name, genomeset_data, 'tab')
-            report_path = os.path.join(self.scratch, 'genomeset_report.tab')
-        elif report_format == 'csv':
-            gsr = CreateGenomeSetsReport(self.config)
-            string = gsr.readGenomeSet(genome_name, genomeset_data, 'csv')
-            report_path = os.path.join(self.scratch, 'genomeset_report.csv')
-        elif report_format == 'list':
-            gsr = CreateGenomeSetsReport(self.config)
-            string = gsr.readGenomeSet(genome_name, genomeset_data, 'list')
-            report_path = os.path.join(self.scratch, 'genomeset_report.txt')
-        elif report_format == 'meta':
-            gsr = CreateGenomeSetsReport(self.config)
-            string = gsr.getGenomeSetMeta(genomeset['data'][0])
-            report_path = os.path.join(self.scratch, 'genomeset_report.txt')
-        else:
-            raise ValueError('Invalid report option.' + str(report_format))
-
-        report_txt = open(report_path, "w")
-        report_txt.write(string)
-        report_txt.close()
-        report_path = os.path.join(self.scratch, 'text_report.html')
-        report_txt = open(report_path, "w")
-        report_txt.write("<pre>" + string + "</pre>")
-        report_txt.close()
-
-        #        print string
-        cr = Report_creator(self.config)
-        reported_output = cr.create_report(token, params['workspace_name'],
-                                           string, self.scratch)
-
-        output = {'report_name': reported_output['name'],
-                  'report_ref': reported_output['ref']}
-
-        print('returning: ' + pformat(output))
-        #END genomeset_report
-
-        # At some point might do deeper type checking...
-        if not isinstance(output, dict):
-            raise ValueError('Method genomeset_report return value ' +
-                             'output is not type dict as required.')
-        # return the results
-        return [output]
-
     def domain_report(self, ctx, params):
         """
         :param params: instance of type "DomainReportParams" -> structure:
@@ -484,83 +396,6 @@ This sample module for creating text report for data objects
         # At some point might do deeper type checking...
         if not isinstance(output, dict):
             raise ValueError('Method domain_report return value ' +
-                             'output is not type dict as required.')
-        # return the results
-        return [output]
-
-    def tree_report(self, ctx, params):
-        """
-        :param params: instance of type "TreeReportParams" -> structure:
-           parameter "tree_input_ref" of type "tree_ref", parameter
-           "workspace_name" of String, parameter "report_format" of String
-        :returns: instance of type "ReportResults" (Here is the definition of
-           the output of the function.  The output can be used by other SDK
-           modules which call your code, or the output visualizations in the
-           Narrative.  'report_name' and 'report_ref' are special output
-           fields- if defined, the Narrative can automatically render your
-           Report.) -> structure: parameter "report_name" of String,
-           parameter "report_ref" of String
-        """
-        # ctx is the context object
-        # return variables are: output
-        #BEGIN tree_report
-        #END tree_report
-
-        # At some point might do deeper type checking...
-        if not isinstance(output, dict):
-            raise ValueError('Method tree_report return value ' +
-                             'output is not type dict as required.')
-        # return the results
-        return [output]
-
-    def featseq_report(self, ctx, params):
-        """
-        :param params: instance of type "FeatSeqReportParams" -> structure:
-           parameter "feature_sequence_input_ref" of type "featseq_ref",
-           parameter "workspace_name" of String, parameter "report_format" of
-           String
-        :returns: instance of type "ReportResults" (Here is the definition of
-           the output of the function.  The output can be used by other SDK
-           modules which call your code, or the output visualizations in the
-           Narrative.  'report_name' and 'report_ref' are special output
-           fields- if defined, the Narrative can automatically render your
-           Report.) -> structure: parameter "report_name" of String,
-           parameter "report_ref" of String
-        """
-        # ctx is the context object
-        # return variables are: output
-        #BEGIN featseq_report
-        #END featseq_report
-
-        # At some point might do deeper type checking...
-        if not isinstance(output, dict):
-            raise ValueError('Method featseq_report return value ' +
-                             'output is not type dict as required.')
-        # return the results
-        return [output]
-
-    def protcomp_report(self, ctx, params):
-        """
-        :param params: instance of type "ProtCompReportParams" -> structure:
-           parameter "protein_compare_input_ref" of type "protcomp_ref",
-           parameter "workspace_name" of String, parameter "report_format" of
-           String
-        :returns: instance of type "ReportResults" (Here is the definition of
-           the output of the function.  The output can be used by other SDK
-           modules which call your code, or the output visualizations in the
-           Narrative.  'report_name' and 'report_ref' are special output
-           fields- if defined, the Narrative can automatically render your
-           Report.) -> structure: parameter "report_name" of String,
-           parameter "report_ref" of String
-        """
-        # ctx is the context object
-        # return variables are: output
-        #BEGIN protcomp_report
-        #END protcomp_report
-
-        # At some point might do deeper type checking...
-        if not isinstance(output, dict):
-            raise ValueError('Method protcomp_report return value ' +
                              'output is not type dict as required.')
         # return the results
         return [output]

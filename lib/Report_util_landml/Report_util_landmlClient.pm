@@ -310,6 +310,104 @@ ReportResults is a reference to a hash where the following keys are defined:
  
 
 
+=head2 genomeset_report
+
+  $output = $obj->genomeset_report($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a Report_util_landml.GenomeSetReportParams
+$output is a Report_util_landml.ReportResults
+GenomeSetReportParams is a reference to a hash where the following keys are defined:
+	genomeset_input_ref has a value which is a Report_util_landml.genomeset_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+genomeset_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a Report_util_landml.GenomeSetReportParams
+$output is a Report_util_landml.ReportResults
+GenomeSetReportParams is a reference to a hash where the following keys are defined:
+	genomeset_input_ref has a value which is a Report_util_landml.genomeset_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+genomeset_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub genomeset_report
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function genomeset_report (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to genomeset_report:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'genomeset_report');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "Report_util_landml.genomeset_report",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'genomeset_report',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method genomeset_report",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'genomeset_report',
+				       );
+    }
+}
+ 
+
+
 =head2 domain_report
 
   $output = $obj->domain_report($params)
@@ -408,6 +506,300 @@ ReportResults is a reference to a hash where the following keys are defined:
     }
 }
  
+
+
+=head2 tree_report
+
+  $output = $obj->tree_report($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a Report_util_landml.TreeReportParams
+$output is a Report_util_landml.ReportResults
+TreeReportParams is a reference to a hash where the following keys are defined:
+	tree_input_ref has a value which is a Report_util_landml.tree_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+tree_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a Report_util_landml.TreeReportParams
+$output is a Report_util_landml.ReportResults
+TreeReportParams is a reference to a hash where the following keys are defined:
+	tree_input_ref has a value which is a Report_util_landml.tree_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+tree_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub tree_report
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function tree_report (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to tree_report:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'tree_report');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "Report_util_landml.tree_report",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'tree_report',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method tree_report",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'tree_report',
+				       );
+    }
+}
+ 
+
+
+=head2 featseq_report
+
+  $output = $obj->featseq_report($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a Report_util_landml.FeatSeqReportParams
+$output is a Report_util_landml.ReportResults
+FeatSeqReportParams is a reference to a hash where the following keys are defined:
+	feature_sequence_input_ref has a value which is a Report_util_landml.featseq_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+featseq_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a Report_util_landml.FeatSeqReportParams
+$output is a Report_util_landml.ReportResults
+FeatSeqReportParams is a reference to a hash where the following keys are defined:
+	feature_sequence_input_ref has a value which is a Report_util_landml.featseq_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+featseq_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub featseq_report
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function featseq_report (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to featseq_report:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'featseq_report');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "Report_util_landml.featseq_report",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'featseq_report',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method featseq_report",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'featseq_report',
+				       );
+    }
+}
+ 
+
+
+=head2 protcomp_report
+
+  $output = $obj->protcomp_report($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a Report_util_landml.ProtCompReportParams
+$output is a Report_util_landml.ReportResults
+ProtCompReportParams is a reference to a hash where the following keys are defined:
+	protein_compare_input_ref has a value which is a Report_util_landml.protcomp_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+protcomp_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a Report_util_landml.ProtCompReportParams
+$output is a Report_util_landml.ReportResults
+ProtCompReportParams is a reference to a hash where the following keys are defined:
+	protein_compare_input_ref has a value which is a Report_util_landml.protcomp_ref
+	workspace_name has a value which is a string
+	report_format has a value which is a string
+protcomp_ref is a string
+ReportResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub protcomp_report
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function protcomp_report (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to protcomp_report:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'protcomp_report');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "Report_util_landml.protcomp_report",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'protcomp_report',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method protcomp_report",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'protcomp_report',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -451,16 +843,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'domain_report',
+                method_name => 'protcomp_report',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method domain_report",
+            error => "Error invoking method protcomp_report",
             status_line => $self->{client}->status_line,
-            method_name => 'domain_report',
+            method_name => 'protcomp_report',
         );
     }
 }
@@ -580,7 +972,111 @@ a string
 
 
 
+=head2 genomeset_ref
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 domain_ref
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 tree_ref
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 featseq_ref
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 protcomp_ref
 
 =over 4
 
@@ -690,6 +1186,40 @@ report_format has a value which is a string
 
 
 
+=head2 GenomeSetReportParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+genomeset_input_ref has a value which is a Report_util_landml.genomeset_ref
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+genomeset_input_ref has a value which is a Report_util_landml.genomeset_ref
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+
+=end text
+
+=back
+
+
+
 =head2 DomainReportParams
 
 =over 4
@@ -716,6 +1246,108 @@ report_format has a value which is a string
 a reference to a hash where the following keys are defined:
 domain_annotation_input_ref has a value which is a Report_util_landml.domain_ref
 evalue_cutoff has a value which is a float
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 TreeReportParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+tree_input_ref has a value which is a Report_util_landml.tree_ref
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+tree_input_ref has a value which is a Report_util_landml.tree_ref
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 FeatSeqReportParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+feature_sequence_input_ref has a value which is a Report_util_landml.featseq_ref
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+feature_sequence_input_ref has a value which is a Report_util_landml.featseq_ref
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 ProtCompReportParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+protein_compare_input_ref has a value which is a Report_util_landml.protcomp_ref
+workspace_name has a value which is a string
+report_format has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+protein_compare_input_ref has a value which is a Report_util_landml.protcomp_ref
 workspace_name has a value which is a string
 report_format has a value which is a string
 

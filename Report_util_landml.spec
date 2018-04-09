@@ -17,8 +17,12 @@ module Report_util_landml {
 
     typedef string assembly_ref;
     typedef string genome_ref;
+    typedef string genomeset_ref;
     typedef string domain_ref;
-    /*
+    typedef string tree_ref;
+    typedef string featseq_ref;
+    typedef string protcomp_ref;
+     /*
         A 'typedef' can also be used to define compound or container
         objects, like lists, maps, and structures.  The standard KBase
         convention is to use structures, as shown here, to define the
@@ -46,11 +50,35 @@ module Report_util_landml {
     } GenomeReportParams;
 
     typedef structure {
+        genomeset_ref genomeset_input_ref;
+        string workspace_name;
+        string report_format;
+    } GenomeSetReportParams;
+
+    typedef structure {
         domain_ref domain_annotation_input_ref;
         float evalue_cutoff;
         string workspace_name;
         string report_format;
     } DomainReportParams;
+
+    typedef structure {
+        tree_ref tree_input_ref;
+        string workspace_name;
+        string report_format;
+    } TreeReportParams;
+
+    typedef structure {
+        featseq_ref feature_sequence_input_ref;
+        string workspace_name;
+        string report_format;
+    } FeatSeqReportParams;
+
+    typedef structure {
+        protcomp_ref protein_compare_input_ref;
+        string workspace_name;
+        string report_format;
+    } ProtCompReportParams;
 
     /*
         Here is the definition of the output of the function.  The output
@@ -75,6 +103,14 @@ module Report_util_landml {
         returns (ReportResults output) authentication required;
     funcdef genome_report(GenomeReportParams params)
         returns (ReportResults output) authentication required;
+    funcdef genomeset_report(GenomeSetReportParams params)
+        returns (ReportResults output) authentication required;
     funcdef domain_report(DomainReportParams params)
+        returns (ReportResults output) authentication required;
+    funcdef tree_report(TreeReportParams params)
+        returns (ReportResults output) authentication required;
+    funcdef featseq_report(FeatSeqReportParams params)
+        returns (ReportResults output) authentication required;
+    funcdef protcomp_report(ProtCompReportParams params)
         returns (ReportResults output) authentication required;
 };

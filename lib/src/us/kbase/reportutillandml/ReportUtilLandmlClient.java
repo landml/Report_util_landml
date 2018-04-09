@@ -202,6 +202,23 @@ public class ReportUtilLandmlClient {
     }
 
     /**
+     * <p>Original spec-file function name: genomeset_report</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.reportutillandml.GenomeSetReportParams GenomeSetReportParams}
+     * @return   parameter "output" of type {@link us.kbase.reportutillandml.ReportResults ReportResults}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ReportResults genomesetReport(GenomeSetReportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ReportResults>> retType = new TypeReference<List<ReportResults>>() {};
+        List<ReportResults> res = caller.jsonrpcCall("Report_util_landml.genomeset_report", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: domain_report</p>
      * <pre>
      * </pre>
@@ -215,6 +232,57 @@ public class ReportUtilLandmlClient {
         args.add(params);
         TypeReference<List<ReportResults>> retType = new TypeReference<List<ReportResults>>() {};
         List<ReportResults> res = caller.jsonrpcCall("Report_util_landml.domain_report", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: tree_report</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.reportutillandml.TreeReportParams TreeReportParams}
+     * @return   parameter "output" of type {@link us.kbase.reportutillandml.ReportResults ReportResults}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ReportResults treeReport(TreeReportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ReportResults>> retType = new TypeReference<List<ReportResults>>() {};
+        List<ReportResults> res = caller.jsonrpcCall("Report_util_landml.tree_report", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: featseq_report</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.reportutillandml.FeatSeqReportParams FeatSeqReportParams}
+     * @return   parameter "output" of type {@link us.kbase.reportutillandml.ReportResults ReportResults}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ReportResults featseqReport(FeatSeqReportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ReportResults>> retType = new TypeReference<List<ReportResults>>() {};
+        List<ReportResults> res = caller.jsonrpcCall("Report_util_landml.featseq_report", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: protcomp_report</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.reportutillandml.ProtCompReportParams ProtCompReportParams}
+     * @return   parameter "output" of type {@link us.kbase.reportutillandml.ReportResults ReportResults}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ReportResults protcompReport(ProtCompReportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ReportResults>> retType = new TypeReference<List<ReportResults>>() {};
+        List<ReportResults> res = caller.jsonrpcCall("Report_util_landml.protcomp_report", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 
