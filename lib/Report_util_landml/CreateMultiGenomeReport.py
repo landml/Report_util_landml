@@ -8,7 +8,7 @@ def log(message, prefix_newline=False):
     print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
 
 
-class CreateGenomeSetsReport:
+class CreateMultiGenomeReport:
     def __init__(self, config):
         self.config = config
         self.callback_url = os.environ['SDK_CALLBACK_URL']
@@ -53,7 +53,7 @@ class CreateGenomeSetsReport:
         if format == 'tab':
             lst = [name, obj_id, sci_name, source, domain, assembly, num_feat, num_ctg, gc_cont, gen_code]
             line = "\t".join(lst) + "\n"
-        if format == 'cvs':
+        if format == 'csv':
             lst = [name, obj_id, sci_name, source, domain, assembly, num_feat, num_ctg, gc_cont, gen_code]
             line = ",".join(lst) + "\n"
         return line

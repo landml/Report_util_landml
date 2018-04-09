@@ -10,7 +10,7 @@ from KBaseReport.KBaseReportClient import KBaseReport
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 from CreateFasta_Report import CreateFasta
 from CreateFeatureLists_Report import CreateFeatureLists
-from CreateGenomeSetsReport import CreateGenomeSetsReport
+from CreateMultiGenomeReport import CreateMultiGenomeReport
 from Report_creator import Report_creator
 
 #END_HEADER
@@ -352,19 +352,19 @@ This sample module for creating text report for data objects
         report_format = params['report_format']
         string = ''
         if report_format == 'tab':
-            gsr = CreateGenomeSetsReport(self.config)
+            gsr = CreateMultiGenomeReport(self.config)
             string = gsr.readGenomeSet(genome_name, genomeset_data, 'tab')
             report_path = os.path.join(self.scratch, 'genomeset_report.tab')
         elif report_format == 'csv':
-            gsr = CreateGenomeSetsReport(self.config)
+            gsr = CreateMultiGenomeReport(self.config)
             string = gsr.readGenomeSet(genome_name, genomeset_data, 'csv')
             report_path = os.path.join(self.scratch, 'genomeset_report.csv')
         elif report_format == 'list':
-            gsr = CreateGenomeSetsReport(self.config)
+            gsr = CreateMultiGenomeReport(self.config)
             string = gsr.readGenomeSet(genome_name, genomeset_data, 'list')
             report_path = os.path.join(self.scratch, 'genomeset_report.txt')
         elif report_format == 'meta':
-            gsr = CreateGenomeSetsReport(self.config)
+            gsr = CreateMultiGenomeReport(self.config)
             string = gsr.getGenomeSetMeta(genomeset['data'][0])
             report_path = os.path.join(self.scratch, 'genomeset_report.txt')
         else:
