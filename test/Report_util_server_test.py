@@ -197,7 +197,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genomeset_meta(self):
+    def mytest_genomeset_meta(self):
         genome_object_name = 'test_Genome'
         genomeset_ref = "1706/37/1"
         ret = self.getImpl().genomeset_report(self.getContext(),
@@ -208,7 +208,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genomeset_list(self):
+    def mytest_genomeset_list(self):
         genome_object_name = 'test_Genome'
         genomeset_ref = "1706/37/1"
         ret = self.getImpl().genomeset_report(self.getContext(),
@@ -219,7 +219,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genomeset_tab(self):
+    def mytest_genomeset_tab(self):
         genome_object_name = 'test_Genome'
         genomeset_ref = "1706/37/1"
         ret = self.getImpl().genomeset_report(self.getContext(),
