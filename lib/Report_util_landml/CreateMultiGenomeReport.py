@@ -17,7 +17,7 @@ class CreateMultiGenomeReport:
     # Listing of the Elements of a GenomeSet
     #
     def getGenomeSet(self, obj_id, obj_data, format):
-#        obj_data = get_object_data(obj_id)
+
         lst = ['unk', 'unk', 'unk', 'unk', 'unk', 'unk', 'unk', 'unk', 'unk']
         domain, size, num_feat, gc_cont, num_ctg, source, gen_code, assembly, sci_name = lst
         name = obj_data['info'][1]
@@ -47,14 +47,14 @@ class CreateMultiGenomeReport:
         line = ''
         if format == 'list':
             line = name + "\n"
-            line += "\tObjectID:     {0:s}\n\tScientName:   {1}\n\tSource:       {2:s}\n\tDomain:       {3:s}\n\tAssembly Ref: {4}\n".format(
-                obj_id, sci_name, source, domain, assembly)
+            line += "\tObjectID:     {0:s}\n\tScientName:   {1}\n\tSize:         {0}\n\tSource:       {2:s}\n\tDomain:       {3:s}\n\tAssembly Ref: {4}\n".format(
+                obj_id, sci_name, size, source, domain, assembly)
             line += "\tFeatures:     {0}\n\tContigs:      {1}\n\tPct. GC:      {2}\n\tGenetic Code: {3}\n".format(num_feat, num_ctg, gc_cont, gen_code)
         if format == 'tab':
-            lst = [name, obj_id, sci_name, source, domain, assembly, num_feat, num_ctg, gc_cont, gen_code]
+            lst = [name, obj_id, sci_name, size, source, domain, assembly, num_feat, num_ctg, gc_cont, gen_code]
             line = "\t".join(lst) + "\n"
         if format == 'csv':
-            lst = [name, obj_id, sci_name, source, domain, assembly, num_feat, num_ctg, gc_cont, gen_code]
+            lst = [name, obj_id, sci_name, size, source, domain, assembly, num_feat, num_ctg, gc_cont, gen_code]
             line = ",".join(lst) + "\n"
         return line
 

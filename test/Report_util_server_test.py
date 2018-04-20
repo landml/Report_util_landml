@@ -61,6 +61,16 @@ class Report_util_landmlTest(unittest.TestCase):
         shutil.copy(os.path.join("data",
                                  cls.test_filename), cls.test_path)
 
+        cls.genbank_file_name = 'minimal.gbff'
+        cls.genbank_file_path = os.path.join(cls.scratch, cls.genbank_file_name)
+        shutil.copy(os.path.join('data', cls.genbank_file_name), cls.genbank_file_path)
+
+        cls.gfu = GenomeFileUtil(cls.callback_url)
+
+        domain_data_file = 'Carsonella.Domains.json'
+        cls.domain_file = os.path.join(cls.scratch, domain_data_file)
+        shutil.copy(os.path.join('data', domain_data_file), cls.domain_file)
+
     @classmethod
     def tearDownClass(cls):
         if hasattr(cls, 'wsName'):
@@ -106,13 +116,118 @@ class Report_util_landmlTest(unittest.TestCase):
         return assembly_ref
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def mytest_assembly_metadata(self):
+    def getDomainInfo(self, domain_name ):
+        lib_i = 0
+        if hasattr(self.__class__, 'domainInfo_list'):
+            try:
+                info = self.__class__.domainInfo_list[lib_i]
+                name = self.__class__.domainName_list[lib_i]
+                if info != None:
+                    if name != domain_name:
+                        self.__class__.domainInfo_list[lib_i] = None
+                        self.__class__.domainName_list[lib_i] = None
+                    else:
+                        return info
+            except:
+                pass
+
+        # 1) transform json to kbase DomainAnnotation object and upload to ws
+        # create object
+        with open (self.domain_file, 'r', 0) as domain_fh:
+            domain_obj = json.load(domain_fh)
+
+        genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
+                                                    'workspace_name': self.getWsName(),
+                                                    'genome_name': 'minimal_test_genome'
+                                                    })['genome_ref']
+
+        domain_obj['used_dms_ref'] = 'KBasePublicGeneDomains/All'
+        domain_obj['genome_ref'] = genome_ref
+
+        provenance = [{}]
+        new_obj_info = self.getWsClient().save_objects({
+            'workspace': self.getWsName(),
+            'objects': [
+                {
+                    'type': 'KBaseGeneFamilies.DomainAnnotation',
+                    'data': domain_obj,
+                    'name': 'test_DOMAINS',
+                    'meta': {},
+                    'provenance': provenance
+                }
+            ]})[0]
+
+        # 2) store it
+        if not hasattr(self.__class__, 'domainInfo_list'):
+            self.__class__.domainInfo_list = []
+            self.__class__.domainName_list = []
+        for i in range(lib_i+1):
+            try:
+                assigned = self.__class__.domainInfo_list[i]
+            except:
+                self.__class__.domainInfo_list.append(None)
+                self.__class__.domainName_list.append(None)
+
+        self.__class__.domainInfo_list[lib_i] = new_obj_info
+        self.__class__.domainName_list[lib_i] = domain_name
+
+        return str(new_obj_info[6]) + "/" + str(new_obj_info[0]) + "/" + str(new_obj_info[4])
+
+    def getGenomeSet(self):
+        ref1 = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
+                                                    'workspace_name': self.getWsName(),
+                                                    'genome_name': 'minimal_test_genome'
+                                                    })['genome_ref']
+
+        genbank_file_name = 'minimal2.gbff'
+        genbank_file_path = os.path.join(self.scratch, genbank_file_name)
+        shutil.copy(os.path.join('data', genbank_file_name), genbank_file_path)
+        ref2 = self.gfu.genbank_to_genome({'file': {'path': genbank_file_path},
+                                                    'workspace_name': self.getWsName(),
+                                                    'genome_name': 'minimal_test_genome2'
+                                                    })['genome_ref']
+#        genome_ref_list = [str(ref1), str(ref2)]
+#
+#        print "List:", genome_ref_list
+
+        # build GenomeSet obj
+        testGS = {
+            'description': 'two genomes',
+            'elements': dict()
+        }
+#        genome_scinames = dict()
+#        genome_scinames['ref1'] = 'Saccharomyces cerevisiae 1'
+#        genome_scinames['ref2'] = 'Saccharomyces cerevisiae 2'
+#
+#        for genome_ref in genome_ref_list:
+#            testGS['elements'][genome_scinames[genome_ref]] = { 'ref': genome_ref }
+        testGS['elements']['Saccharomyces cerevisiae 1'] = { 'ref' : ref1}
+        testGS['elements']['Saccharomyces cerevisiae 2'] = { 'ref' : ref2}
+
+        new_obj_info = self.getWsClient().save_objects({'workspace': self.getWsName(),
+                                                    'objects': [
+                                                        {
+                                                            'type':'KBaseSearch.GenomeSet',
+                                                            'data':testGS,
+                                                            'name':'test_genomeset',
+                                                            'meta':{},
+                                                            'provenance':[
+                                                                {
+                                                                    'service':'kb_phylogenomics',
+                                                                    'method':'test_view_fxn_profile'
+                                                                }
+                                                            ]
+                                                        }]
+                                                })[0]
+#        print "NEW:", new_obj_info
+#
+        return str(new_obj_info[6]) + "/" + str(new_obj_info[0]) + "/" + str(new_obj_info[4])
+
+
+    def test_assembly_metadata(self):
 
         assembly_ref = self.get_fasta_file(self.test_path,
                                              'TestAssembly3')
-#        print "ASSEMBLY_REF=", assembly_ref
-
-        # Second, call your implementation
         ret = self.getImpl().assembly_metadata_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'assembly_input_ref': assembly_ref,
@@ -122,17 +237,13 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
  #       print  ret
 
-    def mytest_genome_tab(self):
-#        genbank_file_name = 'minimal.gbff'
-#        genbank_file_path = os.path.join(self.scratch, genbank_file_name)
-#        shutil.copy(os.path.join('data', genbank_file_name), genbank_file_path)
-#        gfu = GenomeFileUtil(self.callback_url)
-#        genome_ref = gfu.genbank_to_genome({'file': {'path': genbank_file_path},
-#                                                    'workspace_name': self.getwsName(),
-#                                                    'genome_name': genome_object_name
-#                                                    })['genome_ref']
-        genome_object_name = 'test_Genome'
-        genome_ref = "1706/26/1"
+    def test_genome_tab(self):
+#        genome_object_name = 'test_Genome'
+#        genome_ref = "1706/26/1"
+        genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
+                                                    'workspace_name': self.getWsName(),
+                                                    'genome_name': 'minimal_test_genome'
+                                                    })['genome_ref']
         ret = self.getImpl().genome_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genome_input_ref': genome_ref,
@@ -141,9 +252,13 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def mytest_genome_gff(self):
-        genome_object_name = 'test_Genome'
-        genome_ref = "1706/26/1"
+    def test_genome_gff(self):
+#        genome_object_name = 'test_Genome'
+#        genome_ref = "1706/26/1"
+        genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
+                                                    'workspace_name': self.getWsName(),
+                                                    'genome_name': 'minimal_test_genome'
+                                                    })['genome_ref']
         ret = self.getImpl().genome_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genome_input_ref': genome_ref,
@@ -152,9 +267,13 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def mytest_genome_fasta(self):
-        genome_object_name = 'test_Genome'
-        genome_ref = "1706/26/1"
+    def test_genome_fasta(self):
+#        genome_object_name = 'test_Genome'
+#        genome_ref = "1706/26/1"
+        genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
+                                                    'workspace_name': self.getWsName(),
+                                                    'genome_name': 'minimal_test_genome'
+                                                    })['genome_ref']
         ret = self.getImpl().genome_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genome_input_ref': genome_ref,
@@ -163,9 +282,13 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def mytest_genome_mrna(self):
-        genome_object_name = 'test_Genome'
-        genome_ref = "1706/26/1"
+    def test_genome_mrna(self):
+#        genome_object_name = 'test_Genome'
+#        genome_ref = "1706/26/1"
+        genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
+                                                    'workspace_name': self.getWsName(),
+                                                    'genome_name': 'minimal_test_genome'
+                                                    })['genome_ref']
         ret = self.getImpl().genome_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genome_input_ref': genome_ref,
@@ -174,9 +297,13 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def mytest_genome_DNA(self):
-        genome_object_name = 'test_Genome'
-        genome_ref = "1706/26/1"
+    def test_genome_DNA(self):
+#        genome_object_name = 'test_Genome'
+#        genome_ref = "1706/26/1"
+        genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
+                                                    'workspace_name': self.getWsName(),
+                                                    'genome_name': 'minimal_test_genome'
+                                                    })['genome_ref']
         ret = self.getImpl().genome_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genome_input_ref': genome_ref,
@@ -185,9 +312,10 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def mytest_domain_annotation(self):
-        genome_object_name = 'test_Genome'
-        domain_ref = "14803/3/3"
+    def test_domain_annotation(self):
+#        genome_object_name = 'test_Genome'
+#        domain_ref = "14803/3/3"
+        domain_ref = self.getDomainInfo('test_domain')
         ret = self.getImpl().domain_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'evalue_cutoff': '1e-20',
@@ -197,9 +325,10 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def mytest_genomeset_meta(self):
-        genome_object_name = 'test_Genome'
-        genomeset_ref = "1706/37/1"
+    def test_genomeset_meta(self):
+#        genome_object_name = 'test_Genome'
+#        genomeset_ref = "1706/37/1"
+        genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genomeset_input_ref': genomeset_ref,
@@ -208,9 +337,10 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def mytest_genomeset_list(self):
-        genome_object_name = 'test_Genome'
-        genomeset_ref = "1706/37/1"
+    def test_genomeset_list(self):
+#        genome_object_name = 'test_Genome'
+#        genomeset_ref = "1706/37/1"
+        genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genomeset_input_ref': genomeset_ref,
@@ -219,9 +349,10 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def mytest_genomeset_tab(self):
-        genome_object_name = 'test_Genome'
-        genomeset_ref = "1706/37/1"
+    def test_genomeset_tab(self):
+#        genome_object_name = 'test_Genome'
+#        genomeset_ref = "1706/37/1"
+        genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genomeset_input_ref': genomeset_ref,
@@ -233,6 +364,7 @@ class Report_util_landmlTest(unittest.TestCase):
     def test_genomeset_csv(self):
         genome_object_name = 'test_Genome'
         genomeset_ref = "1706/37/1"
+        genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genomeset_input_ref': genomeset_ref,
@@ -240,3 +372,4 @@ class Report_util_landmlTest(unittest.TestCase):
                                              })
         # Validate the returned data
         print  "RETURN;", ret
+
