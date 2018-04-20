@@ -82,21 +82,16 @@ class CreateMultiGenomeReport:
         if format == 'list':
             line = "Description for: " + obj_name + "\n"
         if format == 'tabcol':
-            lst = ["Name", "ObjectID", "ScientName", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
+            lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
                    "Genetic Code"]
             line = "\t".join(lst) + "\n"
         if format == 'cvscol':
-            lst = ["Name", "ObjectID", "ScientName", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
+            lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
                    "Genetic Code"]
             line = ",".join(lst) + "\n"
 
-#        data_file_cli = DataFileUtil(self.callback_url)
-
         for ele in myGS:
-            #print ele, myGS[ele]
-            #obj_id = myGS[ele]['ref']
             genome = self.dfu.get_objects({'object_refs': [myGS[ele]['ref']]})
-#            genome_data = genome['data'][0]['data']
             line += self.getGenomeSet(myGS[ele]['ref'], genome['data'][0], format)
 
         return line
