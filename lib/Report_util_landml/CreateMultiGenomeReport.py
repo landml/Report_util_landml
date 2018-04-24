@@ -104,7 +104,7 @@ class CreateMultiGenomeReport:
             lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
                    "Genetic Code", "Num CDS", "Num gene", "Num other", "Num rRNA", "Num tRNA"]
             line = "\t".join(lst) + "\n"
-        if format == 'cvs':
+        if format == 'csv':
             lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
                    "Genetic Code", "Num CDS", "Num gene", "Num other", "Num rRNA", "Num tRNA"]
             line = ",".join(lst) + "\n"
