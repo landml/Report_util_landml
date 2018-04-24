@@ -38,7 +38,16 @@ parameters :
         short-hint : |
             Include a fasta listing of the contigs in the Assembly
 description : |
-    <p>Text Report of the Metadata included in an Assembly, including the counts of bases.
-     Output is in tab-delimited format.
-     Includes a listing of the contig descriptions.
-     Optionally includes a FASTA of the contigs in the assembly.</p>
+    <p>This intended purpose of this app is for downloadable TEXT reports. Most data objects already have some type of pretty HTML tables,
+    either as output from an app or by dragging the object onto the narrative. This app serves a different purpose. Comma and tab-delimited
+    columns may look misaligned on the screen because they are for input to a spreadsheet or computer program.</p>
+    <p>This app creates reports on the metadata in an Assembly. Short reports will display as TEXT in the Summary section of the output.
+    Longer reports will instead have a link to open the TEXT in a new html browser tab. In the Files section of the output will
+    be a link for downloading the file. </p>
+    <p>The output includes</p>
+    <ul>
+      <li>Metadata: Minimal information. A report on the metadata for the Assembly. </li>
+      <li>Listing of the contig descriptions</li>
+      <li>OPTIONALLY: the DNA of the contigs in Fasta format. </li>
+    </ul>
+

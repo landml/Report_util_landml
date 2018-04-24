@@ -43,4 +43,15 @@ parameters :
         short-hint : |
             Format for the type of report to produce
 description : |
-    <p>Get a list in tab-separated (tsv) or comma-separated (csv) format</p>
+    <p>This intended purpose of this app is for downloadable TEXT reports. Most data objects already have some type of pretty HTML tables,
+    either as output from an app or by dragging the object onto the narrative. This app serves a different purpose. Comma and tab-delimited
+    columns may look misaligned on the screen because they are for input to a spreadsheet or computer program.</p>
+    <p>This app creates reports in a Domain Annotation object. Short reports will display as TEXT in the Summary section of the output.
+    Longer reports will instead have a link to open the TEXT in a new html browser tab. In the Files section of the output will
+    be a link for downloading the file. </p>
+    <p>The options are:</p>
+    <ul>
+      <li>Tab-delimited. A report with tab-delimited columns.</li>
+      <li>Comma-delimited. A report with comma-delimited columns.</li>
+    </ul>
+

@@ -20,6 +20,7 @@ class CreateMultiGenomeReport:
 
         lst = ['unk', 'unk', 'unk', 'unk', 'unk', 'unk', 'unk', 'unk', 'unk']
         domain, size, num_feat, gc_cont, num_ctg, source, gen_code, assembly, sci_name = lst
+        features = { 'gene' : 0, 'CDS' : 0, 'rRNA' : 0, 'tRNA' : 0, 'other' : 0}
         name = obj_data['info'][1]
         if 'Domain' in obj_data['info'][10]:
             domain = obj_data['info'][10]['Domain']
@@ -43,19 +44,37 @@ class CreateMultiGenomeReport:
             assembly = obj_data['data']['assembly_ref']
         elif 'contigset_ref' in obj_data['data']:
             assembly = obj_data['data']['contigset_ref']
+        if 'features' in obj_data['data']:
+            for feat in obj_data['data']['features']:
+                if 'type' in feat:
+                    type = feat['type']
+                    if type in features:
+                        features[type] += 1
+                    else:
+                        features['other'] += 1
 
         line = ''
         if format == 'list':
             line = name + "\n"
-            line += "\tObjectID:     {0:s}\n\tScientName:   {1}\n\tSize:         {0}\n\tSource:       {2:s}\n\tDomain:       {3:s}\n\tAssembly Ref: {4}\n".format(
+            line += "\tObjectID:     {0:s}\n\tScientName:   {1:s}\n\tSize:         {2}\n\tSource:       {3:s}\n\tDomain:       {4:s}\n\tAssembly Ref: {5:s}\n".format(
                 obj_id, sci_name, size, source, domain, assembly)
             line += "\tFeatures:     {0}\n\tContigs:      {1}\n\tPct. GC:      {2}\n\tGenetic Code: {3}\n".format(num_feat, num_ctg, gc_cont, gen_code)
+
+            for feat in sorted(features):
+                line += "\t{:8s}      {}\n".format(feat, features[feat])
+
         if format == 'tab':
             lst = [name, obj_id, sci_name, size, source, domain, assembly, num_feat, num_ctg, gc_cont, gen_code]
-            line = "\t".join(lst) + "\n"
+            line = "\t".join(lst)
+            for feat in sorted(features):
+                line += "\t" + str(features[feat])
+            line += "\n"
         if format == 'csv':
             lst = [name, obj_id, sci_name, size, source, domain, assembly, num_feat, num_ctg, gc_cont, gen_code]
             line = ",".join(lst) + "\n"
+            for feat in sorted(features):
+                line += "\t" + str(features[feat])
+            line += "\n"
         return line
 
 
@@ -83,17 +102,18 @@ class CreateMultiGenomeReport:
             line = "Description for: " + obj_name + "\n"
         if format == 'tabcol':
             lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
-                   "Genetic Code"]
+                   "Genetic Code", "CDS", "gene", "other", "rRNA", "tRNA"]
             line = "\t".join(lst) + "\n"
         if format == 'cvscol':
             lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
-                   "Genetic Code"]
+                   "Genetic Code", "CDS", "gene", "other", "rRNA", "tRNA"]
             line = ",".join(lst) + "\n"
 
         for ele in myGS:
             genome = self.dfu.get_objects({'object_refs': [myGS[ele]['ref']]})
             line += self.getGenomeSet(myGS[ele]['ref'], genome['data'][0], format)
 
+#        print "LINE:", line
         return line
 
 

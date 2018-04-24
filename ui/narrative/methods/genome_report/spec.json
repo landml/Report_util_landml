@@ -54,7 +54,7 @@
 					},
 					{
 						"value": "mRNA",
-						"display": "FASTA, mRNA of CDSs"
+						"display": "FASTA, of mRNAs"
 					}
 				]
             }

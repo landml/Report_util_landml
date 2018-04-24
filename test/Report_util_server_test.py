@@ -224,7 +224,7 @@ class Report_util_landmlTest(unittest.TestCase):
         return str(new_obj_info[6]) + "/" + str(new_obj_info[0]) + "/" + str(new_obj_info[4])
 
 
-    def test_assembly_metadata(self):
+    def mytest_assembly_metadata(self):
 
         assembly_ref = self.get_fasta_file(self.test_path,
                                              'TestAssembly3')
@@ -237,7 +237,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
  #       print  ret
 
-    def test_genome_tab(self):
+    def mytest_genome_tab(self):
 #        genome_object_name = 'test_Genome'
 #        genome_ref = "1706/26/1"
         genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
@@ -252,7 +252,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genome_gff(self):
+    def mytest_genome_gff(self):
 #        genome_object_name = 'test_Genome'
 #        genome_ref = "1706/26/1"
         genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
@@ -267,7 +267,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genome_fasta(self):
+    def mytest_genome_fasta(self):
 #        genome_object_name = 'test_Genome'
 #        genome_ref = "1706/26/1"
         genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
@@ -282,7 +282,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genome_mrna(self):
+    def mytest_genome_mrna(self):
 #        genome_object_name = 'test_Genome'
 #        genome_ref = "1706/26/1"
         genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
@@ -297,7 +297,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genome_DNA(self):
+    def mytest_genome_DNA(self):
 #        genome_object_name = 'test_Genome'
 #        genome_ref = "1706/26/1"
         genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
@@ -312,7 +312,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_domain_annotation(self):
+    def mytest_domain_annotation(self):
 #        genome_object_name = 'test_Genome'
 #        domain_ref = "14803/3/3"
         domain_ref = self.getDomainInfo('test_domain')
@@ -325,7 +325,7 @@ class Report_util_landmlTest(unittest.TestCase):
         # Validate the returned data
         print  "RETURN;", ret
 
-    def test_genomeset_meta(self):
+    def mytest_genomeset_meta(self):
 #        genome_object_name = 'test_Genome'
 #        genomeset_ref = "1706/37/1"
         genomeset_ref = self.getGenomeSet()
@@ -339,8 +339,8 @@ class Report_util_landmlTest(unittest.TestCase):
 
     def test_genomeset_list(self):
 #        genome_object_name = 'test_Genome'
-#        genomeset_ref = "1706/37/1"
-        genomeset_ref = self.getGenomeSet()
+        genomeset_ref = "1706/37/1"
+#        genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
                                              'genomeset_input_ref': genomeset_ref,
@@ -362,8 +362,8 @@ class Report_util_landmlTest(unittest.TestCase):
         print  "RETURN;", ret
 
     def test_genomeset_csv(self):
-        genome_object_name = 'test_Genome'
-        genomeset_ref = "1706/37/1"
+#        genome_object_name = 'test_Genome'
+#        genomeset_ref = "1706/37/1"
         genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                             {'workspace_name': self.getWsName(),
