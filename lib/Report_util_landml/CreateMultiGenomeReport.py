@@ -71,9 +71,9 @@ class CreateMultiGenomeReport:
             line += "\n"
         if format == 'csv':
             lst = [name, obj_id, sci_name, size, source, domain, assembly, num_feat, num_ctg, gc_cont, gen_code]
-            line = ",".join(lst) + "\n"
+            line = ",".join(lst)
             for feat in sorted(features):
-                line += "\t" + str(features[feat])
+                line += "," + str(features[feat])
             line += "\n"
         return line
 
@@ -100,11 +100,11 @@ class CreateMultiGenomeReport:
         line = ''
         if format == 'list':
             line = "Description for: " + obj_name + "\n"
-        if format == 'tabcol':
+        if format == 'tab':
             lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
                    "Genetic Code", "CDS", "gene", "other", "rRNA", "tRNA"]
             line = "\t".join(lst) + "\n"
-        if format == 'cvscol':
+        if format == 'cvs':
             lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
                    "Genetic Code", "CDS", "gene", "other", "rRNA", "tRNA"]
             line = ",".join(lst) + "\n"

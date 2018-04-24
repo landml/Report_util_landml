@@ -44,7 +44,7 @@ description : |
     <p>This app creates reports on the metadata in an Assembly. Short reports will display as TEXT in the Summary section of the output.
     Longer reports will instead have a link to open the TEXT in a new html browser tab. In the Files section of the output will
     be a link for downloading the file. </p>
-    <p>The output includes</p>
+    <p>The output includes:</p>
     <ul>
       <li>Metadata: Minimal information. A report on the metadata for the Assembly. </li>
       <li>Listing of the contig descriptions</li>

@@ -55,5 +55,4 @@ description : |
       <li>Features, GFF3 format. A GFF3 formatted file of the genes in the genome.</li>
       <li>FASTA, translated CDSs. A Fasta-formatted file of the amino acid sequences of the genes.</li>
       <li>FASTA, of mRNAs. A Fasta-formatted file of the mRNA sequences of the genes.</li>
-      <li></li>
     </ul>
