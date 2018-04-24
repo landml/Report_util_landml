@@ -102,11 +102,11 @@ class CreateMultiGenomeReport:
             line = "Description for: " + obj_name + "\n"
         if format == 'tab':
             lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
-                   "Genetic Code", "CDS", "gene", "other", "rRNA", "tRNA"]
+                   "Genetic Code", "Num CDS", "Num gene", "Num other", "Num rRNA", "Num tRNA"]
             line = "\t".join(lst) + "\n"
         if format == 'cvs':
             lst = ["Name", "ObjectID", "ScientName", "Size", "Source", "Domain", "Assembly Ref", "Features", "Contigs", "Pct. GC",
-                   "Genetic Code", "CDS", "gene", "other", "rRNA", "tRNA"]
+                   "Genetic Code", "Num CDS", "Num gene", "Num other", "Num rRNA", "Num tRNA"]
             line = ",".join(lst) + "\n"
 
         for ele in myGS:
