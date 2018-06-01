@@ -24,6 +24,8 @@ class CreateFeatureLists:
         for feat in genome[features]:
             if 'function' not in feat:
                 feat['function'] = 'unknown'
+            if 'functions' in feat:
+                feat['function'] = feat['functions']
 
             aliases = ''
             if 'aliases' in feat:
