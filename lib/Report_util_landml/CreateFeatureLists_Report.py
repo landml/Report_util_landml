@@ -27,7 +27,16 @@ class CreateFeatureLists:
 
             aliases = ''
             if 'aliases' in feat:
-                aliases = ', '.join(feat['aliases'])
+                for al in feat['aliases']:
+                    if isinstance(al, (str, unicode)):
+                        aliases = ', '.join(feat['aliases'])
+                        break
+                    elif isinstance(al, (list)):
+                        if 'synonym' in al[0] and aliases > '     ':
+                            aliases += ", " + al[1]
+                        elif 'synonym' in al[0] :
+                            aliases += al[1]
+
             if 'type' not in feat:
                 feat['type'] = features
 
