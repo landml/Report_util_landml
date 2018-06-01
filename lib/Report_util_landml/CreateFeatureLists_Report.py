@@ -25,7 +25,7 @@ class CreateFeatureLists:
             if 'function' not in feat:
                 feat['function'] = 'unknown'
             if 'functions' in feat:
-                feat['function'] = feat['functions']
+                feat['function'] = ', '.join(feat['functions'])
 
             aliases = ''
             if 'aliases' in feat:
