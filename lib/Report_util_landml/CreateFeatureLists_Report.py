@@ -1,4 +1,5 @@
 import time
+import os
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -15,17 +16,42 @@ class CreateFeatureLists:
 
 
     def delimitedTable(self, genome, format, features):
+
+        seed_basepath = os.path.abspath('/kb/module/data')
+        seed_subsys   = os.path.join(seed_basepath, 'subsys.txt')
+
+        seed_cat = dict()
+
+        with open(seed_subsys, 'r', 0) as seed_handle:
+            for line in seed_handle.readlines():
+
+                line = line.strip()
+                [cat_group, cat_subgroup, cat, seedfam] = line.split("\t")[0:4]
+                if seedfam in seed_cat:
+                    seed_cat[seedfam] += "; " + cat
+                else:
+                    seed_cat[seedfam] = cat
+
         line = ""
-        lineList = ["Feature ID", "Feature type", "Contig", "Location", "Strand", "Feature function", "Aliases"]
+        lineList = ["Feature ID", "Feature type", "Contig", "Location", "Strand", "Feature function", "Aliases", "RAST Functional Categories"]
         if format == 'tab':
             line += "\t".join(lineList) + "\n"
         else:
             line += ",".join(lineList) + "\n"
+
+        cat = ''
         for feat in genome[features]:
             if 'function' not in feat:
                 feat['function'] = 'unknown'
+            else:
+                if feat['function'] in seed_cat:
+                    cat = seed_cat[feat['function']]
+
             if 'functions' in feat:
                 feat['function'] = ', '.join(feat['functions'])
+                for func in feat['functions']:
+                    if func in seed_cat:
+                        cat = seed_cat[func]
 
             aliases = ''
             if 'aliases' in feat:
@@ -62,21 +88,21 @@ class CreateFeatureLists:
                 location = ", ".join(locList)
 
             if format == 'tab':
-                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases]
+                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases, cat]
                 line += "\t".join(lineList) + "\n"
             else:
                 feat['function'] = '"' + feat['function'] + '"'
                 aliases = '"' + aliases + '"'
                 location = '"' + location + '"'
-                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases]
+                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases, cat]
                 line += ",".join(lineList) + "\n"
 
         return line
 
+
         # -----------------------------------------------------------------
         #    Create a GFF3 version of the features in a genome
         #
-
 
     def gff3(self, genome, features):
         line = ""
