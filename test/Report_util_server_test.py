@@ -61,11 +61,11 @@ class Report_util_landmlTest(unittest.TestCase):
 #       Prepare the Assembly File
 #       Set the name
 #        cls.test_filename = '92477.assembled.fna'
-#        cls.test_filename = 'test.fna'
+        cls.test_filename = 'test.fna'
 #       Set the path to file in scratch
-#        cls.test_path = os.path.join(cls.scratch, cls.test_filename)
+        cls.test_path = os.path.join(cls.scratch, cls.test_filename)
 #       Copy from local to scratch
-#        shutil.copy(os.path.join("data", cls.test_filename), cls.test_path)
+        shutil.copy(os.path.join("data", cls.test_filename), cls.test_path)
 
 #       Prepare the Genome from gbff File
         cls.genbank_file_name = 'Carsonella_ruddii_HT_isolate_Thao2000.gbff'
@@ -223,7 +223,7 @@ class Report_util_landmlTest(unittest.TestCase):
 #
         return str(new_obj_info[6]) + "/" + str(new_obj_info[0]) + "/" + str(new_obj_info[4])
 
-    def mytest_assembly_metadata(self):
+    def test_assembly_metadata(self):
 
         assembly_ref = self.get_fasta_file(self.test_path,
                                            'TestAssembly3')
@@ -238,67 +238,57 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_tab(self):
+    def test_genome_tab(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
                                             'report_format': 'gff'
                                             })
-        # Validate the returned data
-        print("RETURN;", ret)
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_gff(self):
+    def test_genome_gff(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
                                             'report_format': 'gff'
                                             })
-        # Validate the returned data
-        print("RETURN;", ret)
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_fasta(self):
+    def test_genome_fasta(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
                                             'report_format': 'gff'
                                             })
-        # Validate the returned data
-        print("RETURN;", ret)
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_mrna(self):
+    def test_genome_mrna(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
                                             'report_format': 'gff'
                                             })
-        # Validate the returned data
-        print("RETURN;", ret)
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_DNA(self):
+    def test_genome_DNA(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
                                             'report_format': 'gff'
                                             })
-        # Validate the returned data
-        print("RETURN;", ret)
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_domain_annotation(self):
+    def test_domain_annotation(self):
         domain_ref = self.getDomainInfo('test_domain')
         ret = self.getImpl().domain_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
@@ -306,47 +296,39 @@ class Report_util_landmlTest(unittest.TestCase):
                                             'domain_annotation_input_ref': domain_ref,
                                             'report_format': 'tab'
                                             })
-        # Validate the returned data
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genomeset_meta(self):
+    def test_genomeset_meta(self):
         genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                               {'workspace_name': self.ws_info[1],
                                                'genomeset_input_ref': genomeset_ref,
                                                'report_format': 'meta'
                                                })
-        # Validate the returned data
-        print("RETURN;", ret)
-        # Validate the returned data
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genomeset_list(self):
+    def test_genomeset_list(self):
         genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                               {'workspace_name': self.ws_info[1],
                                                'genomeset_input_ref': genomeset_ref,
                                                'report_format': 'list'
                                                })
-        # Validate the returned data
-        print("RETURN;", ret)
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genomeset_tab(self):
+    def test_genomeset_tab(self):
         genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                               {'workspace_name': self.ws_info[1],
                                                'genomeset_input_ref': genomeset_ref,
                                                'report_format': 'tab'
                                                })
-        # Validate the returned data
-        print("RETURN;", ret)
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
@@ -358,8 +340,6 @@ class Report_util_landmlTest(unittest.TestCase):
                                                'genomeset_input_ref': genomeset_ref,
                                                'report_format': 'csv'
                                                })
-        # Validate the returned data
-        print("RETURN;", ret)
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
