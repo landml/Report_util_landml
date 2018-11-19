@@ -52,6 +52,7 @@ description : |
       Easy to read format but more difficult to visually compare one genome to the others.</li>
       <li>Tab-delimited. A report with tab-delimited columns.</li>
       <li>Comma-delimited. A report with comma-delimited columns.</li>
+      <li>Fasta. A report with the Fasta of each of the genomes. </li>
     </ul>
 
 publications :

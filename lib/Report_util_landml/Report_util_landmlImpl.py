@@ -32,9 +32,9 @@ This sample module for creating text report for data objects
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.0.2"
+    VERSION = "0.0.1"
     GIT_URL = "https://github.com/landml/Report_util_landml"
-    GIT_COMMIT_HASH = "529244772098a31e59c46521d91fce2ba97d7933"
+    GIT_COMMIT_HASH = "9330b0f8118e498655e8baf6c1c5fb585001475e"
 
     #BEGIN_CLASS_HEADER
 
@@ -109,7 +109,7 @@ This sample module for creating text report for data objects
         # Step 1 - Parse/examine the parameters and catch any errors
         # It is important to check that parameters exist and are defined, and that nice error
         # messages are returned to users.
-#        print('Validating parameters.')
+        print('Validating parameters.')
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
@@ -189,16 +189,16 @@ This sample module for creating text report for data objects
         report_txt.write("<pre>" + string + "</pre>")
         report_txt.close()
 
- #       print string
+        print string
 
         cr = Report_creator(self.config)
         reported_output = cr.create_report(token, params['workspace_name'],
-                                           string, self.scratch)
+                                    string, self.scratch)
 
         output = {'report_name': reported_output['name'],
                            'report_ref': reported_output['ref']}
 
-#        print('returning: ' + pformat(output))
+        print('returning: ' + pformat(output))
 
         #END assembly_metadata_report
 
@@ -234,7 +234,7 @@ This sample module for creating text report for data objects
         # Step 1 - Parse/examine the parameters and catch any errors
         # It is important to check that parameters exist and are defined, and that nice error
         # messages are returned to users.
-#        print('Validating parameters.')
+        print('Validating parameters.')
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
@@ -246,7 +246,7 @@ This sample module for creating text report for data objects
         genome = data_file_cli.get_objects({'object_refs': [genome_input_ref]})
         genome_data = genome['data'][0]['data']
 
-        #print genome_data.keys()
+        print genome_data.keys()
 
         report_format = params['report_format']
         string = ''
@@ -277,7 +277,7 @@ This sample module for creating text report for data objects
                 assembly_input_ref = genome_data['assembly_ref']
                 string += self.get_assembly_sequence(assembly_input_ref)
             else:
-                string += 'Did not find the Assembly Reference'
+                string += 'Did not find the Assembly Reference\n'
 
         else:
             raise ValueError('Invalid report option.' + str(report_format))
@@ -299,7 +299,7 @@ This sample module for creating text report for data objects
         output = {'report_name': reported_output['name'],
                   'report_ref': reported_output['ref']}
 
-        #print('returning: ' + pformat(output))
+        print('returning: ' + pformat(output))
         #END genome_report
 
         # At some point might do deeper type checking...
@@ -334,7 +334,7 @@ This sample module for creating text report for data objects
         # Step 1 - Parse/examine the parameters and catch any errors
         # It is important to check that parameters exist and are defined, and that nice error
         # messages are returned to users.
-#        print('Validating parameters.')
+        print('Validating parameters.')
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
@@ -347,7 +347,7 @@ This sample module for creating text report for data objects
         genome_name = genomeset['data'][0]['info'][1]
         genomeset_data = genomeset['data'][0]['data']
 
-#        print genomeset_data.keys()
+        print genomeset_data.keys()
 
         report_format = params['report_format']
         string = ''
@@ -367,6 +367,19 @@ This sample module for creating text report for data objects
             gsr = CreateMultiGenomeReport(self.config)
             string = gsr.getGenomeSetMeta(genomeset['data'][0])
             report_path = os.path.join(self.scratch, 'genomeset_report.txt')
+        elif report_format == 'fasta':
+            gsr = CreateMultiGenomeReport(self.config)
+            assembly_list = gsr.getAssemblyRef(genomeset['data'][0])
+            string = ''
+            for assembly in assembly_list:
+                 assembly_ref, sci_name = assembly.split(':')
+                 dna = self.get_assembly_sequence(assembly_ref)
+                 report_path = os.path.join(self.scratch, 'G'+assembly_ref.replace('/', '_')+'.fna')
+                 report_txt = open(report_path, "w")
+                 report_txt.write(dna)
+                 report_txt.close()
+                 string += assembly_ref+'-'+sci_name+", "
+            report_path = os.path.join(self.scratch, 'genomeset_report.txt')
         else:
             raise ValueError('Invalid report option.' + str(report_format))
 
@@ -378,7 +391,7 @@ This sample module for creating text report for data objects
         report_txt.write("<pre>" + string + "</pre>")
         report_txt.close()
 
-        #        print string
+        print string
         cr = Report_creator(self.config)
         reported_output = cr.create_report(token, params['workspace_name'],
                                            string, self.scratch)
@@ -386,7 +399,7 @@ This sample module for creating text report for data objects
         output = {'report_name': reported_output['name'],
                   'report_ref': reported_output['ref']}
 
-#        print('returning: ' + pformat(output))
+        print('returning: ' + pformat(output))
         #END genomeset_report
 
         # At some point might do deeper type checking...
@@ -422,7 +435,7 @@ This sample module for creating text report for data objects
         # Step 1 - Parse/examine the parameters and catch any errors
         # It is important to check that parameters exist and are defined, and that nice error
         # messages are returned to users.
-        #print('Validating parameters.')
+        print('Validating parameters.')
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
@@ -434,7 +447,7 @@ This sample module for creating text report for data objects
         domain_anno = data_file_cli.get_objects({'object_refs': [domain_annotation_input_ref]})
         domain_data = domain_anno['data'][0]['data']
 
-        #print domain_data.keys()
+        print domain_data.keys()
 
         evalue_cutoff = float(params['evalue_cutoff'])
         report_format = params['report_format']
@@ -446,7 +459,8 @@ This sample module for creating text report for data objects
             string2 = cf.readDomainAnnCount(domain_data, 'tab', evalue_cutoff)
             report_path1 = os.path.join(self.scratch, 'domain_annotation_list.tab')
             report_path2 = os.path.join(self.scratch, 'domain_annotation_count.tab')
-        elif report_frmat == 'csv':
+            print "TYPE=", type(string1)
+        elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
             string1 = cf.readDomainAnnList(domain_data, 'csv', evalue_cutoff)
             string2 = cf.readDomainAnnCount(domain_data, 'csv', evalue_cutoff)
@@ -477,7 +491,7 @@ This sample module for creating text report for data objects
         output = {'report_name': reported_output['name'],
                   'report_ref': reported_output['ref']}
 
-        #print('returning: ' + pformat(output))
+        print('returning: ' + pformat(output))
         #END domain_report
 
         # At some point might do deeper type checking...

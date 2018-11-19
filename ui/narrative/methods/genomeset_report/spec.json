@@ -47,6 +47,10 @@
 					{
 						"value": "csv",
 						"display": "Comma-delimited"
+					},
+					{
+						"value": "fasta",
+						"display": "DNA fasta"
 					}
 				]
             }
