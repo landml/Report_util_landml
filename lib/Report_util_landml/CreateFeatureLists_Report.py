@@ -112,7 +112,8 @@ class CreateFeatureLists:
 
             aliases = ''
             if 'aliases' in feat:
-                aliases = ':'.join(feat['aliases'])
+                for al in feat['aliases']:
+                    aliases = ':'.join(al)
 
             if 'type' not in feat:
                 feat['type'] = features
