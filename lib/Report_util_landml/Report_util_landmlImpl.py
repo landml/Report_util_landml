@@ -334,7 +334,7 @@ This sample module for creating text report for data objects
         # Step 1 - Parse/examine the parameters and catch any errors
         # It is important to check that parameters exist and are defined, and that nice error
         # messages are returned to users.
-        print('Validating parameters.')
+#        print('Validating parameters.')
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
@@ -347,7 +347,7 @@ This sample module for creating text report for data objects
         genome_name = genomeset['data'][0]['info'][1]
         genomeset_data = genomeset['data'][0]['data']
 
-        print genomeset_data.keys()
+#        print genomeset_data.keys()
 
         report_format = params['report_format']
         string = ''
@@ -378,7 +378,7 @@ This sample module for creating text report for data objects
                  report_txt = open(report_path, "w")
                  report_txt.write(dna)
                  report_txt.close()
-                 string += assembly_ref+'-'+sci_name+", "
+                 string += assembly_ref+'-'+sci_name+"\n"
             report_path = os.path.join(self.scratch, 'genomeset_report.txt')
         else:
             raise ValueError('Invalid report option.' + str(report_format))
@@ -391,7 +391,7 @@ This sample module for creating text report for data objects
         report_txt.write("<pre>" + string + "</pre>")
         report_txt.close()
 
-        print string
+#        print string
         cr = Report_creator(self.config)
         reported_output = cr.create_report(token, params['workspace_name'],
                                            string, self.scratch)
@@ -399,7 +399,7 @@ This sample module for creating text report for data objects
         output = {'report_name': reported_output['name'],
                   'report_ref': reported_output['ref']}
 
-        print('returning: ' + pformat(output))
+#        print('returning: ' + pformat(output))
         #END genomeset_report
 
         # At some point might do deeper type checking...

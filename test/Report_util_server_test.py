@@ -223,7 +223,7 @@ class Report_util_landmlTest(unittest.TestCase):
 #
         return str(new_obj_info[6]) + "/" + str(new_obj_info[0]) + "/" + str(new_obj_info[4])
 
-    def mytest_assembly_metadata(self):
+    def test_assembly_metadata(self):
 
         assembly_ref = self.get_fasta_file(self.test_path,
                                            'TestAssembly3')
@@ -238,7 +238,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_tab(self):
+    def test_genome_tab(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
@@ -248,7 +248,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_gff(self):
+    def test_genome_gff(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
@@ -258,7 +258,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_fasta(self):
+    def test_genome_fasta(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
@@ -268,7 +268,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_mrna(self):
+    def test_genome_mrna(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
@@ -278,7 +278,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_DNA(self):
+    def test_genome_DNA(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
@@ -288,7 +288,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_domain_annotation(self):
+    def test_domain_annotation(self):
         domain_ref = self.getDomainInfo('test_domain')
         ret = self.getImpl().domain_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
@@ -300,7 +300,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genomeset_meta(self):
+    def test_genomeset_meta(self):
         genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                               {'workspace_name': self.ws_info[1],
@@ -311,7 +311,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genomeset_list(self):
+    def test_genomeset_list(self):
         genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                               {'workspace_name': self.ws_info[1],
@@ -322,7 +322,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genomeset_tab(self):
+    def test_genomeset_tab(self):
         genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                               {'workspace_name': self.ws_info[1],
@@ -333,7 +333,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genomeset_csv(self):
+    def test_genomeset_csv(self):
         genomeset_ref = self.getGenomeSet()
         ret = self.getImpl().genomeset_report(self.getContext(),
                                               {'workspace_name': self.ws_info[1],
@@ -351,7 +351,7 @@ class Report_util_landmlTest(unittest.TestCase):
                                                'genomeset_input_ref': genomeset_ref,
                                                'report_format': 'fasta'
                                                })
-        print ("RETURNED",ret)
+        print("RETURNED", ret)
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
