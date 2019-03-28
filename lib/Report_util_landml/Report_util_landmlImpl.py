@@ -5,9 +5,9 @@ import shutil
 
 from Bio import SeqIO
 from pprint import pprint, pformat
-from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
-from KBaseReport.KBaseReportClient import KBaseReport
-from DataFileUtil.DataFileUtilClient import DataFileUtil
+from installed_clients.AssemblyUtilClient import AssemblyUtil
+from installed_clients.KBaseReportClient import KBaseReport
+from installed_clients.DataFileUtilClient import DataFileUtil
 from CreateFasta_Report import CreateFasta
 from CreateFeatureLists_Report import CreateFeatureLists
 from CreateMultiGenomeReport import CreateMultiGenomeReport

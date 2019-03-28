@@ -1,5 +1,6 @@
 import time
 import os
+import re
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -9,11 +10,139 @@ def log(message, prefix_newline=False):
 class CreateFeatureLists:
     def __init__(self, config):
         self.config = config
+        self.callback_url = os.environ['SDK_CALLBACK_URL']
+        (self.cats, self.cat2name, self.cat2group, self.domfam2cat, self.domfam2name, self.domfam2ns) = self._configure_categories()
 
+    def _configure_categories(self):
+
+        domain_desc_basepath = os.path.abspath('/kb/module/data')
+        domain_to_cat_map_path = dict()
+        domain_cat_names_path = dict()
+        domain_fam_names_path = dict()
+        domain_to_cat_map_path['COG'] = os.path.join(domain_desc_basepath, 'COG_2014.tsv')
+        domain_cat_names_path['COG'] = os.path.join(domain_desc_basepath, 'COG_2014_funcat.tsv')
+        domain_fam_names_path['COG'] = os.path.join(domain_desc_basepath, 'COG_2014.tsv')
+        domain_to_cat_map_path['PF'] = os.path.join(domain_desc_basepath, 'Pfam-A.clans.tsv')
+        domain_cat_names_path['PF'] = os.path.join(domain_desc_basepath, 'Pfam-A.clans_names.tsv')
+        domain_fam_names_path['PF'] = os.path.join(domain_desc_basepath, 'Pfam-A.clans.tsv')
+        domain_to_cat_map_path['TIGR'] = os.path.join(domain_desc_basepath, 'TIGRInfo.tsv')
+        domain_cat_names_path['TIGR'] = os.path.join(domain_desc_basepath, 'tigrrole2go.txt')
+        #domain_fam_names_path['TIGR']  = os.path.join(domain_desc_basepath, 'tigrfams2go.txt')
+        domain_fam_names_path['TIGR'] = os.path.join(domain_desc_basepath, 'TIGRInfo.tsv')
+        domain_to_cat_map_path['SEED'] = os.path.join(domain_desc_basepath, 'SEED_subsys.txt')
+        domain_cat_names_path['SEED'] = os.path.join(domain_desc_basepath, 'SEED_funcat.txt')
+        #domain_cat_names_path['SEED']  = os.path.join(domain_desc_basepath, 'SEED_subsys.txt')
+        domain_fam_names_path['SEED'] = os.path.join(domain_desc_basepath, 'SEED_subsys.txt')
+        
+        cats = []
+        cat2name     = dict()
+        cat2group    = dict()
+        domfam2cat   = dict()
+#        cat2domfams  = dict()
+#        domfam2group = dict()
+        domfam2name  = dict()
+        domfam2ns = dict()
+
+        # read all mappings between groups and domfams
+        for namespace in ['COG', 'PF', 'TIGR', 'SEED']:
+
+            cat2name[namespace] = dict()
+            cat2group[namespace] = dict()
+#            domfam2cat[namespace] = dict()
+#            cat2domfams[namespace] = dict()
+#            domfam2group[namespace]  = dict()
+#            domfam2name[namespace]  = dict()
+            
+            # get high-level cats
+            tigrrole_id2cat = dict()
+            with open(domain_cat_names_path[namespace], 'r', 0) as dom_cat_handle:
+                for line in dom_cat_handle.readlines():
+                    line = line.strip()
+
+                    if namespace == 'COG':
+                        [cat, cat_group, cat_name] = line.split("\t")[0:3]
+                        if  cat not in cats:
+                            cats.append(cat)
+                        cat2name[namespace][cat] = cat_name
+                        cat2group[namespace][cat] = cat_group
+
+                    elif namespace == 'PF':
+                        [cat, cat_name] = line.split("\t")[0:2]
+                        if cat not in cats:
+                            cats.append(cat)
+                        cat2name[namespace][cat] = cat_name
+                        cat2group[namespace][cat] = None
+
+                    elif namespace == 'TIGR':
+                        if line.startswith('!'):
+                            continue
+                        [cat, cat_id, cat_group, cat_name_plus_go_terms] = line.split("\t")[0:4]
+                        tigrrole_id2cat[cat_id] = cat
+                        if cat not in cats:
+                            cats.append(cat)
+                        cat_name = re.sub(' *\> GO:.*$', '', cat_name_plus_go_terms)
+                        cat2name[namespace][cat] = cat_name
+                        cat2group[namespace][cat] = cat_group
+
+                    elif namespace == 'SEED':
+                        #[cat_group, cat_subgroup, cat, domfam] = line.split("\t")[0:4]
+                        [cat_group, cat] = line.split("\t")[0:2]
+                        if cat not in cats:
+                            cats.append(cat)
+                        cat_disp = re.sub('_', ' ', cat)
+                        cat2name[namespace][cat] = cat_disp
+                        cat2group[namespace][cat] = cat_group
+
+            # get domfam to cat map, and vice versa
+            with open(domain_to_cat_map_path[namespace], 'r', 0) as dom2cat_map_handle:
+                for line in dom2cat_map_handle.readlines():
+                    line = line.strip()
+
+                    if namespace == 'COG':
+                        [domfam, cat_str, dom_name] = line.split("\t")[0:3]
+                        cat = cat_str[0]  # only use first cat
+                        
+                    elif namespace == 'PF':
+                        [domfam, cat, cat_name, dom_id, dom_name] = line.split("\t")[0:5]
+
+                    elif namespace == 'TIGR':
+                        if line.startswith('!'):
+                            continue
+                        [domfam_id, domfam, cat_group, cat_id, domfam_name, ec_id, dom_name] = line.split("\t")[0:7]
+                        if cat_id != '' and int(cat_id) != 0 and cat_id in tigrrole_id2cat:
+                            cat = tigrrole_id2cat[cat_id]
+                        else:
+                            continue
+
+                    elif namespace == 'SEED':
+                        [cat_group, cat_subgroup, cat, domfam] = line.split("\t")[0:4]
+                        domfam = domfam.strip()
+                        domfam = re.sub(' *\#.*$', '', domfam)
+                        domfam = re.sub(' *\(EC [\d\.\-\w]*\) *$', '', domfam)
+                        domfam = re.sub(' *\(TC [\d\.\-\w]*\) *$', '', domfam)
+                        domfam = re.sub(' ', '_', domfam)
+                        domfam = 'SEED' + domfam
+                        dom_name = domfam
+
+                    domfam2ns[domfam] = namespace
+                    domfam2cat[domfam] = cat
+                    domfam2name[domfam]  = dom_name
+                    
+ #                   if cat not in cat2domfams[namespace]:
+ #                       cat2domfams[namespace][cat] = []
+ #                   cat2domfams[namespace][cat].append(domfam)
+                    
+ #                   if cat in cat2group[namespace]:
+ #                       domfam2group[namespace][domfam]  = cat2group[namespace][cat]
+ #                   else:
+ #                       domfam2group[namespace][domfam]  = None
+ 
+        return(cats, cat2name, cat2group, domfam2cat, domfam2name, domfam2ns)
+    
+        
     # -----------------------------------------------------------------
     #    Create a Delimited Table version of the genes in a genome
     #
-
 
     def delimitedTable(self, genome, format, features):
 
@@ -167,7 +296,15 @@ class CreateFeatureLists:
         for domain in geneDomain:
             list = geneDomain[domain]
             if list[0][2] < cutoff:
-                lineList = [contig, geneName, domain, str(list[0][2]), str(list[0][0]), str(list[0][1])]
+                if '.' in domain and len(domain) < 15:
+                    domain = domain.split('.')[0]
+                namespace = self.domfam2ns[domain]
+                dom_name = self.domfam2name[domain]
+                cat = self.domfam2cat[domain]
+                cat_name = self.cat2name[namespace][cat]
+                cat_group = self.cat2group[namespace][cat]
+                
+                lineList = [contig, geneName, domain, str(list[0][2]), str(list[0][0]), str(list[0][1]), dom_name, cat, cat_name, str(cat_group)]
                 if format == 'tab':
                     line += "\t".join(lineList)
                 elif format == 'csv':
@@ -191,7 +328,7 @@ class CreateFeatureLists:
 
         # Header
         line = ""
-        lineList = ["Contig", "Gene ID", "Domain", "Evalue", "Start", "Stop"]
+        lineList = ["Contig", "Gene ID", "Domain", "Evalue", "Start", "Stop","Domain Name", "Category", "Category Name", "Category Group"]
 
         #   Check for valid formats
         if format not in ['tab', 'csv']:
@@ -211,7 +348,8 @@ class CreateFeatureLists:
             contigData = myData[contig]
             for gene in contigData:
                 if (gene[4]):
-                    line += self.printGeneDomain(contig, gene[0], gene[4], format, cutoff)
+                    domain = gene[4]
+                    line += self.printGeneDomain(contig, gene[0], domain, format, cutoff)
 
         return line
 
