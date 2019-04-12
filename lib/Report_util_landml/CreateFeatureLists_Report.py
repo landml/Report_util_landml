@@ -298,11 +298,34 @@ class CreateFeatureLists:
             if list[0][2] < cutoff:
                 if '.' in domain and len(domain) < 15:
                     domain = domain.split('.')[0]
-                namespace = self.domfam2ns[domain]
-                dom_name = self.domfam2name[domain]
-                cat = self.domfam2cat[domain]
-                cat_name = self.cat2name[namespace][cat]
-                cat_group = self.cat2group[namespace][cat]
+                #print ("DOMAIN", domain)
+                if domain in self.domfam2ns:
+                    namespace = self.domfam2ns[domain]
+                else:
+                    namespace = ''
+                #print ("NAMESpaCE", namespace)
+                if domain in self.domfam2name:
+                    dom_name = self.domfam2name[domain]
+                else:
+                    dom_name = ''
+                #print ("DOMNAME", dom_name)
+                if domain in self.domfam2cat:
+                    cat = self.domfam2cat[domain]
+                else:
+                    cat = ''
+                #print ("CAT", cat)
+                
+                if cat > ' ' and cat in self.cat2name[namespace]:
+                    cat_name = self.cat2name[namespace][cat]
+                else:
+                    cat_name = ''
+                #print ("CATNAME", cat_name)
+                
+                if cat > ' ' and cat in self.cat2group[namespace]:
+                    cat_group = self.cat2group[namespace][cat]
+                else:
+                    cat_group = ''
+                #print ("CATGROUP", cat_group)
                 
                 lineList = [contig, geneName, domain, str(list[0][2]), str(list[0][0]), str(list[0][1]), dom_name, cat, cat_name, str(cat_group)]
                 if format == 'tab':
@@ -311,6 +334,7 @@ class CreateFeatureLists:
                     line += ",".join(lineList)
                 #            print line
                 line += "\n"
+        print line
         return line
 
 
