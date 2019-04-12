@@ -334,7 +334,6 @@ class CreateFeatureLists:
                     line += ",".join(lineList)
                 #            print line
                 line += "\n"
-        print line
         return line
 
 
