@@ -89,9 +89,8 @@ class CreateFeatureLists:
                         [cat_group, cat] = line.split("\t")[0:2]
                         if cat not in cats:
                             cats.append(cat)
-                        cat_disp = re.sub('_', ' ', cat)
-                        cat2name[namespace][cat] = cat_disp
-                        cat2group[namespace][cat] = cat_group
+                        #cat_disp = re.sub('_', ' ', cat)
+                        #cat2name[namespace][cat] = cat_disp
 
             # get domfam to cat map, and vice versa
             with open(domain_to_cat_map_path[namespace], 'r', 0) as dom2cat_map_handle:
@@ -120,9 +119,14 @@ class CreateFeatureLists:
                         domfam = re.sub(' *\#.*$', '', domfam)
                         domfam = re.sub(' *\(EC [\d\.\-\w]*\) *$', '', domfam)
                         domfam = re.sub(' *\(TC [\d\.\-\w]*\) *$', '', domfam)
-                        domfam = re.sub(' ', '_', domfam)
-                        domfam = 'SEED' + domfam
+                        domfam = re.sub('_', ' ', domfam)
+                        #domfam = 'SEED ' + domfam
                         dom_name = domfam
+                        dom_name = cat_subgroup
+                        cat2group[namespace][cat] = cat_group
+                        
+                        if 'DNA-directed RNA polymerase' in domfam:
+                            print ("DOMFAM ", domfam + " SUBGROUP ", cat_subgroup, " CAT ", cat)
 
                     domfam2ns[domfam] = namespace
                     domfam2cat[domfam] = cat
@@ -138,7 +142,6 @@ class CreateFeatureLists:
  #                       domfam2group[namespace][domfam]  = None
  
         return(cats, cat2name, cat2group, domfam2cat, domfam2name, domfam2ns)
-    
         
     # -----------------------------------------------------------------
     #    Create a Delimited Table version of the genes in a genome
@@ -146,41 +149,53 @@ class CreateFeatureLists:
 
     def delimitedTable(self, genome, format, features):
 
-        seed_basepath = os.path.abspath('/kb/module/data')
-        seed_subsys   = os.path.join(seed_basepath, 'subsys.txt')
+#        seed_basepath = os.path.abspath('/kb/module/data')
+#        seed_subsys   = os.path.join(seed_basepath, 'subsys.txt')
 
-        seed_cat = dict()
+#        seed_cat = dict()
 
-        with open(seed_subsys, 'r', 0) as seed_handle:
-            for line in seed_handle.readlines():
-
-                line = line.strip()
-                [cat_group, cat_subgroup, cat, seedfam] = line.split("\t")[0:4]
-                if seedfam in seed_cat:
-                    seed_cat[seedfam] += "; " + cat
-                else:
-                    seed_cat[seedfam] = cat
-
+#        with open(seed_subsys, 'r', 0) as seed_handle:
+#            for line in seed_handle.readlines():
+#
+#                line = line.strip()
+#                [cat_group, cat_subgroup, cat, seedfam] = line.split("\t")[0:4]
+#                if seedfam in seed_cat:
+#                    seed_cat[seedfam] += "; " + cat
+#                else:
+#                    seed_cat[seedfam] = cat
+        seed_cat = self.domfam2cat
+        
         line = ""
-        lineList = ["Feature ID", "Feature type", "Contig", "Location", "Strand", "Feature function", "Aliases", "RAST Functional Categories"]
+        lineList = ["Feature ID", "Feature type", "Contig", "Location", "Strand", "Feature function", "Aliases",
+                    "RAST Functional Assignment", "RAST Functional Group 1", "RAST Functional Group 2"]
         if format == 'tab':
             line += "\t".join(lineList) + "\n"
         else:
             line += ",".join(lineList) + "\n"
-
+            
         cat = ''
+        domfam = ''
         for feat in genome[features]:
             if 'function' not in feat:
                 feat['function'] = 'unknown'
             else:
+
                 if feat['function'] in seed_cat:
-                    cat = seed_cat[feat['function']]
+                    domfam = feat['function']
+                    cat = seed_cat[domfam]
+                if 'DNA-directed RNA polymerase' in feat['function']:
+                                    print ("DOMFAM ", domfam, " CAT", cat)                    
 
             if 'functions' in feat:
                 feat['function'] = ', '.join(feat['functions'])
                 for func in feat['functions']:
                     if func in seed_cat:
-                        cat = seed_cat[func]
+                        domfam = func
+                        cat = seed_cat[domfam]
+                    if 'DNA-directed RNA polymerase' in feat['function']:
+                        print ("DOMFAM ", domfam, " CAT", cat)
+                    break # Taking just the first
+
 
             aliases = ''
             if 'aliases' in feat:
@@ -215,15 +230,23 @@ class CreateFeatureLists:
                     locList.append(str(start) + '..' + str(stop))
 
                 location = ", ".join(locList)
-
+                
+            catgroup = ''
+            subgroup = ''
+            if cat > ' ':
+                if cat in self.cat2group['SEED']:
+                    catgroup = self.cat2group['SEED'][cat] 
+                if domfam in self.domfam2name:
+                    subgroup = self.domfam2name[domfam]
+ 
             if format == 'tab':
-                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases, cat]
+                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases, cat, subgroup, catgroup]
                 line += "\t".join(lineList) + "\n"
             else:
                 feat['function'] = '"' + feat['function'] + '"'
                 aliases = '"' + aliases + '"'
                 location = '"' + location + '"'
-                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases, cat]
+                lineList = [feat['id'], feat['type'], contig, location, strand, feat['function'], aliases, cat, subgroup, catgroup]
                 line += ",".join(lineList) + "\n"
 
         return line
