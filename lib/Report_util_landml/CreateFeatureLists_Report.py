@@ -1,6 +1,7 @@
 import time
 import os
 import re
+from .CreateFasta_Report import CreateFasta
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -125,8 +126,8 @@ class CreateFeatureLists:
                         dom_name = cat_subgroup
                         cat2group[namespace][cat] = cat_group
                         
-                        if 'DNA-directed RNA polymerase' in domfam:
-                            print ("DOMFAM ", domfam + " SUBGROUP ", cat_subgroup, " CAT ", cat)
+                        #if 'DNA-directed RNA polymerase' in domfam:
+                        #    print ("DOMFAM ", domfam + " SUBGROUP ", cat_subgroup, " CAT ", cat)
 
                     domfam2ns[domfam] = namespace
                     domfam2cat[domfam] = cat
@@ -183,8 +184,8 @@ class CreateFeatureLists:
                 if feat['function'] in seed_cat:
                     domfam = feat['function']
                     cat = seed_cat[domfam]
-                if 'DNA-directed RNA polymerase' in feat['function']:
-                                    print ("DOMFAM ", domfam, " CAT", cat)                    
+                #if 'DNA-directed RNA polymerase' in feat['function']:
+                #                    print ("DOMFAM ", domfam, " CAT", cat)                    
 
             if 'functions' in feat:
                 feat['function'] = ', '.join(feat['functions'])
@@ -192,8 +193,8 @@ class CreateFeatureLists:
                     if func in seed_cat:
                         domfam = func
                         cat = seed_cat[domfam]
-                    if 'DNA-directed RNA polymerase' in feat['function']:
-                        print ("DOMFAM ", domfam, " CAT", cat)
+                    #if 'DNA-directed RNA polymerase' in feat['function']:
+                    #    print ("DOMFAM ", domfam, " CAT", cat)
                     break # Taking just the first
 
 
@@ -466,4 +467,85 @@ class CreateFeatureLists:
         return line
 
 
-print ("Done")
+    #
+    #   OBJECT: FeatureSet or SequenceSet
+    #   FORMAT: List of the contents of the object
+    #
+    def readFeatSeq(self, pyStr, format):
+        
+        # Header
+        line = ""
+        lineList = list()
+
+        cf = CreateFasta(self.config)
+#
+#   Type 1 - Order matters
+#
+        if 'description' in pyStr and 'elements' in pyStr and 'element_ordering' in pyStr:
+            print ('Description', pyStr['description'], "\nOrdered Elements:")
+            lineList.append(['Description', pyStr['description'], "\nOrdered Elements:"])
+            eleOrder = pyStr['element_ordering']
+            count = 1
+            for index in eleOrder:
+                print ("\t", count, "\t", index, "\t", pyStr['elements'][index])
+                lineList.append([str(count), index, pyStr['elements'][index]])
+                count += 1
+
+#
+#   Type 2 - Unordered
+#
+        elif 'description' in pyStr and 'elements' in pyStr:
+            print ('Description', pyStr['description'], "\nUnordered Elements:")
+            lineList.append(['Description', pyStr['description']])
+            lineList.append(["\nUnordered Elements:"])
+            myElements = pyStr['elements']
+            count = 0
+            for element in myElements:
+                print ("\t", element, "\t", myElements[element])
+                lineList.append([element, myElements[element]])
+                count += 1
+
+#
+#   Type 3 - With Sequences
+#
+        elif 'description' in pyStr and 'sequences' in pyStr and 'sequence_set_id' in pyStr:
+            print ('Set Description', pyStr['description'])
+            print ("Sequence Set ID", pyStr['sequence_set_id'])
+            print ("Sequences:")
+            lineList.append(['Set Description', pyStr['description']])
+            lineList.append(["Sequence Set ID", pyStr['sequence_set_id']])
+            lineList.append(["Sequences:"])
+
+            mySequences = pyStr['sequences']
+            count = 0
+            for seq in mySequences:
+                print (">" + seq['sequence_id'], seq['description'])
+                line = cf.splitSequence(seq['sequence'])
+                lineList.append([">" + seq['sequence_id'], seq['description']])
+                lineList.append([line])
+                count += 1
+
+#
+#   Type Unknown
+#
+        else:
+            print ("This type of FeatureSet has not been described yet")
+
+        #   Check for valid formats
+        if format not in ['tab', 'csv']:
+            print ("Invalid format. Valid formats are tab and csv")
+            return
+        elif format == 'tab':
+            for row in lineList:
+                line = "\t".join(row)
+        elif format == 'csv':
+            line = "'" + ",".join(lineList)
+
+        # Add line-end to the header
+        line += "\n"
+
+        print (line)
+            
+        return line
+
+

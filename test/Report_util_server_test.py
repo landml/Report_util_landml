@@ -288,7 +288,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def test_domain_annotation(self):
+    def mytest_domain_annotation(self):
         domain_ref = self.getDomainInfo('test_domain')
         ret = self.getImpl().domain_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
@@ -355,3 +355,28 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
+
+    def test_featureSet(self):
+        featset_ref = '27092/18/1'
+        ret = self.getImpl().featseq_report(self.getContext(),
+                                           {'workspace_name': self.ws_info[1],
+                                            'feature_sequence_input_ref': featset_ref,
+                                            'report_format': 'tab'
+                                            })
+        self.assertIn('report_name', ret[0])
+        self.assertIn('report_ref', ret[0])
+        pass
+    
+    
+    def test_sequenceSet(self):
+        featset_ref = '27092/23/1'
+        ret = self.getImpl().featseq_report(self.getContext(),
+                                           {'workspace_name': self.ws_info[1],
+                                            'feature_sequence_input_ref': featset_ref,
+                                            'report_format': 'tab'
+                                            })
+        self.assertIn('report_name', ret[0])
+        self.assertIn('report_ref', ret[0])
+        pass
+    
+    

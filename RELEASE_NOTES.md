@@ -3,6 +3,7 @@
   example, 'Cold shock protein CspA' is also in Ribosome_LSU_bacterial,
   Protein biosynthesis, and Protein Metabolism
 - Update the app Catalog descriptions of the tools
+- Upgrade to Python 3
 
 ### Version 0.0.3
 - Updated to the new GFU
