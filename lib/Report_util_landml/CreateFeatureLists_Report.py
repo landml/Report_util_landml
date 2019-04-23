@@ -55,7 +55,7 @@ class CreateFeatureLists:
             
             # get high-level cats
             tigrrole_id2cat = dict()
-            with open(domain_cat_names_path[namespace], 'r', 0) as dom_cat_handle:
+            with open(domain_cat_names_path[namespace], 'r') as dom_cat_handle:
                 for line in dom_cat_handle.readlines():
                     line = line.strip()
 
@@ -93,7 +93,7 @@ class CreateFeatureLists:
                         #cat2name[namespace][cat] = cat_disp
 
             # get domfam to cat map, and vice versa
-            with open(domain_to_cat_map_path[namespace], 'r', 0) as dom2cat_map_handle:
+            with open(domain_to_cat_map_path[namespace], 'r') as dom2cat_map_handle:
                 for line in dom2cat_map_handle.readlines():
                     line = line.strip()
 
@@ -154,7 +154,7 @@ class CreateFeatureLists:
 
 #        seed_cat = dict()
 
-#        with open(seed_subsys, 'r', 0) as seed_handle:
+#        with open(seed_subsys, 'r') as seed_handle:
 #            for line in seed_handle.readlines():
 #
 #                line = line.strip()
@@ -200,7 +200,7 @@ class CreateFeatureLists:
             aliases = ''
             if 'aliases' in feat:
                 for al in feat['aliases']:
-                    if isinstance(al, (str, unicode)):
+                    if isinstance(al, (str)):
                         aliases = ', '.join(feat['aliases'])
                         break
                     elif isinstance(al, (list)):
@@ -368,8 +368,8 @@ class CreateFeatureLists:
     #
     def readDomainAnnList(self, pyStr, format, cutoff):
         #   Make sure the cutoff is a number
-        if not isinstance(cutoff, (int, long, float, complex)):
-            print "Cutoff Value must be numeric."
+        if not isinstance(cutoff, (int, float, complex)):
+            print ("Cutoff Value must be numeric.")
             return
 
         # Header
@@ -378,7 +378,7 @@ class CreateFeatureLists:
 
         #   Check for valid formats
         if format not in ['tab', 'csv']:
-            print "Invalid format. Valid formats are tab and csv"
+            print ("Invalid format. Valid formats are tab and csv")
             return
         elif format == 'tab':
             line = "\t".join(lineList)
@@ -423,8 +423,8 @@ class CreateFeatureLists:
     #
     def readDomainAnnCount(self, pyStr, format, cutoff):
         #   Make sure the cutoff is a number
-        if not isinstance(cutoff, (int, long, float, complex)):
-            print "Cutoff Value must be numeric."
+        if not isinstance(cutoff, (int, float, complex)):
+            print ("Cutoff Value must be numeric.")
             return
 
         # Header
@@ -433,7 +433,7 @@ class CreateFeatureLists:
 
         #   Check for valid formats
         if format not in ['tab', 'csv']:
-            print "Invalid format. Valid formats are tab and csv"
+            print ("Invalid format. Valid formats are tab and csv")
             return
         elif format == 'tab':
             line = "\t".join(lineList)
@@ -453,7 +453,7 @@ class CreateFeatureLists:
                 if (gene[4]):
                     myDict = self.countGeneDomain(contig, gene[0], gene[4], format, cutoff, myDict)
 
-        domainList = myDict.keys()
+        domainList = list(myDict.keys())
         domainList.sort()
         for domain in domainList:
             lineList = [domain, str(myDict[domain])]
@@ -466,4 +466,4 @@ class CreateFeatureLists:
         return line
 
 
-print "Done"
+print ("Done")

@@ -8,9 +8,9 @@ import requests
 
 from os import environ
 try:
-    from ConfigParser import ConfigParser  # py2
-except:
     from configparser import ConfigParser  # py3
+except:
+    from configparser import ConfigParser  # py2
 
 from pprint import pprint  # noqa: F401
 
@@ -154,7 +154,7 @@ class Report_util_landmlTest(unittest.TestCase):
 
         # 1) transform json to kbase DomainAnnotation object and upload to ws
         # create object
-        with open(self.domain_file, 'r', 0) as domain_fh:
+        with open(self.domain_file, 'r') as domain_fh:
             domain_obj = json.load(domain_fh)
 
 #        genome_ref = self.gfu.genbank_to_genome({'file': {'path': self.genbank_file_path},
@@ -351,7 +351,7 @@ class Report_util_landmlTest(unittest.TestCase):
                                                'genomeset_input_ref': genomeset_ref,
                                                'report_format': 'fasta'
                                                })
-        print("RETURNED", ret)
+        print(("RETURNED", ret))
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass

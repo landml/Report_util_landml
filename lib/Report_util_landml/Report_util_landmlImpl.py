@@ -8,10 +8,10 @@ from pprint import pprint, pformat
 from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.DataFileUtilClient import DataFileUtil
-from CreateFasta_Report import CreateFasta
-from CreateFeatureLists_Report import CreateFeatureLists
-from CreateMultiGenomeReport import CreateMultiGenomeReport
-from Report_creator import Report_creator
+from .CreateFasta_Report import CreateFasta
+from .CreateFeatureLists_Report import CreateFeatureLists
+from .CreateMultiGenomeReport import CreateMultiGenomeReport
+from .Report_creator import Report_creator
 
 #END_HEADER
 
@@ -189,7 +189,7 @@ This sample module for creating text report for data objects
         report_txt.write("<pre>" + string + "</pre>")
         report_txt.close()
 
-        print string
+        print (string)
 
         cr = Report_creator(self.config)
         reported_output = cr.create_report(token, params['workspace_name'],
@@ -246,7 +246,7 @@ This sample module for creating text report for data objects
         genome = data_file_cli.get_objects({'object_refs': [genome_input_ref]})
         genome_data = genome['data'][0]['data']
 
-        print genome_data.keys()
+        print (list(genome_data.keys()))
 
         report_format = params['report_format']
         string = ''
@@ -447,7 +447,7 @@ This sample module for creating text report for data objects
         domain_anno = data_file_cli.get_objects({'object_refs': [domain_annotation_input_ref]})
         domain_data = domain_anno['data'][0]['data']
 
-        print domain_data.keys()
+        print (list(domain_data.keys()))
 
         evalue_cutoff = float(params['evalue_cutoff'])
         report_format = params['report_format']
@@ -459,7 +459,7 @@ This sample module for creating text report for data objects
             string2 = cf.readDomainAnnCount(domain_data, 'tab', evalue_cutoff)
             report_path1 = os.path.join(self.scratch, 'domain_annotation_list.tab')
             report_path2 = os.path.join(self.scratch, 'domain_annotation_count.tab')
-            print "TYPE=", type(string1)
+            print ("TYPE=", type(string1))
         elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
             string1 = cf.readDomainAnnList(domain_data, 'csv', evalue_cutoff)
