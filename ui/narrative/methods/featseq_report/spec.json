@@ -18,7 +18,7 @@
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ "KBaseSequences.SequenceSet" ]
+                "valid_ws_types": [ "KBaseSequences.SequenceSet", "KBaseCollections.FeatureSet" ]
             }
         },
         {
@@ -48,7 +48,7 @@
         "service-mapping": {
             "url": "",
             "name":"Report_util_landml",
-            "method": "domain_report",
+            "method": "featseq_report",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
