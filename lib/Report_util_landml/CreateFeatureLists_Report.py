@@ -536,8 +536,45 @@ class CreateFeatureLists:
         # Add line-end to the header
         line += "\n"
 
-        print ("LINE: ", line)
+        #print ("LINE: ", line)
             
         return line
 
+    def readProtComp(self, pyStr,format):
+# Header
+        line = ""
+        lineList = ["Genome-name1", "Genome-name2", "bit-score", "bbh-percent"]
+    
+    #   Check for valid formats
+        if format not in ['tab','csv']:
+            print ("Invalid format. Valid formats are tab and csv")
+            return
+        elif format == 'tab':
+            line = "\t".join(lineList)
+        elif format == 'csv':
+            line = "'" + ",".join(lineList)
+    
+        names1 = pyStr["proteome1names"]
+        names2 = pyStr["proteome2names"]
+        pairs = pyStr["data1"]
+    
+        count = 0
+        for pos1, name1 in enumerate(names1):
+            for pair in pairs[pos1]:
+                pos2 = pair[0]
+                bit_score = pair[1]
+                bbh_percent = pair[2]
+                name2 = names2[pos2]
+                lineList = [name1, name2, str(bit_score), str(bbh_percent)]
+                if format == 'tab':
+                    line += "\t".join(lineList) + "\n"
+                elif format == 'csv':
+                    line += ",".join(lineList) + "\n"
 
+    
+                count += 1
+    
+            if count > 50:
+                break
+        print ("DEBUG LINE: ", line)
+        return line

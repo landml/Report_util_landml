@@ -622,6 +622,60 @@ This sample module for creating text report for data objects
         # ctx is the context object
         # return variables are: output
         #BEGIN protcomp_report
+        token = ctx['token']
+
+        # Print statements to stdout/stderr are captured and available as the App log
+        print('Starting ProteomeComparison Report. Params=')
+        pprint(params)
+
+        # Step 1 - Parse/examine the parameters and catch any errors
+        # It is important to check that parameters exist and are defined, and that nice error
+        # messages are returned to users.
+        print('Validating parameters.')
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'protcomp_input_ref' not in params:
+            raise ValueError('Parameter protcomp_input_ref is not set in input arguments')
+        protcomp_input_ref = params['protcomp_input_ref']
+
+        data_file_cli = DataFileUtil(self.callback_url)
+        protcomp = data_file_cli.get_objects({'object_refs': [protcomp_input_ref]})
+        protcomp_data = protcomp['data'][0]['data']
+
+        print ("DEBUG KEYS: ", list(protcomp_data.keys()))
+
+        report_format = params['report_format']
+        string1 = ''
+        if report_format == 'tab':
+            cf = CreateFeatureLists(self.config)
+            string1 = cf.readProtComp(protcomp_data, 'tab')
+            report_path1 = os.path.join(self.scratch, 'protcomp_list.tsv')
+        elif report_format == 'csv':
+            cf = CreateFeatureLists(self.config)
+            string1 = cf.readProtComp(setseq_data, 'csv')
+            report_path1 = os.path.join(self.scratch, 'protcomp_list.csv')
+        else:
+            raise ValueError('Invalid report option.' + str(report_format))
+
+        report_txt = open(report_path1, "w")
+        report_txt.write(string1)
+        report_txt.close()
+
+        report_path = os.path.join(self.scratch, 'text_report.html')
+        report_txt = open(report_path, "w")
+        report_txt.write("<pre>" + string1 + "</pre>")
+        report_txt.close()
+
+        #        print string
+        cr = Report_creator(self.config)
+
+        reported_output = cr.create_report(token, params['workspace_name'],
+                                           string1, self.scratch)
+
+        output = {'report_name': reported_output['name'],
+                  'report_ref': reported_output['ref']}
+
         #END protcomp_report
 
         # At some point might do deeper type checking...

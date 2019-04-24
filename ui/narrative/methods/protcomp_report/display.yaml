@@ -1,9 +1,9 @@
 #
 # define display information
 #
-name: Text Reports - FeatureSet/SequenceSet
+name: Text Reports - Proteome Comparison
 tooltip: |
-    Create text reports based on a FeatureSet or a SequenceSet
+    Create text reports based on a Proteome Comparison data object
 screenshots: []
 
 icon: kaleidoscope.png
@@ -29,9 +29,9 @@ suggestions:
 parameters :
     feature_sequence_input_ref :
         ui-name : |
-            FeatureSet/SequenceSet
+            ProteomeComparison
         short-hint : |
-            The FeatureSet or SequenceSet to be used in the report
+            The ProteomeComparison to be used in the report
     report_format:
         ui-name : |
             Report_format
@@ -47,7 +47,8 @@ description : |
     The generated comma and tab-delimited columns may look misaligned on the screen
     but they are readable by a spreadsheet or computer program.</p>
      
-    <p>This app creates a report on the contents of a FeatureSet or a SequenceSet.
+    <p>This app creates a report on the contents of a ProteomeComparison.
+    This object is created with the app <a href="https://narrative.kbase.us/#/appcatalog">Compare Two Proteomes</a>.
     Short reports will display as TEXT in the Summary section of the output.
     Longer reports will instead have a link to open the TEXT in a new html browser tab.
     In the Files section of the output will be a link for downloading the files. 
@@ -57,7 +58,7 @@ description : |
     
     <p>The inputs are:
     <ul>
-        <li>The KBase FeatureSet or SequenceSet object (output from several app)</li>
+        <li>The KBase ProteomeComparison object (output from several app)</li>
         <li>A download option:
         <ul>
             <li>Tab-delimited. A report with tab-delimited columns.</li>
@@ -66,13 +67,12 @@ description : |
     </ul>
     </p>
     
-    <p>The output:
+    <p>The output consists of 4 columns:
     <ol>
-        <li>The output depends on the input feature set or sequence set. In general, sequence sets
-        will be a fasta file and feature sets will be a listing of the references to the features
-        in the set. For example 'BW244_0025	27092/5/1' is the feature 'BW244_0025' and it
-        can be found in narrative 27092 in the object with the ID of '27092/5/1'.
-        </li>
+        <li>The gene name from genome 1</li>
+        <li>The gene name from genome 2</li>
+        <li>The bit score of the hit</li>
+        <li>The bi-directional best hit percentage</li>
     </ol>
     </p>
 
