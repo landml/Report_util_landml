@@ -75,7 +75,7 @@ module Report_util_landml {
     } FeatSeqReportParams;
 
     typedef structure {
-        protcomp_ref protein_compare_input_ref;
+        protcomp_ref protcomp_input_ref;
         string workspace_name;
         string report_format;
     } ProtCompReportParams;
