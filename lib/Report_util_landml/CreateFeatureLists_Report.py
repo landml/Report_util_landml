@@ -483,12 +483,12 @@ class CreateFeatureLists:
 #
         if 'description' in pyStr and 'elements' in pyStr and 'element_ordering' in pyStr:
             print ('Description', pyStr['description'], "\nOrdered Elements:")
-            lineList.append(['Description', pyStr['description'], "\nOrdered Elements:"])
+            lineList.append(['Description', str(pyStr['description']), "\nOrdered Elements:"])
             eleOrder = pyStr['element_ordering']
             count = 1
             for index in eleOrder:
                 print ("\t", count, "\t", index, "\t", pyStr['elements'][index])
-                lineList.append([str(count), index, pyStr['elements'][index]])
+                lineList.append([str(count), index, ",".join(pyStr['elements'][index]) ])
                 count += 1
 
 #
@@ -520,9 +520,9 @@ class CreateFeatureLists:
             count = 0
             for seq in mySequences:
                 print (">" + seq['sequence_id'], seq['description'])
-                line = cf.splitSequence(seq['sequence'])
+                seqline = cf.splitSequence(seq['sequence'])
                 lineList.append([">" + seq['sequence_id'], seq['description']])
-                lineList.append([line])
+                lineList.append([seqline])
                 count += 1
 
 #
@@ -537,9 +537,10 @@ class CreateFeatureLists:
             return
         elif format == 'tab':
             for row in lineList:
-                line = "\t".join(row)
+                print ("TYPE ", type(row), "  ROW ", row)
+                line += "\t".join(row) + "\n"
         elif format == 'csv':
-            line = "'" + ",".join(lineList)
+            line += "'" + ",".join(lineList) + "\n"
 
         # Add line-end to the header
         line += "\n"
