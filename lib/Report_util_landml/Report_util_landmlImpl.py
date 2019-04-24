@@ -643,7 +643,7 @@ This sample module for creating text report for data objects
         protcomp = data_file_cli.get_objects({'object_refs': [protcomp_input_ref]})
         protcomp_data = protcomp['data'][0]['data']
 
-        print ("DEBUG KEYS: ", list(protcomp_data.keys()))
+        #print ("DEBUG KEYS: ", list(protcomp_data.keys()))
 
         report_format = params['report_format']
         string1 = ''
@@ -653,7 +653,7 @@ This sample module for creating text report for data objects
             report_path1 = os.path.join(self.scratch, 'protcomp_list.tsv')
         elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
-            string1 = cf.readProtComp(setseq_data, 'csv')
+            string1 = cf.readProtComp(protcomp_data, 'csv')
             report_path1 = os.path.join(self.scratch, 'protcomp_list.csv')
         else:
             raise ValueError('Invalid report option.' + str(report_format))

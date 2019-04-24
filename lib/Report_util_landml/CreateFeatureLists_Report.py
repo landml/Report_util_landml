@@ -531,7 +531,8 @@ class CreateFeatureLists:
             for row in lineList:
                 line += "\t".join(row) + "\n"
         elif format == 'csv':
-            line += "'" + ",".join(lineList) + "\n"
+            for row in lineList:
+                line += "'" + ",".join(lineList) + "\n"
 
         # Add line-end to the header
         line += "\n"
@@ -553,7 +554,9 @@ class CreateFeatureLists:
             line = "\t".join(lineList)
         elif format == 'csv':
             line = "'" + ",".join(lineList)
-    
+        # Add line-end to the header
+        line += "\n"
+        
         names1 = pyStr["proteome1names"]
         names2 = pyStr["proteome2names"]
         pairs = pyStr["data1"]
@@ -570,11 +573,7 @@ class CreateFeatureLists:
                     line += "\t".join(lineList) + "\n"
                 elif format == 'csv':
                     line += ",".join(lineList) + "\n"
-
-    
                 count += 1
-    
-            if count > 50:
-                break
-        print ("DEBUG LINE: ", line)
+                
+        #print ("DEBUG LINE: ", line)
         return line
