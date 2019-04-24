@@ -482,12 +482,10 @@ class CreateFeatureLists:
 #   Type 1 - Order matters
 #
         if 'description' in pyStr and 'elements' in pyStr and 'element_ordering' in pyStr:
-            print ('Description', pyStr['description'], "\nOrdered Elements:")
             lineList.append(['Description', str(pyStr['description']), "\nOrdered Elements:"])
             eleOrder = pyStr['element_ordering']
             count = 1
             for index in eleOrder:
-                print ("\t", count, "\t", index, "\t", pyStr['elements'][index])
                 lineList.append([str(count), index, ",".join(pyStr['elements'][index]) ])
                 count += 1
 
@@ -495,13 +493,11 @@ class CreateFeatureLists:
 #   Type 2 - Unordered
 #
         elif 'description' in pyStr and 'elements' in pyStr:
-            print ('Description', pyStr['description'], "\nUnordered Elements:")
             lineList.append(['Description', pyStr['description']])
             lineList.append(["\nUnordered Elements:"])
             myElements = pyStr['elements']
             count = 0
             for element in myElements:
-                print ("\t", element, "\t", myElements[element])
                 lineList.append([element, myElements[element]])
                 count += 1
 
@@ -509,9 +505,6 @@ class CreateFeatureLists:
 #   Type 3 - With Sequences
 #
         elif 'description' in pyStr and 'sequences' in pyStr and 'sequence_set_id' in pyStr:
-            print ('Set Description', pyStr['description'])
-            print ("Sequence Set ID", pyStr['sequence_set_id'])
-            print ("Sequences:")
             lineList.append(['Set Description', pyStr['description']])
             lineList.append(["Sequence Set ID", pyStr['sequence_set_id']])
             lineList.append(["Sequences:"])
@@ -519,7 +512,6 @@ class CreateFeatureLists:
             mySequences = pyStr['sequences']
             count = 0
             for seq in mySequences:
-                print (">" + seq['sequence_id'], seq['description'])
                 seqline = cf.splitSequence(seq['sequence'])
                 lineList.append([">" + seq['sequence_id'], seq['description']])
                 lineList.append([seqline])
@@ -537,7 +529,6 @@ class CreateFeatureLists:
             return
         elif format == 'tab':
             for row in lineList:
-                print ("TYPE ", type(row), "  ROW ", row)
                 line += "\t".join(row) + "\n"
         elif format == 'csv':
             line += "'" + ",".join(lineList) + "\n"
@@ -545,7 +536,7 @@ class CreateFeatureLists:
         # Add line-end to the header
         line += "\n"
 
-        print (line)
+        print ("LINE: ", line)
             
         return line
 

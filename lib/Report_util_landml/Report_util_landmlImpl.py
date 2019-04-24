@@ -253,7 +253,7 @@ This sample module for creating text report for data objects
         if report_format == 'tab':
             cf = CreateFeatureLists(self.config)
             string = cf.delimitedTable(genome_data, 'tab', 'features')
-            report_path = os.path.join(self.scratch, 'genome_report.tab')
+            report_path = os.path.join(self.scratch, 'genome_report.tsv')
         elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
             string = cf.delimitedTable(genome_data, 'csv', 'features')
@@ -354,7 +354,7 @@ This sample module for creating text report for data objects
         if report_format == 'tab':
             gsr = CreateMultiGenomeReport(self.config)
             string = gsr.readGenomeSet(genome_name, genomeset_data, 'tab')
-            report_path = os.path.join(self.scratch, 'genomeset_report.tab')
+            report_path = os.path.join(self.scratch, 'genomeset_report.tsv')
         elif report_format == 'csv':
             gsr = CreateMultiGenomeReport(self.config)
             string = gsr.readGenomeSet(genome_name, genomeset_data, 'csv')
@@ -456,8 +456,8 @@ This sample module for creating text report for data objects
             cf = CreateFeatureLists(self.config)
             string1 = cf.readDomainAnnList(domain_data, 'tab', evalue_cutoff)
             string2 = cf.readDomainAnnCount(domain_data, 'tab', evalue_cutoff)
-            report_path1 = os.path.join(self.scratch, 'domain_annotation_list.tab')
-            report_path2 = os.path.join(self.scratch, 'domain_annotation_count.tab')
+            report_path1 = os.path.join(self.scratch, 'domain_annotation_list.tsv')
+            report_path2 = os.path.join(self.scratch, 'domain_annotation_count.tsv')
         elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
             string1 = cf.readDomainAnnList(domain_data, 'csv', evalue_cutoff)
@@ -562,14 +562,14 @@ This sample module for creating text report for data objects
         setseq = data_file_cli.get_objects({'object_refs': [feature_sequence_input_ref]})
         setseq_data = setseq['data'][0]['data']
 
-        print (list(setseq_data.keys()))
+        #print (list(setseq_data.keys()))
 
         report_format = params['report_format']
         string1 = ''
         if report_format == 'tab':
             cf = CreateFeatureLists(self.config)
             string1 = cf.readFeatSeq(setseq_data, 'tab')
-            report_path1 = os.path.join(self.scratch, 'sequence_set_list.tab')
+            report_path1 = os.path.join(self.scratch, 'sequence_set_list.tsv')
         elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
             string1 = cf.readFeatSeq(setseq_data, 'csv')
