@@ -531,13 +531,14 @@ class CreateFeatureLists:
             for row in lineList:
                 line += "\t".join(row) + "\n"
         elif format == 'csv':
+            line = "'"   ## Needed for Excel to recognize comma-delimited
             for row in lineList:
-                line += "'" + ",".join(lineList) + "\n"
+                line += ",".join(row) + "\n"
 
         # Add line-end to the header
         line += "\n"
 
-        #print ("LINE: ", line)
+        print ("LINE: ", line)
             
         return line
 

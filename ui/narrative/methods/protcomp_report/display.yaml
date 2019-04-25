@@ -44,8 +44,7 @@ description : |
     either as output from an app or by dragging the object onto the narrative.
     This app serves a different purpose. This app creates one or more files that
     are downloadable and used with local tools such as Excel or computer scripts.
-    The generated comma and tab-delimited columns may look misaligned on the screen
-    but they are readable by a spreadsheet or computer program.</p>
+    </p>
      
     <p>This app creates a report on the contents of a ProteomeComparison.
     This object is created with the app <a href="https://narrative.kbase.us/#/appcatalog">Compare Two Proteomes</a>.
