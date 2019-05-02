@@ -538,7 +538,7 @@ class CreateFeatureLists:
         # Add line-end to the header
         line += "\n"
 
-        print ("LINE: ", line)
+        #print ("LINE: ", line)
             
         return line
 
@@ -557,6 +557,7 @@ class CreateFeatureLists:
             line = "'" + ",".join(lineList)
         # Add line-end to the header
         line += "\n"
+        #print (pyStr)
         
         names1 = pyStr["proteome1names"]
         names2 = pyStr["proteome2names"]
@@ -564,6 +565,14 @@ class CreateFeatureLists:
     
         count = 0
         for pos1, name1 in enumerate(names1):
+            if not pairs[pos1]:
+                # The list is empty, no genome2 gene
+                lineList = [name1, '--']
+                if format == 'tab':
+                    line += "\t".join(lineList) + "\n"
+                elif format == 'csv':
+                    line += ",".join(lineList) + "\n"
+                continue
             for pair in pairs[pos1]:
                 pos2 = pair[0]
                 bit_score = pair[1]
@@ -576,5 +585,16 @@ class CreateFeatureLists:
                     line += ",".join(lineList) + "\n"
                 count += 1
                 
+        pairs = pyStr["data2"]
+        for pos2, name2 in enumerate(names2):
+            if not pairs[pos2]:
+                # The list is empty, no genome1 gene
+                lineList = ['--', name2]
+                if format == 'tab':
+                    line += "\t".join(lineList) + "\n"
+                elif format == 'csv':
+                    line += ",".join(lineList) + "\n"
+                continue
+              
         #print ("DEBUG LINE: ", line)
         return line
