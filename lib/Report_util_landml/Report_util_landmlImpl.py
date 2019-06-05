@@ -5,13 +5,13 @@ import shutil
 
 from Bio import SeqIO
 from pprint import pprint, pformat
-from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
-from KBaseReport.KBaseReportClient import KBaseReport
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-from CreateFasta_Report import CreateFasta
-from CreateFeatureLists_Report import CreateFeatureLists
-from CreateMultiGenomeReport import CreateMultiGenomeReport
-from Report_creator import Report_creator
+from installed_clients.AssemblyUtilClient import AssemblyUtil
+from installed_clients.KBaseReportClient import KBaseReport
+from installed_clients.DataFileUtilClient import DataFileUtil
+from .CreateFasta_Report import CreateFasta
+from .CreateFeatureLists_Report import CreateFeatureLists
+from .CreateMultiGenomeReport import CreateMultiGenomeReport
+from .Report_creator import Report_creator
 
 #END_HEADER
 
@@ -189,7 +189,7 @@ This sample module for creating text report for data objects
         report_txt.write("<pre>" + string + "</pre>")
         report_txt.close()
 
-        print string
+        print (string)
 
         cr = Report_creator(self.config)
         reported_output = cr.create_report(token, params['workspace_name'],
@@ -246,14 +246,14 @@ This sample module for creating text report for data objects
         genome = data_file_cli.get_objects({'object_refs': [genome_input_ref]})
         genome_data = genome['data'][0]['data']
 
-        print genome_data.keys()
+        print (list(genome_data.keys()))
 
         report_format = params['report_format']
         string = ''
         if report_format == 'tab':
             cf = CreateFeatureLists(self.config)
             string = cf.delimitedTable(genome_data, 'tab', 'features')
-            report_path = os.path.join(self.scratch, 'genome_report.tab')
+            report_path = os.path.join(self.scratch, 'genome_report.tsv')
         elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
             string = cf.delimitedTable(genome_data, 'csv', 'features')
@@ -277,7 +277,7 @@ This sample module for creating text report for data objects
                 assembly_input_ref = genome_data['assembly_ref']
                 string += self.get_assembly_sequence(assembly_input_ref)
             else:
-                string += 'Did not find the Assembly Reference'
+                string += 'Did not find the Assembly Reference\n'
 
         else:
             raise ValueError('Invalid report option.' + str(report_format))
@@ -334,7 +334,7 @@ This sample module for creating text report for data objects
         # Step 1 - Parse/examine the parameters and catch any errors
         # It is important to check that parameters exist and are defined, and that nice error
         # messages are returned to users.
-        print('Validating parameters.')
+#        print('Validating parameters.')
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
@@ -347,14 +347,14 @@ This sample module for creating text report for data objects
         genome_name = genomeset['data'][0]['info'][1]
         genomeset_data = genomeset['data'][0]['data']
 
-        print genomeset_data.keys()
+#        print genomeset_data.keys()
 
         report_format = params['report_format']
         string = ''
         if report_format == 'tab':
             gsr = CreateMultiGenomeReport(self.config)
             string = gsr.readGenomeSet(genome_name, genomeset_data, 'tab')
-            report_path = os.path.join(self.scratch, 'genomeset_report.tab')
+            report_path = os.path.join(self.scratch, 'genomeset_report.tsv')
         elif report_format == 'csv':
             gsr = CreateMultiGenomeReport(self.config)
             string = gsr.readGenomeSet(genome_name, genomeset_data, 'csv')
@@ -367,6 +367,19 @@ This sample module for creating text report for data objects
             gsr = CreateMultiGenomeReport(self.config)
             string = gsr.getGenomeSetMeta(genomeset['data'][0])
             report_path = os.path.join(self.scratch, 'genomeset_report.txt')
+        elif report_format == 'fasta':
+            gsr = CreateMultiGenomeReport(self.config)
+            assembly_list = gsr.getAssemblyRef(genomeset['data'][0])
+            string = ''
+            for assembly in assembly_list:
+                 assembly_ref, sci_name = assembly.split(':')
+                 dna = self.get_assembly_sequence(assembly_ref)
+                 report_path = os.path.join(self.scratch, 'G'+assembly_ref.replace('/', '_')+'.fna')
+                 report_txt = open(report_path, "w")
+                 report_txt.write(dna)
+                 report_txt.close()
+                 string += assembly_ref+'-'+sci_name+"\n"
+            report_path = os.path.join(self.scratch, 'genomeset_report.txt')
         else:
             raise ValueError('Invalid report option.' + str(report_format))
 
@@ -378,7 +391,7 @@ This sample module for creating text report for data objects
         report_txt.write("<pre>" + string + "</pre>")
         report_txt.close()
 
-        #        print string
+#        print string
         cr = Report_creator(self.config)
         reported_output = cr.create_report(token, params['workspace_name'],
                                            string, self.scratch)
@@ -386,7 +399,7 @@ This sample module for creating text report for data objects
         output = {'report_name': reported_output['name'],
                   'report_ref': reported_output['ref']}
 
-        print('returning: ' + pformat(output))
+#        print('returning: ' + pformat(output))
         #END genomeset_report
 
         # At some point might do deeper type checking...
@@ -433,8 +446,7 @@ This sample module for creating text report for data objects
         data_file_cli = DataFileUtil(self.callback_url)
         domain_anno = data_file_cli.get_objects({'object_refs': [domain_annotation_input_ref]})
         domain_data = domain_anno['data'][0]['data']
-
-        print domain_data.keys()
+#        print (list(domain_data.keys()))
 
         evalue_cutoff = float(params['evalue_cutoff'])
         report_format = params['report_format']
@@ -444,9 +456,8 @@ This sample module for creating text report for data objects
             cf = CreateFeatureLists(self.config)
             string1 = cf.readDomainAnnList(domain_data, 'tab', evalue_cutoff)
             string2 = cf.readDomainAnnCount(domain_data, 'tab', evalue_cutoff)
-            report_path1 = os.path.join(self.scratch, 'domain_annotation_list.tab')
-            report_path2 = os.path.join(self.scratch, 'domain_annotation_count.tab')
-            print "TYOPE=", type(string1)
+            report_path1 = os.path.join(self.scratch, 'domain_annotation_list.tsv')
+            report_path2 = os.path.join(self.scratch, 'domain_annotation_count.tsv')
         elif report_format == 'csv':
             cf = CreateFeatureLists(self.config)
             string1 = cf.readDomainAnnList(domain_data, 'csv', evalue_cutoff)
@@ -530,6 +541,61 @@ This sample module for creating text report for data objects
         # ctx is the context object
         # return variables are: output
         #BEGIN featseq_report
+        token = ctx['token']
+
+        # Print statements to stdout/stderr are captured and available as the App log
+        print('Starting FeatureSeq/SequenceSet Report Function. Params=')
+        pprint(params)
+
+        # Step 1 - Parse/examine the parameters and catch any errors
+        # It is important to check that parameters exist and are defined, and that nice error
+        # messages are returned to users.
+        print('Validating parameters.')
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'feature_sequence_input_ref' not in params:
+            raise ValueError('Parameter feature_sequence_input_ref is not set in input arguments')
+        feature_sequence_input_ref = params['feature_sequence_input_ref']
+
+        data_file_cli = DataFileUtil(self.callback_url)
+        setseq = data_file_cli.get_objects({'object_refs': [feature_sequence_input_ref]})
+        setseq_data = setseq['data'][0]['data']
+
+        #print (list(setseq_data.keys()))
+
+        report_format = params['report_format']
+        string1 = ''
+        if report_format == 'tab':
+            cf = CreateFeatureLists(self.config)
+            string1 = cf.readFeatSeq(setseq_data, 'tab')
+            report_path1 = os.path.join(self.scratch, 'sequence_set_list.tsv')
+        elif report_format == 'csv':
+            cf = CreateFeatureLists(self.config)
+            string1 = cf.readFeatSeq(setseq_data, 'csv')
+            report_path1 = os.path.join(self.scratch, 'sequence_set_list.csv')
+        else:
+            raise ValueError('Invalid report option.' + str(report_format))
+
+        report_txt = open(report_path1, "w")
+        report_txt.write(string1)
+        report_txt.close()
+
+        report_path = os.path.join(self.scratch, 'text_report.html')
+        report_txt = open(report_path, "w")
+        report_txt.write("<pre>" + string1 + "</pre>")
+        report_txt.close()
+
+        #        print string
+        cr = Report_creator(self.config)
+
+        reported_output = cr.create_report(token, params['workspace_name'],
+                                           string1, self.scratch)
+
+        output = {'report_name': reported_output['name'],
+                  'report_ref': reported_output['ref']}
+
+        print('returning: ' + pformat(output))
         #END featseq_report
 
         # At some point might do deeper type checking...
@@ -556,6 +622,60 @@ This sample module for creating text report for data objects
         # ctx is the context object
         # return variables are: output
         #BEGIN protcomp_report
+        token = ctx['token']
+
+        # Print statements to stdout/stderr are captured and available as the App log
+        print('Starting ProteomeComparison Report. Params=')
+        pprint(params)
+
+        # Step 1 - Parse/examine the parameters and catch any errors
+        # It is important to check that parameters exist and are defined, and that nice error
+        # messages are returned to users.
+        print('Validating parameters.')
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'protcomp_input_ref' not in params:
+            raise ValueError('Parameter protcomp_input_ref is not set in input arguments')
+        protcomp_input_ref = params['protcomp_input_ref']
+
+        data_file_cli = DataFileUtil(self.callback_url)
+        protcomp = data_file_cli.get_objects({'object_refs': [protcomp_input_ref]})
+        protcomp_data = protcomp['data'][0]['data']
+
+        #print ("DEBUG KEYS: ", list(protcomp_data.keys()))
+
+        report_format = params['report_format']
+        string1 = ''
+        if report_format == 'tab':
+            cf = CreateFeatureLists(self.config)
+            string1 = cf.readProtComp(protcomp_data, 'tab')
+            report_path1 = os.path.join(self.scratch, 'protcomp_list.tsv')
+        elif report_format == 'csv':
+            cf = CreateFeatureLists(self.config)
+            string1 = cf.readProtComp(protcomp_data, 'csv')
+            report_path1 = os.path.join(self.scratch, 'protcomp_list.csv')
+        else:
+            raise ValueError('Invalid report option.' + str(report_format))
+
+        report_txt = open(report_path1, "w")
+        report_txt.write(string1)
+        report_txt.close()
+
+        report_path = os.path.join(self.scratch, 'text_report.html')
+        report_txt = open(report_path, "w")
+        report_txt.write("<pre>" + string1 + "</pre>")
+        report_txt.close()
+
+        #        print string
+        cr = Report_creator(self.config)
+
+        reported_output = cr.create_report(token, params['workspace_name'],
+                                           string1, self.scratch)
+
+        output = {'report_name': reported_output['name'],
+                  'report_ref': reported_output['ref']}
+
         #END protcomp_report
 
         # At some point might do deeper type checking...

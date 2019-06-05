@@ -1,7 +1,6 @@
 import time
 import os
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-
+from installed_clients.DataFileUtilClient import DataFileUtil
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
@@ -92,7 +91,6 @@ class CreateMultiGenomeReport:
             line += "  Element:   {}\n".format(ele)
         return line
 
-
     # Describe a GenomeSet
     #
     def readGenomeSet(self, obj_name, pyStr, format):
@@ -116,4 +114,23 @@ class CreateMultiGenomeReport:
 #        print "LINE:", line
         return line
 
+    # Return the assembly_refs
+    #
+    def getAssemblyRef(self, assem):
+        myGS = assem['data']['elements']
+        assembly_list = []
+        for ele in myGS:
+            genome = self.dfu.get_objects({'object_refs': [myGS[ele]['ref']]})
+            obj_data = genome['data'][0]
+            sci_name = obj_data['data']['scientific_name']
 
+            assembly = ""
+            if 'assembly_ref' in obj_data['info'][10]:
+                assembly = obj_data['info'][10]
+            elif 'assembly_ref' in obj_data['data']:
+                assembly = obj_data['data']['assembly_ref']
+            elif 'contigset_ref' in obj_data['data']:
+                assembly = obj_data['data']['contigset_ref']
+            assembly_list.append(assembly+':'+sci_name)
+
+        return assembly_list

@@ -11,17 +11,17 @@
     },
     "parameters": [ 
         {
-            "id": "genomeset_input_ref",
+            "id": "protcomp_input_ref",
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ "KBaseSearch.GenomeSet" ]
+                "valid_ws_types": [ "GenomeComparison.ProteomeComparison"]
             }
         },
-       {
+        {
             "id": "report_format",
             "optional": false,
             "advanced": false,
@@ -31,15 +31,7 @@
             ],
             "field_type": "dropdown",
             "dropdown_options": {
-                "options": [
-					{
-						"value": "meta",
-						"display": "Metadata only"
-					},
-					{
-						"value": "list",
-						"display": "Vertical List"
-					},
+                "options": [ 
 					{
 						"value": "tab",
 						"display": "Tab-delimited"
@@ -47,10 +39,6 @@
 					{
 						"value": "csv",
 						"display": "Comma-delimited"
-					},
-					{
-						"value": "fasta",
-						"display": "DNA fasta"
 					}
 				]
             }
@@ -60,15 +48,15 @@
         "service-mapping": {
             "url": "",
             "name":"Report_util_landml",
-            "method": "genomeset_report",
+            "method": "protcomp_report",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace_name"
                 },
                 {
-                    "input_parameter": "genomeset_input_ref",
-                    "target_property": "genomeset_input_ref",
+                    "input_parameter": "protcomp_input_ref",
+                    "target_property": "protcomp_input_ref",
                     "target_type_transform": "resolved-ref"
                 },
                 {

@@ -3,7 +3,7 @@
 #
 name: Text Report - Assembly Metadata
 tooltip: |
-    Create a text report of an Assembly Object's Metadata
+    Create a text report for an Assembly Object
 screenshots: []
 
 icon: kaleidoscope.png
@@ -38,18 +38,54 @@ parameters :
         short-hint : |
             Include a fasta listing of the contigs in the Assembly
 description : |
-    <p>This intended purpose of this app is for downloadable TEXT reports. Most data objects already have some type of pretty HTML tables,
-    either as output from an app or by dragging the object onto the narrative. This app serves a different purpose. Comma and tab-delimited
-    columns may look misaligned on the screen because they are for input to a spreadsheet or computer program.</p>
-    <p>This app creates reports on the metadata in an Assembly. Short reports will display as TEXT in the Summary section of the output.
-    Longer reports will instead have a link to open the TEXT in a new html browser tab. In the Files section of the output will
-    be a link for downloading the file. </p>
-    <p>The output includes:</p>
+    <p>This intended purpose of this app is for downloadable <b>TEXT</b> reports.</p> 
+    <p>Most KBase data objects already have some type of pretty HTML table,
+    either as output from an app or by dragging the object onto the narrative.
+    This app serves a different purpose. This app creates one or more files that
+    are downloadable and used with local tools such as Excel or computer scripts.
+    </p>
+    
+    <p>This app creates reports on the contents of an Assembly object.
+    Short reports will display as TEXT in the Summary section of the output.
+    Longer reports will instead have a link to open the TEXT in a new html browser tab.
+    In the Files section of the output will be a link for downloading the file. 
+    Whether short or long, the Summary/Link section is intended to be a preview
+    of the downloadable file. If the report is tab or comma delimited, it may be
+    misaligned on the screen but readable by a computer script.</p>
+  
+    <p>The inputs are:
     <ul>
-      <li>Metadata: Minimal information. A report on the metadata for the Assembly. </li>
-      <li>Listing of the contig descriptions</li>
-      <li>OPTIONALLY: the DNA of the contigs in Fasta format. </li>
+        <li>The KBase Assembly object (uploaded or output from an app)</li>
+        <li>A checkbox for whether or not to include the Fasta of the Assembly.</li>
     </ul>
+    </p>
+    
+    <p>The output:
+    <ol>
+        <li>A <b>Link</b> section with a link
+        to the requested report that can be opened in another browser tab.</li>
+        <li>One downloadable file in the <b>Files</b> section. The report has
+        following sections:
+            <ol>
+            <li>The metadata of the Assembly object. This includes the
+            length of the DNA sequence, the number of contigs, the fraction GC
+            content, a taxon reference, and a Fasta handle reference.</li>
+            <li>A count of the As, Cs, Gs, and Ts in the Assembly.</li>
+            <li>A list of the contigs in the Assembly.
+                <ul>
+                <li>Contig name (e.g., AKKW01000148)</li>
+                <li>Length of the contig</li>
+                <li>GC fraction of the contig</li>
+                <li>Number of Ns</li>
+                <li>Contig ID (can be the same as the name)</li>
+                <li>Contig description from the Fasta header line</li>
+                </ul>
+            </li>
+            <li>OPTIONALLY: the DNA of the contigs in Fasta format.</li>
+            </ol>
+        </li>
+    </ol>
+    </p>
 
 publications :
     -

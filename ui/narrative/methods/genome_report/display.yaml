@@ -3,7 +3,7 @@
 #
 name: Text Reports - Genome
 tooltip: |
-    Create a text reports based on a Genome Object
+    Create a text report based on a Genome Object
 screenshots: []
 
 icon: kaleidoscope.png
@@ -36,26 +36,59 @@ parameters :
         ui-name : |
             Report_format
         short-hint : |
-            Format for the type of report to produce
+            Format for the report
 description : |
-    <p>Get an annotated genome in FASTA, tab-separated (tsv), comma-separated (csv), or GFF3 format</p>
-    <p>This intended purpose of this app is for downloadable TEXT reports. Most data objects already have some type of pretty HTML tables,
-    either as output from an app or by dragging the object onto the narrative. This app serves a different purpose. Comma and tab-delimited
-    columns may look misaligned on the screen because they are for input to a spreadsheet or computer program.</p>
-    <p>This app creates reports on annotated genomes. Short reports will display as TEXT in the Summary section of the output.
-    Longer reports will instead have a link to open the TEXT in a new html browser tab. In the Files section of the output will
-    be a link for downloading the file. </p>
-    <p>The options are:</p>
+    <p>This intended purpose of this app is for downloadable <b>TEXT</b> reports.</p>
+    
+    <p>Most KBase data objects already have some type of pretty HTML table,
+    either as output from an app or by dragging the object onto the narrative.
+    This app serves a different purpose. This app creates one or more files that
+    are downloadable and used with local tools such as Excel or computer scripts.
+    </p>
+      
+    <p>This app creates reports on a Genome.
+    Short reports will display as TEXT in the Summary section of the output.
+    Longer reports will instead have a link to open the TEXT in a new html browser tab.
+    In the Files section of the output will be a link for downloading the files. 
+    Whether short or long, the Summary/Link section is intended to be a preview
+    of the downloadable file. If the report is tab or comma delimited, it may be
+    misaligned on the screen but readable by a computer script.</p>
+   
+    <p>The inputs are:
     <ul>
-      <li>DNA fasta format. Create a fasta file of the genomic DNA.</li>
-      <li>Features, Tab-delimited. A report where the rows are the genes in the genome and the columns
-      are information about the genes. Columns separated with tabs.</li>
-      <li>Features, Comma-delimited. A report where the rows are the genes in the genome and the columns
-      are information about the genes. Columns separated with commas.</li>
-      <li>Features, GFF3 format. A GFF3 formatted file of the genes in the genome.</li>
-      <li>FASTA, translated CDSs. A Fasta-formatted file of the amino acid sequences of the genes.</li>
-      <li>FASTA, of mRNAs. A Fasta-formatted file of the mRNA sequences of the genes.</li>
+        <li>The KBase Genome object (uploaded or output from an app)</li>
+        <li>A download option:
+        <ul>
+            <li>DNA fasta format. Create a fasta file of the genomic DNA.</li>
+            <li>Features, Tab-delimited. A report where the rows are the genes in the genome and the columns
+            are information about the genes. Columns separated with tabs.</li>
+            <li>Features, Comma-delimited. A report where the rows are the genes in the genome and the columns
+            are information about the genes. Columns separated with commas.</li>
+            <li>Features, GFF3 format. A GFF3 formatted file of the genes in the genome.</li>
+            <li>FASTA, translated CDSs. A Fasta-formatted file of the amino acid sequences of the genes.</li>
+            <li>FASTA, of mRNAs. A Fasta-formatted file of the mRNA sequences of the genes.</li>           
+        </ul></li>        
     </ul>
+    </p>
+    
+    <p>The output:
+    <ol>
+        <li>The <b>Summary</b> or <b>Link</b> section has text version of the requested file.
+       </li>
+        <li>One downloadable file in the <b>Files</b> section. The name and content
+        of the file will depend on the requested file format.
+            <ol>
+            <li>FASTA files will be in Fasta format. The file name will end in
+            .fna for nucleotide files and .faa for amino acid files.</li>
+            <li>Feature lists will include the contig, feature ID, feature type,
+            location of the feature, its function, aliases, and RAST functional
+            assignment. Tab-delimited files will end in .tab, comma-delimited
+            files will end with .csv and GFF files will end with .gff.</li>
+            </ol>
+        </li>
+    </ol>
+    </p>
+
 
 publications :
     -

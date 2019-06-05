@@ -1,4 +1,4 @@
-FROM kbase/kbase:sdkbase2.latest
+FROM kbase/sdkbase2:python
 MAINTAINER KBase Developer
 # -----------------------------------------
 # In this section, you can install any system dependencies required
@@ -13,7 +13,7 @@ MAINTAINER KBase Developer
 
 #RUN pip install setuptools --upgrade
 
-RUN pip install coverage
+#RUN pip install coverage
 
 # update security libraries in the base image
 RUN pip install cffi --upgrade \
