@@ -561,20 +561,24 @@ class CreateFeatureLists:
         
         names1 = pyStr["proteome1names"]
         names2 = pyStr["proteome2names"]
-        pairs = pyStr["data1"]
+        pairs1 = pyStr["data1"]
+        foundPairs = {}
     
         count = 0
         for pos1, name1 in enumerate(names1):
-            if not pairs[pos1]:
+            if not pairs1[pos1]:
                 # The list is empty, no genome2 gene
                 lineList = [name1, '--']
                 if format == 'tab':
                     line += "\t".join(lineList) + "\n"
                 elif format == 'csv':
                     line += ",".join(lineList) + "\n"
+                print ("Position1 ", pos1, "Name1 ", name1)
                 continue
-            for pair in pairs[pos1]:
+            for pair in pairs1[pos1]:
                 pos2 = pair[0]
+                loc = str(pos1) + ".." + str(pos2)
+                foundPairs[loc] = 'Y'
                 bit_score = pair[1]
                 bbh_percent = pair[2]
                 name2 = names2[pos2]
@@ -583,18 +587,34 @@ class CreateFeatureLists:
                     line += "\t".join(lineList) + "\n"
                 elif format == 'csv':
                     line += ",".join(lineList) + "\n"
+                print ("Position1 ", pos1, "Name1 ", name1, "Position2 ", pos2, "Name2 ", name2, "LOC=", loc)
                 count += 1
                 
-        pairs = pyStr["data2"]
+        pairs2 = pyStr["data2"]
         for pos2, name2 in enumerate(names2):
-            if not pairs[pos2]:
+            if not pairs2[pos2]:
                 # The list is empty, no genome1 gene
                 lineList = ['--', name2]
                 if format == 'tab':
                     line += "\t".join(lineList) + "\n"
                 elif format == 'csv':
                     line += ",".join(lineList) + "\n"
-                continue
-              
+                print ("Position2 ", pos2, "Name2 ", name2)
+                #continue
+            for pair in pairs2[pos2]:
+                pos1 = pair[0]
+                loc = str(pos1) + ".." + str(pos2)
+                if loc in foundPairs:
+                    continue
+                bit_score = pair[1]
+                bbh_percent = pair[2]
+                name1 = names1[pos1]
+                lineList = [name1, name2, str(bit_score), str(bbh_percent)]
+                if format == 'tab':
+                    line += "\t".join(lineList) + "\n"
+                elif format == 'csv':
+                    line += ",".join(lineList) + "\n"
+                print ("---Position1 ", pos1, "Name1 ", name1, "Position2 ", pos2, "Name2 ", name2, "LOC=", loc)
+                count += 1             
         #print ("DEBUG LINE: ", line)
         return line

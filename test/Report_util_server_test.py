@@ -356,19 +356,29 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def test_featureSet(self):
+    def mytest_featureSet(self):
         featset_ref = '27092/18/1'
         ret = self.getImpl().featseq_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'feature_sequence_input_ref': featset_ref,
-                                            'report_format': 'tab'
+                                            'report_format': 'csv'
                                             })
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
         pass
     
+    def test_ProtComp(self):
+        protcomp_ref = '29939/15/1'
+        ret = self.getImpl().protcomp_report(self.getContext(),
+                                           {'workspace_name': self.ws_info[1],
+                                            'protcomp_input_ref': protcomp_ref,
+                                            'report_format': 'csv'
+                                            })
+        self.assertIn('report_name', ret[0])
+        self.assertIn('report_ref', ret[0])
+        pass
     
-    def test_sequenceSet(self):
+    def mytest_sequenceSet(self):
         featset_ref = '27092/23/1'
         ret = self.getImpl().featseq_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
