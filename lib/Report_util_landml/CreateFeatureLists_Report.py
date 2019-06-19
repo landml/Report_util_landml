@@ -573,7 +573,6 @@ class CreateFeatureLists:
                     line += "\t".join(lineList) + "\n"
                 elif format == 'csv':
                     line += ",".join(lineList) + "\n"
-                print ("Position1 ", pos1, "Name1 ", name1)
                 continue
             for pair in pairs1[pos1]:
                 pos2 = pair[0]
@@ -587,7 +586,6 @@ class CreateFeatureLists:
                     line += "\t".join(lineList) + "\n"
                 elif format == 'csv':
                     line += ",".join(lineList) + "\n"
-                print ("Position1 ", pos1, "Name1 ", name1, "Position2 ", pos2, "Name2 ", name2, "LOC=", loc)
                 count += 1
                 
         pairs2 = pyStr["data2"]
@@ -599,8 +597,6 @@ class CreateFeatureLists:
                     line += "\t".join(lineList) + "\n"
                 elif format == 'csv':
                     line += ",".join(lineList) + "\n"
-                print ("Position2 ", pos2, "Name2 ", name2)
-                #continue
             for pair in pairs2[pos2]:
                 pos1 = pair[0]
                 loc = str(pos1) + ".." + str(pos2)
@@ -614,7 +610,6 @@ class CreateFeatureLists:
                     line += "\t".join(lineList) + "\n"
                 elif format == 'csv':
                     line += ",".join(lineList) + "\n"
-                print ("---Position1 ", pos1, "Name1 ", name1, "Position2 ", pos2, "Name2 ", name2, "LOC=", loc)
                 count += 1             
         #print ("DEBUG LINE: ", line)
         return line
