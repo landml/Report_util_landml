@@ -1,9 +1,9 @@
 #
 # define display information
 #
-name: Text Reports - Genome Set
+name: Text Reports - GenomeSet
 tooltip: |
-    Create a text report based on a Genome Set Object
+    Create a text report based on a GenomeSet object.
 screenshots: []
 
 icon: kaleidoscope.png
@@ -31,67 +31,45 @@ parameters :
         ui-name : |
             GenomeSet
         short-hint : |
-            The genome set used in the report
+            The GenomeSet to be used in the report.
     report_format:
         ui-name : |
-            Report_format
+            Report Format
         short-hint : |
-            Format for the report
+            Specify the format for the report.
 description : |
-    <p>This intended purpose of this app is for downloadable <b>TEXT</b> reports.</p>
-    
-    <p>Most KBase data objects already have some type of pretty HTML table,
-    either as output from an app or by dragging the object onto the narrative.
-    This app serves a different purpose. This app creates one or more files that
-    are downloadable and used with local tools such as Excel or computer scripts.
-    </p>
-    
-    <p>This app creates reports on the genomes in a GenomeSet.
-    Short reports will display as TEXT in the Summary section of the output.
-    Longer reports will instead have a link to open the TEXT in a new html browser tab.
-    In the Files section of the output will be a link for downloading the file.
-    Whether short or long, the Summary/Link section is intended to be a preview
-    of the downloadable file. If the report is tab or comma delimited, it may be
-    misaligned on the screen but readable by a computer script.</p>
-    
-    <p>The inputs are:
+    <p>This intended purpose of this App is to produce downloadable <b>TEXT</b> reports.</p>
+
+    <p>Most KBase data objects already have some type of viewable HTML table, either as output from an App or by dragging the object onto the Narrative. This App serves a different purpose. It creates data files that are downloadable and used with local tools such as Excel or informatic scripts.</p>
+
+    <p>This App creates reports on the Genomes in a GenomeSet. Short reports will display as TEXT in the “Summary” section of the output. Longer reports will instead have a link to open the TEXT in a new html browser tab. There is a link for downloading the files in the “Files” section of the outout. Whether short or long, the Summary/Link section is intended to be a preview of the downloadable file. If the report is tab or comma delimited, it may appear misaligned on the screen but readable by a computer script.</p>
+
+    <p><b>Inputs:</b>
     <ul>
-        <li>The KBase Genome object (uploaded or output from an app)</li>
-        <li>A download option:
-            <ul>
-            <li>Metadata: Minimal information. A report on the metadata
-            for GenomeSet. Includes the name, object type, the creator,
-            the narrative ID, the description of the GenomeSet, and a list
-            of the genome IDs in the Set.</li>
-            <li>Vertical. List information on each of the genomes in a
-            vertical report instead of columns. Easy to read format but
-            more difficult to visually compare one genome to the others.</li>
-            <li>Tab-delimited. A report with tab-delimited columns.</li>
-            <li>Comma-delimited. A report with comma-delimited columns.</li>
-            <li>Fasta. A report with the Fasta of each of the genomes. (REALLY LONG)</li>
-            </ul>
-        </li>        
+      <li>The KBase GenomeSet object.</li>
+      <li>A download option:
+        <ul>
+          <li>Metadata: Minimal information. A report on the metadata for the GenomeSet, including, name, object type, author/creator, narrative ID, GenomeSet description, and a list of the KBase-relevant Genome IDs in the set.</li>
+          <li>Vertical. List information on each of the Genomes in a vertical report instead of columns. Easy-to-read format but more difficult to visually compare one Genome to the others.</li>
+          <li>Tab-delimited. A report with tab-delimited columns.</li>
+          <li>Comma-delimited. A report with comma-delimited columns.</li>
+          <li>DNA Fasta. A report with the DNA FASTA of each of the Genomes. NOTE: this is really long.</li>
+        </ul></li>
     </ul>
     </p>
-    
-    <p>The output:
+
+    <p><b>Output:</b>
     <ol>
-        <li>The <b>Summary</b> or <b>Link</b> section has text version of the requested file.
-       </li>
-        <li>One downloadable file in the <b>Files</b> section. The name and content
-        of the file will depend on the requested file format.
-            <ol>
-            <li>The metadata contains minimum information about the set and
-            the genome references that are part of the set.</li>
-            <li>FASTA files will be in Fasta format. The file name will end in
-            .fna for nucleotide files and .faa for amino acid files.</li>
-            <li>The other reports contain summary statistics about the genomes
-            in the set. The differences are just in the format of the informat.</li>
-            </ol>
-        </li>
+      <li>The <b>Summary</b> or <b>Link</b> section has a text version of the requested file.</li>
+      <li>One downloadable file in the <b>Files</b> section. The name and content of the file will depend on the requested file format.
+        <ol>
+          <li>The metadata contains minimum information about the set and the genome references that are part of the set.</li>
+          <li>FASTA files will be in FASTA format. The file name will end in .fna for nucleotide files and .faa for amino acid files.</li>
+          <li>The other reports contain summary statistics about the genomes in the set. The differences are just in the format of the information.</li>
+        </ol></li>
     </ol>
-    </p>   
- 
+    </p>
+
 publications :
     -
         display-text: |
