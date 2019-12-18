@@ -205,11 +205,12 @@ class CreateFeatureLists:
                         aliases = ', '.join(feat['aliases'])
                         break
                     elif isinstance(al, (list)):
-                        if 'synonym' in al[0] and aliases > '     ':
+                        if ('synonym' in al[0]  or 'gene' in al[0] or 'protein_id' in al[0] ) and aliases > '     ':
                             aliases += ", " + al[1]
-                        elif 'synonym' in al[0] :
+                        elif ('synonym' in al[0]  or 'gene' in al[0] or 'protein_id' in al[0] )  :
                             aliases += al[1]
 
+                            
             if 'type' not in feat:
                 feat['type'] = features
 

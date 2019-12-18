@@ -238,11 +238,11 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
 
-    def mytest_genome_tab(self):
+    def test_genome_tab(self):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
-                                            'report_format': 'gff'
+                                            'report_format': 'tab'
                                             })
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
@@ -262,7 +262,7 @@ class Report_util_landmlTest(unittest.TestCase):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
-                                            'report_format': 'gff'
+                                            'report_format': 'fasta'
                                             })
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
@@ -272,7 +272,7 @@ class Report_util_landmlTest(unittest.TestCase):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
-                                            'report_format': 'gff'
+                                            'report_format': 'mRNA'
                                             })
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
@@ -282,7 +282,7 @@ class Report_util_landmlTest(unittest.TestCase):
         ret = self.getImpl().genome_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
                                             'genome_input_ref': self.genome_ref,
-                                            'report_format': 'gff'
+                                            'report_format': 'DNA'
                                             })
         self.assertIn('report_name', ret[0])
         self.assertIn('report_ref', ret[0])
@@ -367,7 +367,7 @@ class Report_util_landmlTest(unittest.TestCase):
         self.assertIn('report_ref', ret[0])
         pass
     
-    def test_ProtComp(self):
+    def mytest_ProtComp(self):
         protcomp_ref = '29939/15/1'
         ret = self.getImpl().protcomp_report(self.getContext(),
                                            {'workspace_name': self.ws_info[1],
