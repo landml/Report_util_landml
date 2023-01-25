@@ -4,7 +4,7 @@
         "landml"
     ],
     "contact": "https://kbase.us/contact-us/",
-    "categories": ["active", "util"],
+    "categories": ["inactive", "util"],
     "widgets": {
         "input": null,
         "output": "no-display"
